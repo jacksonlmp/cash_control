@@ -14,4 +14,4 @@ Acesso direto a navegação: https://www.figma.com/proto/iZQQEsllVc1Kb5QCC5haJt/
 # Backlog:
 Atividades registradas nas Issues e backlog definido na aba Projects, Backlog - Cash Control
 
-Documento detalhado anexado no projeto, nome: Documentação
+Documentção detalhada anexada ao projeto, nome do arquivo: Documentação CashControl.pdf
