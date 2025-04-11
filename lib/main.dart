@@ -1,4 +1,5 @@
 import 'package:cash_control/ui/view_model/register_view_model.dart';
+import 'package:cash_control/ui/widgets/dashboard.screen.dart';
 import 'package:cash_control/ui/widgets/register.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       value: viewModel,
       child: MaterialApp(
         title: 'Cadastro',
-        home: const RegisterScreen(),
+        home: const DashboardScreen(),
       ),
     );
   }
