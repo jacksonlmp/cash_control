@@ -1,5 +1,6 @@
 // lib/ui/dashboard/widgets/dashboard.screen.dart
 import 'package:cash_control/navigation/dashboard_navigation.dart';
+import 'package:cash_control/ui/view_model/category_view_model.dart';
 import 'package:cash_control/ui/widgets/nav_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<CategoryViewModel>(context);
     return ChangeNotifierProvider(
       create: (_) => DashboardViewModel(),
       child: Consumer<DashboardViewModel>(
@@ -29,11 +31,22 @@ class CategoryScreen extends StatelessWidget {
             body: Container(
               color: Colors.black,
               child: Center(
-                child: Text(
-                  'Conteúdo Categoria',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineSmall?.copyWith(color: Colors.white),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: vm.nameController,
+                      decoration: const InputDecoration(labelText: 'Nome'),
+                    ),
+                    const SizedBox(height: 20),
+                    if (vm.error != null)
+                      Text(vm.error!, style: const TextStyle(color: Colors.red)),
+                    ElevatedButton(
+                      onPressed: vm.isLoading ? null : vm.register,
+                      child: vm.isLoading
+                          ? const CircularProgressIndicator()
+                          : const Text('Cadastrar'),
+                    ),
+                  ],
                 ),
               ),
             ),
