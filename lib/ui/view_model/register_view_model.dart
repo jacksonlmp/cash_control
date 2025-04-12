@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/services/user_services.dart';
+import '../../data/services/user_service.dart';
 
 class RegisterViewModel extends ChangeNotifier {
   final UserService service;

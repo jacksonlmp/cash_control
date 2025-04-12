@@ -1,10 +1,9 @@
 import 'package:cash_control/ui/view_model/register_view_model.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
-import 'package:cash_control/ui/widgets/register.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'data/repositories/user_repository_impl.dart';
-import 'data/services/user_services.dart';
+import 'data/services/user_service.dart';
 
 void main() {
   final repository = UserRepositoryImpl();
