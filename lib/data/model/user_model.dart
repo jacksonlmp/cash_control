@@ -1,4 +1,4 @@
-import '../../domain/models/user.dart';
+import 'package:cash_control/domain/models/user.dart';
 
 class UserModel extends User {
   UserModel({
@@ -8,6 +8,10 @@ class UserModel extends User {
     required super.password,
   });
 
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'name': name, 'email': email, 'password': password};
+  }
+
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'],
@@ -16,11 +20,4 @@ class UserModel extends User {
       password: map['password'],
     );
   }
-
-  Map<String, dynamic> toMap() => {
-    'id': id,
-    'name': name,
-    'email': email,
-    'password': password,
-  };
 }

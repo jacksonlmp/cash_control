@@ -1,5 +1,8 @@
+// lib/ui/user/view_model/register_view_model.dart
 import 'package:flutter/material.dart';
 import '../../data/services/user_service.dart';
+import '../../domain/models/user.dart';
+import '../../data/database_helper.dart'; // Adicione esta linha
 
 class RegisterViewModel extends ChangeNotifier {
   final UserService service;
@@ -41,11 +44,19 @@ class RegisterViewModel extends ChangeNotifier {
     }
 
     try {
-      await service.registerUser(
+      final user = User(
+        id: UniqueKey().toString(),
         name: name,
         email: email,
         password: password,
       );
+
+      await service.registerUser(user);
+
+      // Chame a função de depuração para imprimir os usuários
+      final dbHelper = DatabaseHelper();
+      await dbHelper.printUsers();
+
     } catch (e) {
       error = e.toString().replaceAll('Exception: ', '');
     }
