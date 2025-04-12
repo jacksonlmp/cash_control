@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/dashboard_view_model.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+class CategoryScreen extends StatelessWidget {
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class DashboardScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Dashboard',
+                'Categoria',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.black,
@@ -30,7 +30,7 @@ class DashboardScreen extends StatelessWidget {
               color: Colors.black,
               child: Center(
                 child: Text(
-                  'Conteúdo Dashboard',
+                  'Conteúdo Categoria',
                   style: Theme.of(
                     context,
                   ).textTheme.headlineSmall?.copyWith(color: Colors.white),
