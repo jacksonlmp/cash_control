@@ -1,38 +1,33 @@
-import 'package:cash_control/domain/models/user.dart';
 import 'package:cash_control/data/repositories/user_repository.dart';
-import '../../utils/validators.dart';
-import 'package:uuid/uuid.dart';
+import 'package:cash_control/domain/models/user.dart';
 
 class UserService {
-  final UserRepository repository;
+  final UserRepository _repository;
 
-  UserService(this.repository);
+  UserService(this._repository);
 
-  Future<void> registerUser({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
-    if (!Validators.isValidEmail(email)) {
+  Future<void> registerUser(User user) async {
+    if (!_isValidEmail(user.email)) {
       throw Exception('Email inválido');
     }
-
-    if (!Validators.isStrongPassword(password)) {
-      throw Exception('A senha deve conter pelo menos 8 caracteres, 1 maiúscula e 1 número.');
+    if (!_isValidPassword(user.password)) {
+      throw Exception('Senha não atende aos requisitos de segurança');
     }
 
-    final emailExists = await repository.existsEmail(email);
-    if (emailExists) {
-      throw Exception('Este e-mail já está cadastrado.');
+    if (await _repository.existsEmail(user.email)) {
+      throw Exception('E-mail já está em uso');
     }
 
-    final user = User(
-      id: const Uuid().v4(),
-      name: name,
-      email: email,
-      password: password,
-    );
+    await _repository.register(user);
+  }
 
-    await repository.register(user);
+  bool _isValidEmail(String email) {
+    // Implementar validação de e-mail
+    return true;
+  }
+
+  bool _isValidPassword(String password) {
+    // Implementar validação de senha
+    return true;
   }
 }

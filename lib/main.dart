@@ -1,30 +1,33 @@
-import 'package:cash_control/ui/view_model/register_view_model.dart';
-import 'package:cash_control/ui/widgets/dashboard.screen.dart';
+// lib/main.dart
+import 'package:cash_control/ui/view_model/user_view_model.dart';
+import 'package:cash_control/ui/widgets/user_registration.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'data/repositories/user_repository_impl.dart';
-import 'data/services/user_service.dart';
+import 'package:cash_control/data/repositories/user_repository_impl.dart';
+import 'package:cash_control/data/services/user_service.dart';
 
 void main() {
-  final repository = UserRepositoryImpl();
-  final service = UserService(repository);
-  final viewModel = RegisterViewModel(service);
-
-  runApp(MyApp(viewModel));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final RegisterViewModel viewModel;
-
-  const MyApp(this.viewModel, {super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: viewModel,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserViewModel(UserService(UserRepositoryImpl())),
+        ),
+      ],
       child: MaterialApp(
-        title: 'Cadastro',
-        home: const DashboardScreen(),
+        title: 'CashControl',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const UserRegistrationScreen(),
       ),
     );
   }
