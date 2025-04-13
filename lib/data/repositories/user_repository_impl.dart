@@ -26,6 +26,21 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<User?> getUserByEmailAndPassword(String email, String password) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'users',
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
+    );
+
+    if (result.isNotEmpty) {
+      return UserModel.fromMap(result.first);
+    }
+    return null;
+  }
+
+  @override
   Future<bool> existsEmail(String email) async {
     final db = await _databaseHelper.database;
 

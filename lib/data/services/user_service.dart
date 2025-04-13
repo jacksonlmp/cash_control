@@ -21,6 +21,10 @@ class UserService {
     await _repository.register(user);
   }
 
+  Future<User?> login(String email, String password) async {
+    return await _repository.getUserByEmailAndPassword(email, password);
+  }
+
   bool _isValidEmail(String email) {
     // Implementar validação de e-mail
     return true;

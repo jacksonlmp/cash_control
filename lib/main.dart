@@ -1,6 +1,8 @@
-// lib/main.dart
-import 'package:cash_control/ui/view_model/user_view_model.dart';
+import 'package:cash_control/data/repositories/user_repository.dart';
+import 'package:cash_control/ui/view_model/login_view_model.dart';
+import 'package:cash_control/ui/widgets/login.screen.dart';
 import 'package:cash_control/ui/widgets/user_registration.screen.dart';
+import 'package:cash_control/ui/widgets/welcome.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
@@ -18,16 +20,20 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => UserViewModel(UserService(UserRepositoryImpl())),
+          create: (_) => LoginViewModel(UserService(UserRepositoryImpl()) as UserRepository),
         ),
+        // Aqui você pode adicionar outros ViewModels também
       ],
-      child: MaterialApp(
-        title: 'CashControl',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const UserRegistrationScreen(),
+      child: Builder(
+        builder:
+            (context) => MaterialApp(
+              title: 'CashControl',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: const UserRegistrationScreen(),
+            ),
       ),
     );
   }
