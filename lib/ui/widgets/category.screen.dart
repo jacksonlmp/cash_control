@@ -67,16 +67,29 @@ class CategoryScreen extends StatelessWidget {
                                     final confirm = await showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                        title: const Text('Excluir categoria'),
-                                        content: const Text('Tem certeza que deseja excluir esta categoria?'),
+                                        backgroundColor: Colors.grey[900],
+                                        title: const Text(
+                                          'Excluir categoria',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        content: const Text(
+                                          'Tem certeza que deseja excluir esta categoria?',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                         actions: [
                                           TextButton(
                                             onPressed: () => Navigator.of(context).pop(false),
-                                            child: const Text('Cancelar'),
+                                            child: const Text(
+                                              'Cancelar',
+                                              style: TextStyle(color: Color(0xFFA100FF)),
+                                            ),
                                           ),
                                           TextButton(
                                             onPressed: () => Navigator.of(context).pop(true),
-                                            child: const Text('Excluir'),
+                                            child: const Text(
+                                              'Excluir',
+                                              style: TextStyle(color: Color(0xFFA100FF)),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -91,31 +104,44 @@ class CategoryScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                    ElevatedButton(
-                      onPressed: viewModel.isLoading
-                          ? null
-                          : () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ChangeNotifierProvider(
-                              create: (_) => CategoryRegistrationViewModel(
-                                  CategoryService(CategoryRepositoryImpl())
-                              ),
-                              child: const CategoryRegistrationScreen(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFA100FF), // Cor de fundo roxa
+                            foregroundColor: Colors.white,  // Cor do texto branca
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // Bordas arredondadas
                             ),
                           ),
-                        );
-                      },
-                      child: viewModel.isLoading
-                          ? const CircularProgressIndicator()
-                          : const Text('Cadastrar'),
+                          onPressed: viewModel.isLoading
+                              ? null
+                              : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChangeNotifierProvider(
+                                  create: (_) => CategoryRegistrationViewModel(
+                                    CategoryService(CategoryRepositoryImpl()),
+                                  ),
+                                  child: const CategoryRegistrationScreen(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: viewModel.isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text('Cadastrar'),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-
             bottomNavigationBar: Container(
               decoration: const BoxDecoration(
                 border: Border(

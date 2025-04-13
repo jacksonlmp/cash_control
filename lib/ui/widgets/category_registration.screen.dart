@@ -16,6 +16,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
       child: Consumer<CategoryRegistrationViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
+            backgroundColor: Colors.black,
             appBar: AppBar(
               title: const Text(
                 'Cadastrar Categoria',
@@ -27,31 +28,92 @@ class CategoryRegistrationScreen extends StatelessWidget {
               ),
             ),
             body: Container(
-              color: Colors.black,
-              child: Center(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SizedBox(height: 20),
                     TextField(
                       onChanged: viewModel.setName,
-                      decoration: const InputDecoration(labelText: 'Nome'),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Nome',
+                        labelStyle: const TextStyle(color: Colors.white),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Color(0xFFA100FF)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Color(0xFFA100FF), width: 2),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     if (viewModel.errorMessage.isNotEmpty)
                       Text(
                         viewModel.errorMessage,
                         style: const TextStyle(color: Colors.red),
                       ),
-                    ElevatedButton(
-                      onPressed: viewModel.isLoading ? null : viewModel.registerCategory,
-                      child: viewModel.isLoading
-                          ? const CircularProgressIndicator()
-                          : const Text('Cadastrar'),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFA100FF),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: viewModel.isLoading
+                            ? null
+                            : () async {
+                          await viewModel.registerCategory();
+                          if (viewModel.errorMessage.isEmpty) {
+                            // Sucesso
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.grey[900],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  title: const Text(
+                                    'Sucesso',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  content: const Text(
+                                    'Categoria cadastrada com sucesso!',
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text(
+                                        'OK',
+                                        style: TextStyle(color: Color(0xFFA100FF)),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: viewModel.isLoading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text('Cadastrar'),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-
             bottomNavigationBar: Container(
               decoration: const BoxDecoration(
                 border: Border(
