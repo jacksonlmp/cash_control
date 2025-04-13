@@ -1,5 +1,4 @@
 import 'package:cash_control/ui/view_model/login_view_model.dart';
-import 'package:cash_control/ui/widgets/user_registration.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +19,8 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/logo_cash_control.jpg',
-                    width: 150,
-                    height: 150,
+                    width: 250,
+                    height: 250,
                   ),
 
                   const SizedBox(height: 24),
@@ -65,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () async {
-                      await viewModel.login();
+                      await viewModel.login(context);
                       if (viewModel.error != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -94,24 +93,23 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: const Text(
                       'Esqueceu sua senha?',
-                      style: TextStyle(color: Colors.purple),
+                      style: TextStyle(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
 
                   const SizedBox(height: 8),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UserRegistrationScreen(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, '/register');
                     },
-                    child: const Text(
-                      'Não possui uma conta? Cadastre-se',
-                      style: TextStyle(color: Colors.purple),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
                     ),
+                    child: const Text('Não possui uma conta? Cadastre-se'),
                   ),
                 ],
               );
