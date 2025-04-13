@@ -1,21 +1,17 @@
 // lib/ui/dashboard/widgets/dashboard.screen.dart
-import 'package:cash_control/data/repositories/category_repository_impl.dart';
-import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/navigation/dashboard_navigation.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
-import 'package:cash_control/ui/view_model/category_view_model.dart';
-import 'package:cash_control/ui/widgets/category_registration.screen.dart';
 import 'package:cash_control/ui/widgets/nav_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/dashboard_view_model.dart';
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
+class CategoryRegistrationScreen extends StatelessWidget {
+  const CategoryRegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<CategoryViewModel>(context);
+    final vm = Provider.of<CategoryRegistrationViewModel>(context);
     return ChangeNotifierProvider(
       create: (_) => DashboardViewModel(),
       child: Consumer<DashboardViewModel>(
@@ -23,7 +19,7 @@ class CategoryScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Categoria',
+                'Cadastrar Categoria',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.black,
@@ -37,25 +33,15 @@ class CategoryScreen extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
+                    TextField(
+                      controller: vm.nameController,
+                      decoration: const InputDecoration(labelText: 'Nome'),
+                    ),
                     const SizedBox(height: 20),
                     if (vm.error != null)
                       Text(vm.error!, style: const TextStyle(color: Colors.red)),
                     ElevatedButton(
-                      onPressed: vm.isLoading
-                          ? null
-                          : () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ChangeNotifierProvider(
-                              create: (_) => CategoryRegistrationViewModel(
-                                  CategoryService(CategoryRepositoryImpl())
-                              ),
-                              child: const CategoryRegistrationScreen(),
-                            ),
-                          ),
-                        );
-                      },
+                      onPressed: vm.isLoading ? null : vm.register,
                       child: vm.isLoading
                           ? const CircularProgressIndicator()
                           : const Text('Cadastrar'),
@@ -76,7 +62,6 @@ class CategoryScreen extends StatelessWidget {
                 backgroundColor: Colors.black,
                 selectedItemColor: Colors.white,
                 unselectedItemColor: Colors.white,
-                currentIndex: viewModel.selectedIndex,
                 onTap: (index) {
                   viewModel.onItemTapped(index);
                   handleDashboardNavigation(index, context);
