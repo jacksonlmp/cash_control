@@ -38,6 +38,13 @@ class DatabaseHelper {
         password TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE category (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL
+      )
+    ''');
     // Adicionar demais tabelas
   }
 
@@ -48,6 +55,16 @@ class DatabaseHelper {
     for (var user in users) {
       print(user);
     }
+  }
+
+  // Função de depuração para imprimir os dados do banco de dados
+  Future<List<Map<String, dynamic>>> printCategories() async {
+    final db = await database;
+    final List<Map<String, dynamic>> categories = await db.query('category');
+    for (var category in categories) {
+      print(category);
+    }
+    return categories;
   }
 
   // Função para exportar o banco de dados
@@ -79,6 +96,17 @@ class DatabaseHelper {
       print('Banco de dados exportado para: $exportFilePath');
     } catch (e) {
       print('Erro ao exportar o banco de dados: $e');
+    }
+  }
+
+  // função para deletar o banco (chamar no main se necessário)
+  Future<void> deleteDatabaseFile() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'cashcontrol.db');
+    final file = File(path);
+    if (await file.exists()) {
+      await file.delete();
+      print('Banco deletado com sucesso');
     }
   }
 }

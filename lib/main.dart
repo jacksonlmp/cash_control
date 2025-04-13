@@ -1,12 +1,16 @@
 // lib/main.dart
+import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/ui/view_model/user_view_model.dart';
-import 'package:cash_control/ui/widgets/user_registration.screen.dart';
+import 'package:cash_control/ui/widgets/dashboard.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
 import 'package:cash_control/data/services/user_service.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // deleta o banco
+  // DatabaseHelper().deleteDatabaseFile();
   runApp(const MyApp());
 }
 

@@ -11,10 +11,9 @@ class CategoryRegistrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<CategoryRegistrationViewModel>(context);
     return ChangeNotifierProvider(
       create: (_) => DashboardViewModel(),
-      child: Consumer<DashboardViewModel>(
+      child: Consumer<CategoryRegistrationViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
@@ -27,22 +26,24 @@ class CategoryRegistrationScreen extends StatelessWidget {
                 bottom: BorderSide(color: Colors.white, width: 1.5),
               ),
             ),
-
             body: Container(
               color: Colors.black,
               child: Center(
                 child: Column(
                   children: [
                     TextField(
-                      controller: vm.nameController,
+                      onChanged: viewModel.setName,
                       decoration: const InputDecoration(labelText: 'Nome'),
                     ),
                     const SizedBox(height: 20),
-                    if (vm.error != null)
-                      Text(vm.error!, style: const TextStyle(color: Colors.red)),
+                    if (viewModel.errorMessage.isNotEmpty)
+                      Text(
+                        viewModel.errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      ),
                     ElevatedButton(
-                      onPressed: vm.isLoading ? null : vm.register,
-                      child: vm.isLoading
+                      onPressed: viewModel.isLoading ? null : viewModel.registerCategory,
+                      child: viewModel.isLoading
                           ? const CircularProgressIndicator()
                           : const Text('Cadastrar'),
                     ),

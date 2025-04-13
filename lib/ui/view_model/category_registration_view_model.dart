@@ -1,39 +1,48 @@
+import 'package:cash_control/domain/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_control/data/services/category_service.dart';
 
 class CategoryRegistrationViewModel extends ChangeNotifier {
-  final CategoryService categoryService;
-  CategoryRegistrationViewModel(this.categoryService);
+  final CategoryService _categoryService;
+  CategoryRegistrationViewModel(this._categoryService);
 
-  final nameController = TextEditingController();
+  String _name = '';
+  String _errorMessage = '';
+  bool _isLoading = false;
 
-  String? error;
-  bool isLoading = false;
+  String get name => _name;
+  String get errorMessage => _errorMessage;
+  bool get isLoading => _isLoading;
 
-  Future<void> register() async {
-    isLoading = true;
-    error = null;
+  void setName(String name) {
+    _name = name;
     notifyListeners();
+  }
 
-    final name = nameController.text.trim();
-
-    if (name.isEmpty) {
-      error = 'O nome é obrigatório.';
-      isLoading = false;
+  Future<void> registerCategory() async {
+    if (_name.isEmpty) {
+      _errorMessage = 'O nome é obrigatório.';
       notifyListeners();
       return;
     }
 
-    try {
-      await categoryService.registerCategory(
-        name: name,
-      );
-    } catch (e) {
-      error = e.toString().replaceAll('Exception: ', '');
-    }
-
-    isLoading = false;
+    _isLoading = true;
     notifyListeners();
+
+    try {
+      await _categoryService.registerCategory(
+        Category(
+            id: UniqueKey().toString(),
+            name: name
+        ),
+      );
+      _errorMessage = '';
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void onItemTapped(int index) {
