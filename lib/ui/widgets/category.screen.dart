@@ -61,6 +61,31 @@ class CategoryScreen extends StatelessWidget {
                                   category.name,
                                   style: const TextStyle(color: Colors.white),
                                 ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.white),
+                                  onPressed: () async {
+                                    final confirm = await showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text('Excluir categoria'),
+                                        content: const Text('Tem certeza que deseja excluir esta categoria?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(false),
+                                            child: const Text('Cancelar'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(true),
+                                            child: const Text('Excluir'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (confirm == true) {
+                                      await viewModel.deleteCategory(category.id);
+                                    }
+                                  },
+                                ),
                               ),
                             );
                           },

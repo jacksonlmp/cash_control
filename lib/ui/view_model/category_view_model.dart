@@ -31,6 +31,20 @@ class CategoryViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteCategory(String id) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await _categoryService.deleteCategory(id);
+      _categories = await _categoryService.findAllCategories();
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   void onItemTapped(int index) {
     _selectedIndex = index;
     notifyListeners();

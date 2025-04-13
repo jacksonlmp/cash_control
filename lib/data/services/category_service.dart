@@ -13,4 +13,9 @@ class CategoryService {
   Future<List<Category>> findAllCategories() async {
     return await _repository.findAll();
   }
+
+  Future<void> deleteCategory(String id) async {
+    await _repository.delete(id);
+  }
+
 }
