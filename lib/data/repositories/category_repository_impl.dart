@@ -23,4 +23,18 @@ class CategoryRepositoryImpl implements CategoryRepository {
         conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
+
+  @override
+  Future<List<Category>> findAll() async {
+    final db = await _databaseHelper.database;
+
+    final List<Map<String, dynamic>> maps = await db.query('category');
+
+    return List.generate(maps.length, (i) {
+      return Category(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+      );
+    });
+  }
 }

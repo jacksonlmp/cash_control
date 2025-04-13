@@ -8,22 +8,22 @@ import 'package:cash_control/ui/widgets/category_registration.screen.dart';
 import 'package:cash_control/ui/widgets/nav_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../view_model/dashboard_view_model.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<CategoryViewModel>(context);
     return ChangeNotifierProvider(
-      create: (_) => DashboardViewModel(),
-      child: Consumer<DashboardViewModel>(
+      create: (_) => CategoryViewModel(
+          CategoryService(CategoryRepositoryImpl())
+      ),
+      child: Consumer<CategoryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Categoria',
+                'Categorias',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.black,
@@ -31,17 +31,43 @@ class CategoryScreen extends StatelessWidget {
                 bottom: BorderSide(color: Colors.white, width: 1.5),
               ),
             ),
-
             body: Container(
               color: Colors.black,
               child: Center(
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    if (vm.error != null)
-                      Text(vm.error!, style: const TextStyle(color: Colors.red)),
+                    if (viewModel.errorMessage.isNotEmpty)
+                      Text(
+                        viewModel.errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    if (viewModel.categories.isEmpty)
+                      const Text(
+                          'Nenhuma categoria cadastrada',
+                          style: TextStyle(color: Colors.white)
+                      )
+                    else
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: viewModel.categories.length,
+                          itemBuilder: (context, index) {
+                            final category = viewModel.categories[index];
+                            return Card(
+                              color: Colors.grey[900],
+                              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: ListTile(
+                                title: Text(
+                                  category.name,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ElevatedButton(
-                      onPressed: vm.isLoading
+                      onPressed: viewModel.isLoading
                           ? null
                           : () {
                         Navigator.push(
@@ -56,7 +82,7 @@ class CategoryScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: vm.isLoading
+                      child: viewModel.isLoading
                           ? const CircularProgressIndicator()
                           : const Text('Cadastrar'),
                     ),

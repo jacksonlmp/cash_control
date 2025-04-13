@@ -9,4 +9,8 @@ class CategoryService {
   Future<void> registerCategory(Category category) async {
     await _repository.register(category);
   }
+
+  Future<List<Category>> findAllCategories() async {
+    return await _repository.findAll();
+  }
 }
