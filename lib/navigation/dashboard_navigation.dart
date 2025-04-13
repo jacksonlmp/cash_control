@@ -11,7 +11,7 @@ import '../ui/widgets/category.screen.dart';
 void handleDashboardNavigation(int index, BuildContext context) {
   switch (index) {
     case 0:
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const DashboardScreen(),
@@ -19,11 +19,13 @@ void handleDashboardNavigation(int index, BuildContext context) {
       );
       break;
     case 1:
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
-              create: (_) => CategoryViewModel(CategoryService(CategoryRepositoryImpl())),
+              create: (_) => CategoryViewModel(
+                  CategoryService(CategoryRepositoryImpl())
+              ),
               child: const CategoryScreen(),
             )
         )
