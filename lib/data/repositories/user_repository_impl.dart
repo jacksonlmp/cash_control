@@ -9,26 +9,39 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<void> register(User user) async {
-    final db = await _databaseHelper.database;
+    final Database db = await _databaseHelper.database;
+    await db.insert('users', {
+      'id': user.id,
+      'name': user.name,
+      'email': user.email,
+      'password': user.password,
+    });
+  }
 
-    final userModel = UserModel(
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    );
-
-    await db.insert(
+  @override
+  Future<User?> getUserByEmailAndPassword(String email, String password) async {
+    final Database db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
       'users',
-      userModel.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
     );
+    if (maps.isNotEmpty) {
+      final map = maps.first;
+      return User(
+        id: map['id'],
+        name: map['name'],
+        email: map['email'],
+        password: map['password'],
+      );
+    } else {
+      return null;
+    }
   }
 
   @override
   Future<bool> existsEmail(String email) async {
     final db = await _databaseHelper.database;
-
     final List<Map<String, dynamic>> maps = await db.query(
       'users',
       where: 'email = ?',
