@@ -1,49 +1,52 @@
 import 'package:cash_control/data/services/category_service.dart';
+import 'package:cash_control/domain/models/category.dart';
 import 'package:flutter/material.dart';
 
 class CategoryViewModel extends ChangeNotifier {
-  final CategoryService categoryService;
-  CategoryViewModel(this.categoryService);
+  final CategoryService _categoryService;
+  CategoryViewModel(this._categoryService) {
+    loadCategories();
+  }
 
   int _selectedIndex = 1;
+  String _errorMessage = '';
+  bool _isLoading = false;
+  List<Category> _categories = [];
+
   int get selectedIndex => _selectedIndex;
+  String get errorMessage => _errorMessage;
+  bool get isLoading => _isLoading;
+  List<Category> get categories => _categories;
 
-  final nameController = TextEditingController();
-
-  String? error;
-  bool isLoading = false;
-
-  Future<void> register() async {
-    isLoading = true;
-    error = null;
+  Future<void> loadCategories() async {
+    _isLoading = true;
     notifyListeners();
-
-    final name = nameController.text.trim();
-
-    if (name.isEmpty) {
-      error = 'O nome é obrigatório.';
-      isLoading = false;
-      notifyListeners();
-      return;
-    }
-
     try {
-      await categoryService.registerCategory(
-        name: name,
-      );
+      _categories = await _categoryService.findAllCategories();
     } catch (e) {
-      error = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = 'Erro ao carregar categorias';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
+  }
 
-    isLoading = false;
-    notifyListeners();
+  Future<void> deleteCategory(String id) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await _categoryService.deleteCategory(id);
+      _categories = await _categoryService.findAllCategories();
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void onItemTapped(int index) {
     _selectedIndex = index;
     notifyListeners();
-
-    // Lógica para redirecionar para as novas rotas/telas
-    // Exemplo: AppRouter.pushNamed(_routes[index]);
   }
 }
