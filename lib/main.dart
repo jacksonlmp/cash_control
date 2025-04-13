@@ -1,12 +1,12 @@
-import 'package:cash_control/data/repositories/user_repository.dart';
-import 'package:cash_control/ui/view_model/login_view_model.dart';
+import 'package:cash_control/ui/view_model/user_view_model.dart';
+import 'package:cash_control/ui/widgets/dashboard.screen.dart';
 import 'package:cash_control/ui/widgets/login.screen.dart';
 import 'package:cash_control/ui/widgets/user_registration.screen.dart';
 import 'package:cash_control/ui/widgets/welcome.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cash_control/ui/view_model/login_view_model.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
-import 'package:cash_control/data/services/user_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,20 +20,22 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => LoginViewModel(UserService(UserRepositoryImpl()) as UserRepository),
+          create: (_) => LoginViewModel(UserRepositoryImpl()),
         ),
-        // Aqui você pode adicionar outros ViewModels também
+        ChangeNotifierProvider(
+          create: (_) => UserViewModel(UserRepositoryImpl()),
+        ),
       ],
-      child: Builder(
-        builder:
-            (context) => MaterialApp(
-              title: 'CashControl',
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
-              ),
-              home: const UserRegistrationScreen(),
-            ),
+      child: MaterialApp(
+        title: 'CashControl',
+        theme: ThemeData(primarySwatch: Colors.deepPurple, useMaterial3: true),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const WelcomeScreen(),
+          '/login': (context) => const LoginScreen(),
+          '/register': (context) => const UserRegistrationScreen(),
+          '/dashboard': (context) => const DashboardScreen(),
+        },
       ),
     );
   }
