@@ -1,11 +1,11 @@
 // lib/ui/dashboard/widgets/dashboard.screen.dart
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
-import 'package:cash_control/navigation/dashboard_navigation.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/category_view_model.dart';
 import 'package:cash_control/ui/widgets/category_registration.screen.dart';
-import 'package:cash_control/ui/widgets/nav_items.dart';
+import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
+import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -109,17 +109,10 @@ class CategoryScreen extends StatelessWidget {
                       child: SizedBox(
                         width: double.infinity,
                         height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFA100FF), // Cor de fundo roxa
-                            foregroundColor: Colors.white,  // Cor do texto branca
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // Bordas arredondadas
-                            ),
-                          ),
-                          onPressed: viewModel.isLoading
-                              ? null
-                              : () {
+                        child: CustomButton(
+                          isLoading: viewModel.isLoading,
+                          text: 'Cadastrar',
+                          onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -132,35 +125,14 @@ class CategoryScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          child: viewModel.isLoading
-                              ? const CircularProgressIndicator(color: Colors.white)
-                              : const Text('Cadastrar'),
-                        ),
+                        )
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.white, width: 1.5),
-                ),
-              ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.black,
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.white,
-                currentIndex: viewModel.selectedIndex,
-                onTap: (index) {
-                  viewModel.onItemTapped(index);
-                  handleDashboardNavigation(index, context);
-                },
-                items: buildDashboardNavItems()
-              ),
-            ),
+            bottomNavigationBar: buildBottomNavigationBar(viewModel, context)
           );
         },
       ),

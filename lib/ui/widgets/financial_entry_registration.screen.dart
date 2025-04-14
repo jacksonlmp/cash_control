@@ -1,16 +1,16 @@
-// lib/ui/dashboard/widgets/dashboard.screen.dart
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
-import 'package:cash_control/navigation/dashboard_navigation.dart';
-import 'package:cash_control/ui/styles/input_decorations.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
-import 'package:cash_control/ui/widgets/nav_items.dart';
+import 'package:cash_control/ui/widgets/shared/custom_dropdown.dart';
+import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cash_control/ui/widgets/shared/custom_text_field.dart';
+import 'package:cash_control/ui/widgets/shared/custom_form.dart';
 
 class FinancialEntryRegistrationScreen extends StatelessWidget {
   const FinancialEntryRegistrationScreen({super.key});
@@ -21,7 +21,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
       create: (_) => FinancialEntryRegistrationViewModel(
         FinancialEntryService(
           FinancialEntryRepositoryImpl(),
-          CategoryService(CategoryRepositoryImpl())
+          CategoryService(CategoryRepositoryImpl()),
         ),
       ),
       child: Consumer<FinancialEntryRegistrationViewModel>(
@@ -30,7 +30,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
             backgroundColor: Colors.black,
             appBar: AppBar(
               title: const Text(
-                'Cadastrar Despesas/Receitas',
+                'Cadastrar Despesa/Receita',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.black,
@@ -41,89 +41,90 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
             body: Container(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 20),
-
-                    // Nome
-                    TextField(
-                      onChanged: viewModel.setName,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: inputDecoration('Nome'),
+                child: CustomForm(
+                  isLoading: viewModel.isLoading,
+                  buttonText: 'Cadastrar',
+                  onSubmit: () async {
+                    await viewModel.registerFinancialEntry();
+                    if (viewModel.errorMessage.isEmpty) {
+                      // Sucesso
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.grey[900],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            title: const Text(
+                              'Sucesso',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            content: const Text(
+                              'Entrada financeira cadastrada com sucesso!',
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text(
+                                  'OK',
+                                  style: TextStyle(color: Color(0xFFA100FF)),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  formFields: [
+                    CustomTextField(
+                      label: 'Nome',
+                      onChanged: (val) {
+                        viewModel.setName(val);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira um nome';
+                        }
+                        return null;
+                      },
                     ),
-
                     const SizedBox(height: 16),
-
-                    // Valor
-                    TextField(
+                    CustomTextField(
+                      label: 'Valor',
                       onChanged: (val) {
                         final parsed = double.tryParse(val.replaceAll(',', '.')) ?? 0.0;
                         viewModel.setValue(parsed);
                       },
                       keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: inputDecoration('Valor'),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Categoria (Dropdown)
-                    DropdownButtonFormField<Category>(
-                      value: viewModel.category,
-                      onChanged: (Category? newCategory) {
-                        if (newCategory != null) {
-                          viewModel.setCategory(newCategory);
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira um valor';
                         }
+                        return null;
                       },
-                      decoration: inputDecoration('Categoria'),
-                      style: const TextStyle(color: Colors.white),
-                      dropdownColor: Colors.grey[900],
-                      items: viewModel.categories.map((Category category) {
-                        return DropdownMenuItem<Category>(
-                          value: category,
-                          child: Text(
-                            category.name, // Exibe o nome da categoria
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      }).toList(),
                     ),
-
                     const SizedBox(height: 16),
-
-                    // Tipo
-                    // Dropdown de tipo
-                    DropdownButtonFormField<FinancialEntryType>(
-                      value: viewModel.type,
-                      onChanged: viewModel.setType,
-                      dropdownColor: Colors.grey[900],
-                      decoration: InputDecoration(
-                        labelText: 'Tipo',
-                        labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFFA100FF)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFFA100FF), width: 2),
-                        ),
-                      ),
-                      style: const TextStyle(color: Colors.white),
-                      items: FinancialEntryType.values.map((type) {
-                        return DropdownMenuItem(
-                          value: type,
-                          child: Text(
-                            type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      }).toList(),
+                    CustomDropdown(
+                        label: 'Categoria',
+                        items: viewModel.categories,
+                        getLabel: (category) => category.name,
+                        onChanged: (Category? newCategory) {
+                          if (newCategory != null) {
+                            viewModel.setCategory(newCategory);
+                          }
+                        }
                     ),
-
-                    const SizedBox(height: 16),
-
+                    CustomDropdown(
+                        label: 'Tipo',
+                        items: FinancialEntryType.values,
+                        getLabel: (type) => type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
+                        onChanged: viewModel.setType
+                    ),
                     // Data
                     TextButton(
                       style: TextButton.styleFrom(
@@ -160,97 +161,19 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    const SizedBox(height: 16),
-
                     if (viewModel.errorMessage.isNotEmpty)
                       Text(
                         viewModel.errorMessage,
                         style: const TextStyle(color: Colors.red),
                       ),
-
-                    const SizedBox(height: 16),
-
-                    SizedBox(
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFA100FF),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onPressed: viewModel.isLoading
-                            ? null
-                            : () async {
-                          await viewModel.registerFinancialEntry();
-                          if (viewModel.errorMessage.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.grey[900],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  title: const Text(
-                                    'Sucesso',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  content: const Text(
-                                    'Lançamento cadastrado com sucesso!',
-                                    style: TextStyle(color: Colors.white70),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text(
-                                        'OK',
-                                        style: TextStyle(color: Color(0xFFA100FF)),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        },
-                        child: viewModel.isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('Cadastrar'),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.white, width: 1.5),
-                ),
-              ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.black,
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.white,
-                onTap: (index) {
-                  viewModel.onItemTapped(index);
-                  handleDashboardNavigation(index, context);
-                },
-                currentIndex: viewModel.selectedIndex,
-                items: buildDashboardNavItems(),
-              ),
-            ),
+            bottomNavigationBar: buildBottomNavigationBar(viewModel, context)
           );
         },
       ),
     );
   }
 }
-
-
