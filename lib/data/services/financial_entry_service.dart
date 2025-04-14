@@ -17,6 +17,10 @@ class FinancialEntryService {
     return await _categoryService.findAllCategories();
   }
 
+  Future<List<FinancialEntry>> findAllFinancialEntries() async {
+    return await _repository.findAll();
+  }
+
   Future<void> deleteCategory(String id) async {
     await _repository.delete(id);
   }

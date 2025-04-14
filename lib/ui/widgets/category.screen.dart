@@ -113,7 +113,7 @@ class CategoryScreen extends StatelessWidget {
                           isLoading: viewModel.isLoading,
                           text: 'Cadastrar',
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => ChangeNotifierProvider(
