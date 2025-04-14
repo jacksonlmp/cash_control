@@ -1,18 +1,22 @@
 import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
+import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/domain/models/financial_entry.dart';
 import 'package:flutter/material.dart';
 
 class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   final FinancialEntryService _financialEntryService;
-  FinancialEntryRegistrationViewModel(this._financialEntryService);
+  FinancialEntryRegistrationViewModel(this._financialEntryService){
+    loadCategories();
+  }
 
   String _name = '';
   double _value = 0.0;
-  String _categoryId = '';
+  Category? _category;
   FinancialEntryType _type = FinancialEntryType.despesa;
   DateTime _date = DateTime.now();
+  List<Category> _categories = [];
 
   String _errorMessage = '';
   bool _isLoading = false;
@@ -21,9 +25,10 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   // Getters
   String get name => _name;
   double get value => _value;
-  String get categoryId => _categoryId;
+  Category? get category => _category;
   FinancialEntryType get type => _type;
   DateTime get date => _date;
+  List<Category> get categories => _categories;
 
   String get errorMessage => _errorMessage;
   bool get isLoading => _isLoading;
@@ -39,8 +44,8 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCategoryId(String categoryId) {
-    _categoryId = categoryId;
+  void setCategory(Category category) {
+    _category = category;
     notifyListeners();
   }
 
@@ -54,8 +59,21 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadCategories() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _categories = await _financialEntryService.findAllCategories();
+    } catch (e) {
+      _errorMessage = 'Erro ao carregar categorias';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> registerFinancialEntry() async {
-    if (_name.isEmpty || _value <= 0 || _categoryId.isEmpty) {
+    if (_name.isEmpty || _value <= 0 || _category == null) {
       _errorMessage = 'Preencha todos os campos obrigatórios.';
       notifyListeners();
       return;
@@ -70,7 +88,7 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
           id: UniqueKey().toString(),
           name: _name,
           value: _value,
-          categoryId: _categoryId,
+          categoryId: _category!.id,
           type: _type,
           date: _date,
         ),

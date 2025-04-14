@@ -41,7 +41,10 @@ void handleDashboardNavigation(int index, BuildContext context) {
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
               create: (_) => FinancialEntryRegistrationViewModel(
-                  FinancialEntryService(FinancialEntryRepositoryImpl())
+                  FinancialEntryService(
+                      FinancialEntryRepositoryImpl(),
+                      CategoryService(CategoryRepositoryImpl())
+                  )
               ),
               child: const FinancialEntryRegistrationScreen(),
             )

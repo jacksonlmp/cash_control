@@ -1,7 +1,10 @@
 // lib/ui/dashboard/widgets/dashboard.screen.dart
+import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository_impl.dart';
+import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
+import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/navigation/dashboard_navigation.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
 import 'package:cash_control/ui/widgets/nav_items.dart';
@@ -15,7 +18,10 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => FinancialEntryRegistrationViewModel(
-        FinancialEntryService(FinancialEntryRepositoryImpl()),
+        FinancialEntryService(
+          FinancialEntryRepositoryImpl(),
+          CategoryService(CategoryRepositoryImpl())
+        ),
       ),
       child: Consumer<FinancialEntryRegistrationViewModel>(
         builder: (context, viewModel, child) {
@@ -61,11 +67,26 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    // Categoria ID
-                    TextField(
-                      onChanged: viewModel.setCategoryId,
+                    // Categoria (Dropdown)
+                    DropdownButtonFormField<Category>(
+                      value: viewModel.category,
+                      onChanged: (Category? newCategory) {
+                        if (newCategory != null) {
+                          viewModel.setCategory(newCategory);
+                        }
+                      },
+                      decoration: _inputDecoration('Categoria'),
                       style: const TextStyle(color: Colors.white),
-                      decoration: _inputDecoration('ID da Categoria'),
+                      dropdownColor: Colors.grey[900],
+                      items: viewModel.categories.map((Category category) {
+                        return DropdownMenuItem<Category>(
+                          value: category,
+                          child: Text(
+                            category.name, // Exibe o nome da categoria
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }).toList(),
                     ),
 
                     const SizedBox(height: 16),
@@ -75,7 +96,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                     DropdownButtonFormField<FinancialEntryType>(
                       value: viewModel.type,
                       onChanged: viewModel.setType,
-                      dropdownColor: Colors.black,
+                      dropdownColor: Colors.grey[900],
                       decoration: InputDecoration(
                         labelText: 'Tipo',
                         labelStyle: const TextStyle(color: Colors.white),
@@ -104,6 +125,13 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
 
                     // Data
                     TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.grey[900],
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                       onPressed: () async {
                         DateTime? picked = await showDatePicker(
                           context: context,
@@ -122,8 +150,13 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                         }
                       },
                       child: Text(
-                        'Data: ${viewModel.date.day}/${viewModel.date.month}/${viewModel.date.year}',
-                        style: const TextStyle(color: Colors.white),
+                        'Data: ${viewModel.date.day.toString().padLeft(2, '0')}/'
+                            '${viewModel.date.month.toString().padLeft(2, '0')}/'
+                            '${viewModel.date.year}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
 
@@ -233,4 +266,5 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
     );
   }
 }
+
 
