@@ -1,4 +1,5 @@
-// lib/ui/dashboard/widgets/dashboard.screen.dart
+import 'package:cash_control/data/repositories/user_repository_impl.dart';
+import 'package:cash_control/data/services/user_service.dart';
 import 'package:cash_control/navigation/dashboard_navigation.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
 import 'package:cash_control/ui/widgets/nav_items.dart';
@@ -12,7 +13,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DashboardViewModel(),
+      create: (_) => DashboardViewModel(UserService(UserRepositoryImpl())),
       child: Consumer<CategoryRegistrationViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -42,11 +43,16 @@ class CategoryRegistrationScreen extends StatelessWidget {
                         labelStyle: const TextStyle(color: Colors.white),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFFA100FF)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFA100FF),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFFA100FF), width: 2),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFA100FF),
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),
@@ -67,47 +73,59 @@ class CategoryRegistrationScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: viewModel.isLoading
-                            ? null
-                            : () async {
-                          await viewModel.registerCategory();
-                          if (viewModel.errorMessage.isEmpty) {
-                            // Sucesso
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.grey[900],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  title: const Text(
-                                    'Sucesso',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  content: const Text(
-                                    'Categoria cadastrada com sucesso!',
-                                    style: TextStyle(color: Colors.white70),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text(
-                                        'OK',
-                                        style: TextStyle(color: Color(0xFFA100FF)),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
+                        onPressed:
+                            viewModel.isLoading
+                                ? null
+                                : () async {
+                                  await viewModel.registerCategory();
+                                  if (viewModel.errorMessage.isEmpty) {
+                                    // Sucesso
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.grey[900],
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          title: const Text(
+                                            'Sucesso',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          content: const Text(
+                                            'Categoria cadastrada com sucesso!',
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text(
+                                                'OK',
+                                                style: TextStyle(
+                                                  color: Color(0xFFA100FF),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
                                       },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        },
-                        child: viewModel.isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('Cadastrar'),
+                                    );
+                                  }
+                                },
+                        child:
+                            viewModel.isLoading
+                                ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                                : const Text('Cadastrar'),
                       ),
                     ),
                   ],
@@ -129,7 +147,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
                   viewModel.onItemTapped(index);
                   handleDashboardNavigation(index, context);
                 },
-                items: buildDashboardNavItems()
+                items: buildDashboardNavItems(),
               ),
             ),
           );

@@ -1,4 +1,3 @@
-// lib/ui/dashboard/widgets/dashboard.screen.dart
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/navigation/dashboard_navigation.dart';
