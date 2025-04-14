@@ -6,6 +6,7 @@ import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/navigation/dashboard_navigation.dart';
+import 'package:cash_control/ui/styles/input_decorations.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
 import 'package:cash_control/ui/widgets/nav_items.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                     TextField(
                       onChanged: viewModel.setName,
                       style: const TextStyle(color: Colors.white),
-                      decoration: _inputDecoration('Nome'),
+                      decoration: inputDecoration('Nome'),
                     ),
 
                     const SizedBox(height: 16),
@@ -62,7 +63,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                       },
                       keyboardType: TextInputType.number,
                       style: const TextStyle(color: Colors.white),
-                      decoration: _inputDecoration('Valor'),
+                      decoration: inputDecoration('Valor'),
                     ),
 
                     const SizedBox(height: 16),
@@ -75,7 +76,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                           viewModel.setCategory(newCategory);
                         }
                       },
-                      decoration: _inputDecoration('Categoria'),
+                      decoration: inputDecoration('Categoria'),
                       style: const TextStyle(color: Colors.white),
                       dropdownColor: Colors.grey[900],
                       items: viewModel.categories.map((Category category) {
@@ -247,21 +248,6 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.white),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xFFA100FF)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xFFA100FF), width: 2),
       ),
     );
   }
