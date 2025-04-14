@@ -1,4 +1,3 @@
-// lib/ui/dashboard/widgets/dashboard.screen.dart
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
@@ -14,6 +13,8 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return ChangeNotifierProvider(
       create: (_) => CategoryViewModel(
           CategoryService(CategoryRepositoryImpl())
@@ -132,7 +133,7 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ),
             ),
-            bottomNavigationBar: buildBottomNavigationBar(viewModel, context)
+            bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey)
           );
         },
       ),

@@ -17,6 +17,8 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return ChangeNotifierProvider(
       create: (_) => FinancialEntryRegistrationViewModel(
         FinancialEntryService(
@@ -170,7 +172,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                 ),
               ),
             ),
-            bottomNavigationBar: buildBottomNavigationBar(viewModel, context)
+            bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },
       ),
