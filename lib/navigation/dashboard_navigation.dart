@@ -6,11 +6,13 @@ import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/ui/view_model/category_view_model.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
+import 'package:cash_control/ui/view_model/financial_entry_view_model.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
 import 'package:cash_control/ui/widgets/financial_entry_registration.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../ui/widgets/category.screen.dart';
+import '../ui/widgets/financial_entry.screen.dart';
 
 void handleDashboardNavigation(int index, BuildContext context) {
   switch (index) {
@@ -47,6 +49,22 @@ void handleDashboardNavigation(int index, BuildContext context) {
                   )
               ),
               child: const FinancialEntryRegistrationScreen(),
+            )
+        )
+      );
+      break;
+    case 3:
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+              create: (_) => FinancialEntryViewModel(
+                  FinancialEntryService(
+                      FinancialEntryRepositoryImpl(),
+                      CategoryService(CategoryRepositoryImpl())
+                  )
+              ),
+              child: const FinancialEntryScreen(),
             )
         )
       );
