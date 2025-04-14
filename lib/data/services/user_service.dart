@@ -25,6 +25,10 @@ class UserService {
     return await _repository.getUserByEmailAndPassword(email, password);
   }
 
+  Future<void> logout() async {
+    await _repository.logout();
+  }
+
   bool _isValidEmail(String email) {
     // Implementar validação de e-mail
     return true;

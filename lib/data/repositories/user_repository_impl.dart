@@ -1,8 +1,8 @@
 import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/data/repositories/user_repository.dart';
 import 'package:cash_control/domain/models/user.dart';
-import 'package:cash_control/data/model/user_model.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
@@ -28,6 +28,9 @@ class UserRepositoryImpl implements UserRepository {
     );
     if (maps.isNotEmpty) {
       final map = maps.first;
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('logged_user_id', map['id'].toString());
+
       return User(
         id: map['id'],
         name: map['name'],
@@ -49,5 +52,11 @@ class UserRepositoryImpl implements UserRepository {
     );
 
     return maps.isNotEmpty;
+  }
+
+  @override
+  Future<void> logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('logged_user_id');
   }
 }
