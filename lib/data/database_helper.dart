@@ -45,6 +45,18 @@ class DatabaseHelper {
         name TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE financial_entry (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        value REAL NOT NULL,
+        category_id TEXT NOT NULL,
+        type TEXT CHECK(type IN ('DESPESA', 'RECEITA')) NOT NULL,
+        date TEXT NOT NULL,
+        FOREIGN KEY (category_id) REFERENCES category(id)
+      )
+    ''');
     // Adicionar demais tabelas
   }
 
@@ -65,6 +77,15 @@ class DatabaseHelper {
       print(category);
     }
     return categories;
+  }
+
+  Future<void> printFinancialEntries() async {
+    final db = await database;
+    final List<Map<String, dynamic>> financialEntries = await db.query('financial_entry');
+
+    for (var entry in financialEntries) {
+      print(entry);
+    }
   }
 
   // Função para exportar o banco de dados
