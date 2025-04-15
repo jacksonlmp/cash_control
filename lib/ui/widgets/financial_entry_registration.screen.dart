@@ -5,6 +5,7 @@ import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
+import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:cash_control/ui/widgets/shared/custom_dropdown.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -128,14 +129,12 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                         onChanged: viewModel.setType
                     ),
                     // Data
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.grey[900],
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                    CustomButton(
+                      isLoading: viewModel.isLoading,
+                      text: 'Data: ${viewModel.date.day.toString().padLeft(2, '0')}/'
+                          '${viewModel.date.month.toString().padLeft(2, '0')}/'
+                          '${viewModel.date.year}',
+                      backgroundColor: Colors.grey[900],
                       onPressed: () async {
                         DateTime? picked = await showDatePicker(
                           context: context,
@@ -153,15 +152,6 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                           viewModel.setDate(picked);
                         }
                       },
-                      child: Text(
-                        'Data: ${viewModel.date.day.toString().padLeft(2, '0')}/'
-                            '${viewModel.date.month.toString().padLeft(2, '0')}/'
-                            '${viewModel.date.year}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
                     ),
                     if (viewModel.errorMessage.isNotEmpty)
                       Text(

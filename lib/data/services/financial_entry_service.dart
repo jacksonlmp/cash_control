@@ -21,7 +21,7 @@ class FinancialEntryService {
     return await _repository.findAll();
   }
 
-  Future<void> deleteCategory(String id) async {
+  Future<void> deleteFinancialEntry(String id) async {
     await _repository.delete(id);
   }
 
