@@ -5,6 +5,7 @@ import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
+import 'package:cash_control/ui/widgets/shared/app_bar.dart';
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:cash_control/ui/widgets/shared/custom_dropdown.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
@@ -32,16 +33,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             backgroundColor: Colors.black,
-            appBar: AppBar(
-              title: const Text(
-                'Cadastrar Despesa/Receita',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-              shape: const Border(
-                bottom: BorderSide(color: Colors.white, width: 1.5),
-              ),
-            ),
+            appBar: buildAppBar(context, 'Cadastrar Despesa/Receita', '/financial-entry'),
             endDrawer: buildEndDrawer(context),
             body: Container(
               padding: const EdgeInsets.all(16.0),

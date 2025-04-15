@@ -6,6 +6,7 @@ import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/domain/models/financial_entry.dart';
 import 'package:cash_control/ui/view_model/financial_entry_edit_view_model.dart';
+import 'package:cash_control/ui/widgets/shared/app_bar.dart';
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:cash_control/ui/widgets/shared/custom_dropdown.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
@@ -35,16 +36,7 @@ class FinancialEntryEditScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             backgroundColor: Colors.black,
-            appBar: AppBar(
-              title: const Text(
-                'Editar Despesa/Receita',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-              shape: const Border(
-                bottom: BorderSide(color: Colors.white, width: 1.5),
-              ),
-            ),
+            appBar: buildAppBar(context, 'Editar Despesa/Receita', '/financial-entry'),
             body: Container(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(

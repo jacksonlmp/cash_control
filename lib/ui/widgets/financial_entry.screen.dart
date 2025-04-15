@@ -7,6 +7,7 @@ import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/financial_entry_view_model.dart';
 import 'package:cash_control/ui/widgets/financial_entry_registration.screen.dart';
+import 'package:cash_control/ui/widgets/shared/app_bar.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
@@ -33,16 +34,7 @@ class FinancialEntryScreen extends StatelessWidget {
       child: Consumer<FinancialEntryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                'Despesas',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-              shape: const Border(
-                bottom: BorderSide(color: Colors.white, width: 1.5),
-              ),
-            ),
+              appBar: buildAppBar(context, 'Despesas', '/dashboard'),
             body: Container(
               color: Colors.black,
               child: Center(
