@@ -21,7 +21,6 @@ Container buildBottomNavigationBar(
       onTap: (index) {
         viewModel.onItemTapped(index);
         if (index == 4) {
-          // Índice do "Meu perfil"
           scaffoldKey.currentState?.openEndDrawer();
         } else {
           handleDashboardNavigation(index, context, scaffoldKey);

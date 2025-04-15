@@ -22,7 +22,6 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   bool _isLoading = false;
   int _selectedIndex = 2;
 
-  // Getters
   String get name => _name;
   double get value => _value;
   Category? get category => _category;
