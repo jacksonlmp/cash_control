@@ -5,13 +5,18 @@ import 'package:provider/provider.dart';
 import '../view_model/dashboard_view_model.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>(); // Agora é membro da classe
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
     return ChangeNotifierProvider(
       create: (_) => DashboardViewModel(UserService(UserRepositoryImpl())),
       child: Consumer<DashboardViewModel>(
@@ -43,7 +48,7 @@ class DashboardScreen extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  DrawerHeader(
+                  const DrawerHeader(
                     decoration: BoxDecoration(color: Colors.black),
                     child: Text(
                       'Meu Perfil',
@@ -51,18 +56,18 @@ class DashboardScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: Icon(Icons.lock, color: Colors.black),
-                    title: Text('Trocar Senha'),
+                    leading: const Icon(Icons.lock, color: Colors.black),
+                    title: const Text('Trocar Senha'),
                     onTap: () {
+                      viewModel.forgotPassword(context);
                       Navigator.pop(context); // Fecha o drawer
-                      // Coloque aqui a navegação para a tela de trocar senha
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.exit_to_app, color: Colors.black),
-                    title: Text('Logout'),
+                    leading: const Icon(Icons.exit_to_app, color: Colors.black),
+                    title: const Text('Logout'),
                     onTap: () {
-                      Navigator.pop(context); // Fecha o drawer
+                      Navigator.pop(context);
                       viewModel.logout(context);
                     },
                   ),

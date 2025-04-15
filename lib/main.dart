@@ -1,5 +1,6 @@
 import 'package:cash_control/ui/view_model/user_view_model.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
+import 'package:cash_control/ui/widgets/forgot_password.screen.dart';
 import 'package:cash_control/ui/widgets/login.screen.dart';
 import 'package:cash_control/ui/widgets/user_registration.screen.dart';
 import 'package:cash_control/ui/widgets/welcome.screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const UserRegistrationScreen(),
           '/dashboard': (context) => const DashboardScreen(),
+          '/forgot-password': (context) => const ForgotPassword(),     
         },
       ),
     );

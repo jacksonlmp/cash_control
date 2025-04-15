@@ -59,4 +59,9 @@ class UserRepositoryImpl implements UserRepository {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('logged_user_id');
   }
+
+  @override
+  Future<void> forgotPassword() async {
+    return;
+  }
 }

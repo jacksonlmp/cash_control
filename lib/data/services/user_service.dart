@@ -29,6 +29,10 @@ class UserService {
     await _repository.logout();
   }
 
+  Future<void> forgotPassword() async {
+    await _repository.forgotPassword();
+  }
+
   bool _isValidEmail(String email) {
     // Implementar validação de e-mail
     return true;
