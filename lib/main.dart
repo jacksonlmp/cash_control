@@ -11,6 +11,10 @@ import 'package:cash_control/ui/view_model/login_view_model.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
 
 void main() {
+  // Certifique-se de que o Flutter está inicializado antes de executar qualquer código dependente da plataforma
+  WidgetsFlutterBinding.ensureInitialized();
+  // deleta o banco
+  // DatabaseHelper().deleteDatabaseFile();
   runApp(const MyApp());
 }
 
