@@ -80,6 +80,7 @@ class FinancialEntryEditScreen extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop();
+                                      Navigator.pushReplacementNamed(context, '/financial-entry');
                                     },
                                   ),
                                 ],

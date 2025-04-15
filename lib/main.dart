@@ -1,4 +1,5 @@
 import 'package:cash_control/ui/view_model/user_view_model.dart';
+import 'package:cash_control/ui/widgets/category.screen.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
 import 'package:cash_control/ui/widgets/financial_entry.screen.dart';
 import 'package:cash_control/ui/widgets/forgot_password.screen.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           '/dashboard': (context) => const DashboardScreen(),
           '/forgot-password': (context) => const ForgotPassword(),     
           '/financial-entry': (context) => const FinancialEntryScreen(),
+          '/category': (context) => const CategoryScreen(),
         },
       ),
     );
