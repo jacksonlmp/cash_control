@@ -2,6 +2,7 @@ import 'package:cash_control/data/repositories/user_repository_impl.dart';
 import 'package:cash_control/data/services/user_service.dart';
 import 'package:cash_control/ui/view_model/dashboard_view_model.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
+import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/ui/widgets/shared/custom_text_field.dart';
@@ -93,6 +94,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
                 ),
               ),
             ),
+            endDrawer: buildEndDrawer(context),
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },

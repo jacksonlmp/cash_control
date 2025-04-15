@@ -5,6 +5,7 @@ import 'package:cash_control/ui/view_model/category_view_model.dart';
 import 'package:cash_control/ui/widgets/category_registration.screen.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
+import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -133,6 +134,7 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ),
             ),
+            endDrawer: buildEndDrawer(context),
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey)
           );
         },

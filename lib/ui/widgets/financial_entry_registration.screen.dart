@@ -8,6 +8,7 @@ import 'package:cash_control/ui/view_model/financial_entry_registration_view_mod
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:cash_control/ui/widgets/shared/custom_dropdown.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
+import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/ui/widgets/shared/custom_text_field.dart';
@@ -41,6 +42,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                 bottom: BorderSide(color: Colors.white, width: 1.5),
               ),
             ),
+            endDrawer: buildEndDrawer(context),
             body: Container(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
