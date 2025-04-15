@@ -9,6 +9,7 @@
 ### Nome e E-mail dos Membros da Equipe
 - **Izabel Yale Neves Nascimento** - [izabel.yale@ufape.edu.br](mailto:izabel.yale@ufape.edu.br)
 - **Jackson Lima Paes** - [jacksonlmp17.jl@gmail.com](mailto:jacksonlmp17.jl@gmail.com)
+- **João Victor Leite dos Santos** - [joao.vlsantos2@ufape.edu.br](mailto:joao.vlsantos2@ufape.edu.br)
 
 ## Informações gerais do aplicativo
 
