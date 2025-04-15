@@ -11,13 +11,15 @@ class DashboardViewModel extends ChangeNotifier {
   void onItemTapped(int index) {
     _selectedIndex = index;
     notifyListeners();
-
-    // Lógica para redirecionar para as novas rotas/telas
-    // Exemplo: AppRouter.pushNamed(_routes[index]);
   }
 
   Future<void> logout(BuildContext context) async {
     await _userService.logout();
     Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  Future<void> forgotPassword(BuildContext context) async {
+    await _userService.logout();
+    Navigator.pushNamed(context, '/forgot-password');
   }
 }

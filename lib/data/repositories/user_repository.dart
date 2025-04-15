@@ -5,4 +5,5 @@ abstract class UserRepository {
   Future<bool> existsEmail(String email);
   Future<User?> getUserByEmailAndPassword(String email, String password);
   Future<void> logout(); 
+  Future<void> forgotPassword(); 
 }
