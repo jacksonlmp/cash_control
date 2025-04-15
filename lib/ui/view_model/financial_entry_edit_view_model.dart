@@ -76,26 +76,19 @@ class FinancialEntryEditViewModel extends ChangeNotifier {
   Future<void> loadCategories() async {
     _isLoading = true;
     notifyListeners();
+
     try {
       _categories = await _financialEntryService.findAllCategories();
-      _category = _categories.firstWhere(
-            (cat) => cat.id == _financialEntry.categoryId,
-        orElse: () => getCategoryById(_financialEntry.categoryId)
-      );
+
+      final matched = _categories.where((cat) => cat.id == _financialEntry.categoryId);
+      _category = matched.isNotEmpty ? matched.first : null;
+
     } catch (e) {
       _errorMessage = 'Erro ao carregar categorias';
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-  }
-
-  Category getCategoryById(String id) {
-    final category = categories.firstWhere(
-          (c) => c.id == id,
-      orElse: () => Category(id: '', name: 'Desconhecida'),
-    );
-    return category;
   }
 
   Future<void> updateFinancialEntry() async {
