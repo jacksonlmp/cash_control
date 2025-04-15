@@ -61,8 +61,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     DashboardCharts(
                       financialEntryService: financialEntryService,
                     ),
-                  ],
-                ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.lock, color: Colors.black),
+                    title: const Text('Trocar Senha'),
+                    onTap: () {
+                      viewModel.forgotPassword(context);
+                      Navigator.pop(context); // Fecha o drawer
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.exit_to_app, color: Colors.black),
+                    title: const Text('Logout'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      viewModel.logout(context);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.bar_chart, color: Colors.black),
+                    title: const Text('Metas'),
+                    onTap: () {
+                    Navigator.pop(context);
+                    viewModel.navigateToGoals(context);
+                    },
+                  ),
+                ],
+
               ),
             ),
             endDrawer: buildEndDrawer(context),
