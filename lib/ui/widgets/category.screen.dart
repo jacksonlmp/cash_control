@@ -3,8 +3,10 @@ import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/category_view_model.dart';
 import 'package:cash_control/ui/widgets/category_registration.screen.dart';
+import 'package:cash_control/ui/widgets/shared/app_bar.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
+import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,16 +24,7 @@ class CategoryScreen extends StatelessWidget {
       child: Consumer<CategoryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                'Categorias',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-              shape: const Border(
-                bottom: BorderSide(color: Colors.white, width: 1.5),
-              ),
-            ),
+            appBar: buildAppBar(context, 'Categorias', '/dashboard'),
             body: Container(
               color: Colors.black,
               child: Center(
@@ -133,6 +126,7 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ),
             ),
+            endDrawer: buildEndDrawer(context),
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey)
           );
         },

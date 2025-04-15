@@ -1,7 +1,9 @@
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
 import 'package:cash_control/data/services/user_service.dart';
 import 'package:cash_control/ui/view_model/dashboard_view_model.dart';
+import 'package:cash_control/ui/widgets/shared/app_bar.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
+import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/ui/widgets/shared/custom_text_field.dart';
@@ -20,16 +22,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             backgroundColor: Colors.black,
-            appBar: AppBar(
-              title: const Text(
-                'Cadastrar Categoria',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-              shape: const Border(
-                bottom: BorderSide(color: Colors.white, width: 1.5),
-              ),
-            ),
+            appBar: buildAppBar(context, 'Cadastrar Categoria', '/category'),
             body: Container(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -64,6 +57,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
                                 ),
                                 onPressed: () {
                                   Navigator.of(context).pop();
+                                  Navigator.pushReplacementNamed(context, '/category');
                                 },
                               ),
                             ],
@@ -92,6 +86,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
                 ),
               ),
             ),
+            endDrawer: buildEndDrawer(context),
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },
