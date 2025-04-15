@@ -13,40 +13,72 @@ class MonthlyFinancialChart extends StatelessWidget {
     final despesas = months.map((m) => data[m]?['DESPESA'] ?? 0.0).toList();
 
     return AspectRatio(
-      aspectRatio: 1.7,
-      child: BarChart(
-        BarChartData(
-          barGroups: List.generate(months.length, (i) {
-            return BarChartGroupData(x: i, barRods: [
-              BarChartRodData(
-                toY: receitas[i],
-                color: Colors.green,
-                width: 8,
+        aspectRatio: 1.7,
+        child: BarChart(
+          BarChartData(
+            backgroundColor: Colors.black,
+            barGroups: List.generate(months.length, (i) {
+              return BarChartGroupData(x: i, barRods: [
+                BarChartRodData(
+                  toY: receitas[i],
+                  color: Colors.green,
+                  width: 8,
+                ),
+                BarChartRodData(
+                  toY: despesas[i],
+                  color: Colors.red,
+                  width: 8,
+                ),
+              ]);
+            }),
+            titlesData: FlTitlesData(
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 30,
+                  getTitlesWidget: (value, _) {
+                    final index = value.toInt();
+                    if (index >= 0 && index < months.length) {
+                      return Text(
+                        months[index].substring(5),
+                        style: const TextStyle(color: Colors.white),
+                      );
+                    }
+                    return const Text('');
+                  },
+                ),
               ),
-              BarChartRodData(
-                toY: despesas[i],
-                color: Colors.red,
-                width: 8,
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 40,
+                  getTitlesWidget: (value, _) {
+                    return Text(
+                      value.toStringAsFixed(0),
+                      style: const TextStyle(color: Colors.white),
+                    );
+                  },
+                ),
               ),
-            ]);
-          }),
-          titlesData: FlTitlesData(
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 30,
-                getTitlesWidget: (value, _) {
-                  final index = value.toInt();
-                  if (index >= 0 && index < months.length) {
-                    return Text(months[index].substring(5)); // só mês
-                  }
-                  return const Text('');
-                },
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
               ),
             ),
+            gridData: FlGridData(
+              show: true,
+              getDrawingHorizontalLine: (_) => FlLine(
+                color: Colors.white24,
+                strokeWidth: 1,
+              ),
+            ),
+            borderData: FlBorderData(
+              show: false,
+            ),
           ),
-        ),
-      ),
+        )
     );
   }
 }
