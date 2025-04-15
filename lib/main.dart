@@ -1,16 +1,9 @@
 import 'package:cash_control/ui/view_model/goal_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/goal_view_model.dart';
 import 'package:cash_control/ui/view_model/user_view_model.dart';
-
-import 'package:cash_control/ui/widgets/category.screen.dart';
-
 import 'package:cash_control/ui/view_model/login_view_model.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
-
-
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
-import 'package:cash_control/ui/widgets/financial_entry.screen.dart';
-import 'package:cash_control/ui/widgets/financial_entry_registration.screen.dart';
 import 'package:cash_control/ui/widgets/forgot_password.screen.dart';
 import 'package:cash_control/ui/widgets/goal.screen.dart';
 import 'package:cash_control/ui/widgets/goal_registration.screen.dart';
@@ -19,9 +12,6 @@ import 'package:cash_control/ui/widgets/user_registration.screen.dart';
 import 'package:cash_control/ui/widgets/welcome.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cash_control/ui/view_model/login_view_model.dart';
-import 'package:cash_control/data/repositories/user_repository_impl.dart';
-
 import 'data/services/goal_service.dart';
 
 void main() {
@@ -51,6 +41,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => GoalViewModel(GoalService()),
         ),
+        ChangeNotifierProvider(create: (_) => FinancialReportViewModel(),
+        ),
       ],
       child: MaterialApp(
         title: 'CashControl',
@@ -61,14 +53,14 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const UserRegistrationScreen(),
           '/dashboard': (context) => const DashboardScreen(),
-          '/forgot-password': (context) => const ForgotPassword(),     
-
+          '/forgot-password': (context) => const ForgotPassword(),
           '/financial-entry': (context) => const FinancialEntryScreen(),
           '/financial-entry-registration': (context) => const FinancialEntryRegistrationScreen(),
           '/category': (context) => const CategoryScreen(),
           '/goals': (context) => const GoalScreen(),
           '/goals/register': (context) => const GoalRegistrationScreen(),
-
+          '/monthly_evolution': (context) =>  ChartScreen(),
+          '/monthly_report': (context) => const FinancialReportScreen(),
         },
       ),
     );

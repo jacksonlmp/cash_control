@@ -21,26 +21,5 @@ class GoalService {
 
   Future<int> updateCurrentValue(String id, double currentValue) => _goalRepository.updateCurrentValue(id, currentValue);
 
-  /* Recalcula o progresso das metas baseado nas transações relacionadas.
-  Future<void> recalculateGoalsProgress() async {
-    final goals = await getGoals();
 
-    for (var goal in goals) {
-      // Buscar transações relacionadas à meta
-      final transactions = await _transactionRepository.getTransactionsByGoal(goal.id);
-
-      // Calcular a soma total dessas transações
-      final total = transactions.fold<double>(
-        0.0,
-            (sum, transaction) => sum + transaction.amount,
-      );
-
-      // Atualizar o valor atual da meta
-      await updateCurrentValue(goal.id, total);
-    }
-  }*/
 }
-
-
-
-

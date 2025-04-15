@@ -86,6 +86,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     viewModel.navigateToGoals(context);
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.show_chart, color: Colors.black),
+                    title: const Text('Evolução Mensal'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/monthly_evolution');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.account_balance_outlined, color: Colors.black),
+                    title: const Text('Relatório Mensal'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/monthly_report');
+                    },
+                  ),
                 ],
 
               ),
