@@ -1,9 +1,15 @@
+import 'package:cash_control/ui/view_model/financial_report_view_model.dart';
 import 'package:cash_control/ui/view_model/goal_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/goal_view_model.dart';
 import 'package:cash_control/ui/view_model/user_view_model.dart';
 import 'package:cash_control/ui/view_model/login_view_model.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
+import 'package:cash_control/ui/widgets/category.screen.dart';
+import 'package:cash_control/ui/widgets/chart_screen.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
+import 'package:cash_control/ui/widgets/financial_entry.screen.dart';
+import 'package:cash_control/ui/widgets/financial_entry_registration.screen.dart';
+import 'package:cash_control/ui/widgets/financial_report.screen.dart';
 import 'package:cash_control/ui/widgets/forgot_password.screen.dart';
 import 'package:cash_control/ui/widgets/goal.screen.dart';
 import 'package:cash_control/ui/widgets/goal_registration.screen.dart';
@@ -41,7 +47,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => GoalViewModel(GoalService()),
         ),
-        ChangeNotifierProvider(create: (_) => FinancialReportViewModel(),
+        ChangeNotifierProvider(
+          create: (_) => FinancialReportViewModel(),
         ),
       ],
       child: MaterialApp(

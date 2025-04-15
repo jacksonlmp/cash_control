@@ -61,49 +61,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     DashboardCharts(
                       financialEntryService: financialEntryService,
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.lock, color: Colors.black),
-                    title: const Text('Trocar Senha'),
-                    onTap: () {
-                      viewModel.forgotPassword(context);
-                      Navigator.pop(context); // Fecha o drawer
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.exit_to_app, color: Colors.black),
-                    title: const Text('Logout'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      viewModel.logout(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.bar_chart, color: Colors.black),
-                    title: const Text('Metas'),
-                    onTap: () {
-                    Navigator.pop(context);
-                    viewModel.navigateToGoals(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.show_chart, color: Colors.black),
-                    title: const Text('Evolução Mensal'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/monthly_evolution');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.account_balance_outlined, color: Colors.black),
-                    title: const Text('Relatório Mensal'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/monthly_report');
-                    },
-                  ),
-                ],
-
+                  ],
+                )
               ),
             ),
             endDrawer: buildEndDrawer(context),

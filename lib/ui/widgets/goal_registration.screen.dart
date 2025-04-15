@@ -1,3 +1,4 @@
+import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -191,14 +192,7 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                   const SizedBox(height: 24),
                   SizedBox(
                     height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purpleAccent,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                    child: CustomButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           final target = double.parse(_targetValueController.text);
@@ -238,7 +232,8 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                           }
                         }
                       },
-                      child: Text(widget.goal == null ? 'Criar Meta' : 'Salvar Alterações'),
+                      text: widget.goal == null ? 'Criar Meta' : 'Salvar Alterações',
+                      isLoading: viewModel.isLoading,
                     ),
                   ),
                 ],

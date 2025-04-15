@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final bool hasBorder;
+  final IconData? icon;
 
   const CustomButton({
     required this.isLoading,
@@ -14,6 +15,7 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.backgroundColor,
     this.hasBorder = false,
+    this.icon,
     super.key,
   });
 
@@ -35,7 +37,17 @@ class CustomButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
-            : Text(text),
+            : Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 20, color: Colors.white),
+              const SizedBox(width: 8),
+            ],
+            Text(text),
+          ],
+        ),
       ),
     );
   }

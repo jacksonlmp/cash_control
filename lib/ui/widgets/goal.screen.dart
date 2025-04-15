@@ -1,3 +1,4 @@
+import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/domain/models/goal.dart';
@@ -31,10 +32,9 @@ class _GoalScreenState extends State<GoalScreen> {
       body: Consumer<GoalViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator(color: Colors.purpleAccent));
+            return const Center(child: CircularProgressIndicator(color: Color(0xFFA100FF)));
           }
-
-          if (viewModel.errorMessage != null) {
+          if (viewModel.errorMessage.isNotEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -45,14 +45,11 @@ class _GoalScreenState extends State<GoalScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purpleAccent,
-                      foregroundColor: Colors.black,
-                    ),
+                  CustomButton(
+                    isLoading: viewModel.isLoading,
                     onPressed: () => viewModel.loadGoals(),
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Tentar Novamente'),
+                    icon: Icons.refresh,
+                    text: 'Tentar Novamente',
                   ),
                 ],
               ),
@@ -69,14 +66,11 @@ class _GoalScreenState extends State<GoalScreen> {
                     style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purpleAccent,
-                      foregroundColor: Colors.black,
-                    ),
+                  CustomButton(
+                    isLoading: viewModel.isLoading,
                     onPressed: () => _navigateToGoalRegistration(context),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Criar Nova Meta'),
+                    icon: Icons.add,
+                    text: 'Criar Nova Meta',
                   ),
                 ],
               ),
@@ -84,7 +78,7 @@ class _GoalScreenState extends State<GoalScreen> {
           }
 
           return RefreshIndicator(
-            color: Colors.purpleAccent,
+            color: Color(0xFFA100FF),
             onRefresh: () => viewModel.loadGoals(),
             child: ListView.separated(
               itemCount: viewModel.goals.length,
@@ -102,8 +96,8 @@ class _GoalScreenState extends State<GoalScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.purpleAccent,
-        foregroundColor: Colors.black,
+        backgroundColor: Color(0xFFA100FF),
+        foregroundColor: Colors.white,
         onPressed: () => _navigateToGoalRegistration(context),
         icon: const Icon(Icons.add),
         label: const Text('Nova Meta'),
@@ -174,7 +168,7 @@ class GoalCard extends StatelessWidget {
     final formattedDeadline = _formatDate(goal.deadline);
     final daysRemaining = goal.daysRemaining;
 
-    Color progressColor = Colors.purpleAccent;
+    Color progressColor = Color(0xFFA100FF);
     if (goal.isCompleted) {
       progressColor = Colors.green;
     } else if (daysRemaining < 0) {
