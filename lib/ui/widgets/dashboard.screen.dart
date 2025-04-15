@@ -1,5 +1,10 @@
+import 'package:cash_control/data/repositories/category_repository_impl.dart';
+import 'package:cash_control/data/repositories/financial_entry_repository_impl.dart';
+import 'package:cash_control/data/services/category_service.dart';
+import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/data/services/user_service.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
+import 'package:cash_control/ui/widgets/shared/dashboard_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/dashboard_view_model.dart';
@@ -12,8 +17,18 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<ScaffoldState> scaffoldKey =
-      GlobalKey<ScaffoldState>(); // Agora é membro da classe
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late final FinancialEntryService financialEntryService;
+
+  @override
+  void initState() {
+    super.initState();
+    financialEntryService = FinancialEntryService(
+      FinancialEntryRepositoryImpl(),
+      CategoryService(CategoryRepositoryImpl()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +50,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             body: Container(
               color: Colors.black,
-              child: Center(
-                child: Text(
-                  'Conteúdo Dashboard',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineSmall?.copyWith(color: Colors.white),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    DashboardCharts(
+                      financialEntryService: financialEntryService,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -60,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     title: const Text('Trocar Senha'),
                     onTap: () {
                       viewModel.forgotPassword(context);
-                      Navigator.pop(context); // Fecha o drawer
+                      Navigator.pop(context);
                     },
                   ),
                   ListTile(
