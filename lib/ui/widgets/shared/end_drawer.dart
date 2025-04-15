@@ -7,7 +7,7 @@ Drawer buildEndDrawer(context) {
   var viewModel = GenericModel(UserService(UserRepositoryImpl()));
 
   return Drawer(
-    backgroundColor: Colors.grey[900], // Fundo cinza escuro
+    backgroundColor: Colors.grey[900],
     child: ListView(
       padding: EdgeInsets.zero,
       children: [
@@ -38,6 +38,39 @@ Drawer buildEndDrawer(context) {
           onTap: () {
             Navigator.pop(context);
             viewModel.logout(context);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.bar_chart, color: Colors.white),
+          title: const Text(
+              'Metas',
+              style: TextStyle(color: Colors.white)
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            viewModel.navigateToGoals(context);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.show_chart, color: Colors.white),
+          title: const Text(
+            'Evolução Mensal',
+            style: TextStyle(color: Colors.white),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/monthly_evolution');
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.account_balance_outlined, color: Colors.white),
+          title: const Text(
+            'Relatório Mensal',
+            style: TextStyle(color: Colors.white),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/monthly_report');
           },
         ),
       ],

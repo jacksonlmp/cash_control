@@ -62,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       financialEntryService: financialEntryService,
                     ),
                   ],
-                ),
+                )
               ),
             ),
             endDrawer: buildEndDrawer(context),

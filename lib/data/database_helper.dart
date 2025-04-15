@@ -57,6 +57,18 @@ class DatabaseHelper {
         FOREIGN KEY (category_id) REFERENCES category(id)
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE goals (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT,
+      targetValue REAL NOT NULL,
+      currentValue REAL NOT NULL,
+      deadline TEXT NOT NULL
+    )
+    ''');
+
     // Adicionar demais tabelas
   }
 
@@ -85,6 +97,14 @@ class DatabaseHelper {
 
     for (var entry in financialEntries) {
       print(entry);
+    }
+  }
+
+  Future<void> printGoal() async {
+    final db = await database;
+    final List<Map<String, dynamic>> goals = await db.query('goals');
+    for (var goal in goals) {
+      print(goal);
     }
   }
 
