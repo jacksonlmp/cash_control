@@ -34,7 +34,7 @@ class FinancialEntryScreen extends StatelessWidget {
       child: Consumer<FinancialEntryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-              appBar: buildAppBar(context, 'Despesas', '/dashboard'),
+            appBar: buildAppBar(context, 'Despesas', '/dashboard'),
             body: Container(
               color: Colors.black,
               child: Center(

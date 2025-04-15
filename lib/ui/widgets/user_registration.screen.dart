@@ -50,8 +50,8 @@ class UserRegistrationScreen extends StatelessWidget {
                     children: [
                       Image.asset(
                         'assets/images/logo_cash_control.jpg',
-                        width: 150,
-                        height: 150,
+                        width: 90,
+                        height: 90,
                       ),
                       const SizedBox(height: 20),
                     ],
