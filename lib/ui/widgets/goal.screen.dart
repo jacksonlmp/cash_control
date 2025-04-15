@@ -1,3 +1,4 @@
+import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/domain/models/goal.dart';
@@ -21,33 +22,34 @@ class _GoalScreenState extends State<GoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
+      backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
-        title: const Text('Metas Financeiras'),
+        title: const Text('Metas Financeiras', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF1E1E1E),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Consumer<GoalViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: Color(0xFFA100FF)));
           }
-
-          if (viewModel.errorMessage != null) {
+          if (viewModel.errorMessage.isNotEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Erro ao carregar metas: ${viewModel.errorMessage}',
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.redAccent),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton.icon(
+                  CustomButton(
+                    isLoading: viewModel.isLoading,
                     onPressed: () => viewModel.loadGoals(),
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Tentar Novamente'),
+                    icon: Icons.refresh,
+                    text: 'Tentar Novamente',
                   ),
                 ],
               ),
@@ -61,13 +63,14 @@ class _GoalScreenState extends State<GoalScreen> {
                 children: [
                   const Text(
                     'Você ainda não possui metas financeiras.',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton.icon(
+                  CustomButton(
+                    isLoading: viewModel.isLoading,
                     onPressed: () => _navigateToGoalRegistration(context),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Criar Nova Meta'),
+                    icon: Icons.add,
+                    text: 'Criar Nova Meta',
                   ),
                 ],
               ),
@@ -75,6 +78,7 @@ class _GoalScreenState extends State<GoalScreen> {
           }
 
           return RefreshIndicator(
+            color: Color(0xFFA100FF),
             onRefresh: () => viewModel.loadGoals(),
             child: ListView.separated(
               itemCount: viewModel.goals.length,
@@ -92,6 +96,8 @@ class _GoalScreenState extends State<GoalScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0xFFA100FF),
+        foregroundColor: Colors.white,
         onPressed: () => _navigateToGoalRegistration(context),
         icon: const Icon(Icons.add),
         label: const Text('Nova Meta'),
@@ -116,16 +122,20 @@ class _GoalScreenState extends State<GoalScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Excluir Meta'),
-        content: Text('Deseja realmente excluir a meta "${goal.name}"?'),
+        backgroundColor: const Color(0xFF1E1E1E),
+        title: const Text('Excluir Meta', style: TextStyle(color: Colors.white)),
+        content: Text(
+          'Deseja realmente excluir a meta "${goal.name}"?',
+          style: const TextStyle(color: Colors.white70),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Excluir'),
+            child: const Text('Excluir', style: TextStyle(color: Colors.redAccent)),
           ),
         ],
       ),
@@ -154,12 +164,11 @@ class GoalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final percentCompleted = goal.progressPercentage / 100;
     final formattedDeadline = _formatDate(goal.deadline);
     final daysRemaining = goal.daysRemaining;
 
-    Color progressColor = Colors.blue;
+    Color progressColor = Color(0xFFA100FF);
     if (goal.isCompleted) {
       progressColor = Colors.green;
     } else if (daysRemaining < 0) {
@@ -169,8 +178,9 @@ class GoalCard extends StatelessWidget {
     }
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      elevation: 3,
+      color: const Color(0xFF1E1E1E),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -183,11 +193,13 @@ class GoalCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     goal.name,
-                    style: theme.textTheme.titleLarge,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 PopupMenuButton<String>(
+                  color: const Color(0xFF1E1E1E),
+                  iconColor: Colors.white70,
                   onSelected: (value) {
                     if (value == 'edit') onEdit();
                     if (value == 'delete') onDelete();
@@ -197,9 +209,9 @@ class GoalCard extends StatelessWidget {
                       value: 'edit',
                       child: Row(
                         children: [
-                          Icon(Icons.edit),
+                          Icon(Icons.edit, color: Colors.white70),
                           SizedBox(width: 8),
-                          Text('Editar'),
+                          Text('Editar', style: TextStyle(color: Colors.white70)),
                         ],
                       ),
                     ),
@@ -207,9 +219,9 @@ class GoalCard extends StatelessWidget {
                       value: 'delete',
                       child: Row(
                         children: [
-                          Icon(Icons.delete, color: Colors.red),
+                          Icon(Icons.delete, color: Colors.redAccent),
                           SizedBox(width: 8),
-                          Text('Excluir', style: TextStyle(color: Colors.red)),
+                          Text('Excluir', style: TextStyle(color: Colors.redAccent)),
                         ],
                       ),
                     ),
@@ -220,7 +232,7 @@ class GoalCard extends StatelessWidget {
             if (goal.description != null && goal.description!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: Text(goal.description!, style: theme.textTheme.bodyMedium),
+                child: Text(goal.description!, style: const TextStyle(color: Colors.white60)),
               ),
             const SizedBox(height: 16),
             LinearPercentIndicator(
@@ -231,7 +243,7 @@ class GoalCard extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               ),
               progressColor: progressColor,
-              backgroundColor: Colors.grey[300],
+              backgroundColor: Colors.white10,
               barRadius: const Radius.circular(10),
               animation: true,
               animationDuration: 1000,
@@ -240,11 +252,10 @@ class GoalCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('R\$ ${goal.currentValue.toStringAsFixed(2)}', style: theme.textTheme.bodyLarge),
-                Text(
-                  'R\$ ${goal.targetValue.toStringAsFixed(2)}',
-                  style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
+                Text('R\$ ${goal.currentValue.toStringAsFixed(2)}',
+                    style: const TextStyle(color: Colors.white)),
+                Text('R\$ ${goal.targetValue.toStringAsFixed(2)}',
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 8),
@@ -253,9 +264,9 @@ class GoalCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, size: 16),
+                    const Icon(Icons.calendar_today, size: 16, color: Colors.white60),
                     const SizedBox(width: 4),
-                    Text('Prazo: $formattedDeadline'),
+                    Text('Prazo: $formattedDeadline', style: const TextStyle(color: Colors.white60)),
                   ],
                 ),
                 _buildDaysRemainingBadge(daysRemaining),

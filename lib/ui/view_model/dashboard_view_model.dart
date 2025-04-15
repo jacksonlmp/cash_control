@@ -23,12 +23,4 @@ class DashboardViewModel extends ChangeNotifier {
     Navigator.pushNamed(context, '/forgot-password');
   }
 
-  Future<void> navigateToGoalRegistration(BuildContext context) async {
-    Navigator.pushNamed(context, '/goal-registration');
-  }
-
-  Future<void> navigateToGoals(BuildContext context) async {
-    Navigator.pushNamed(context, '/goals');
-  }
-
 }
