@@ -4,6 +4,7 @@ import 'package:cash_control/domain/models/financial_entry.dart';
 import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
+import 'package:intl/intl.dart';
 
 class DashboardCharts extends StatefulWidget {
   final FinancialEntryService financialEntryService;
@@ -207,7 +208,7 @@ class _DashboardChartsState extends State<DashboardCharts> {
             ),
             // Gráfico de pizza
             Container(
-              height: 210,
+              height: 350,
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: const Color(0xFF22203A),
@@ -219,7 +220,7 @@ class _DashboardChartsState extends State<DashboardCharts> {
                   PieChart(
                     PieChartData(
                       sectionsSpace: 2,
-                      centerSpaceRadius: 52,
+                      centerSpaceRadius: 60,
                       sections: [
                         PieChartSectionData(
                           value: totalReceitas,
@@ -268,9 +269,14 @@ class _DashboardChartsState extends State<DashboardCharts> {
                         style: TextStyle(fontSize: 14, color: Colors.white54),
                       ),
                       Text(
-                        'R\$ ${(totalReceitas + totalDespesas).toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+                        NumberFormat.simpleCurrency(locale: 'pt_BR').format(totalReceitas + totalDespesas),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+
                     ],
                   ),
                 ],
