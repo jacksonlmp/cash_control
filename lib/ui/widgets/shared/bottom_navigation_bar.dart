@@ -24,7 +24,7 @@ Container buildBottomNavigationBar(
           // Índice do "Meu perfil"
           scaffoldKey.currentState?.openEndDrawer();
         } else {
-          handleDashboardNavigation(index, context);
+          handleDashboardNavigation(index, context, scaffoldKey);
         }
       },
       items: buildDashboardNavItems(),
