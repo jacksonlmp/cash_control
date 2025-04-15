@@ -1,0 +1,4 @@
+enum FinancialEntryType {
+  despesa,
+  receita
+}

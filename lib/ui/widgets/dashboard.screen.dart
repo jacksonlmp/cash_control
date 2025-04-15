@@ -1,20 +1,28 @@
-// lib/ui/dashboard/widgets/dashboard.screen.dart
-import 'package:cash_control/navigation/dashboard_navigation.dart';
-import 'package:cash_control/ui/widgets/nav_items.dart';
+import 'package:cash_control/data/services/user_service.dart';
+import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/dashboard_view_model.dart';
+import 'package:cash_control/data/repositories/user_repository_impl.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>(); // Agora é membro da classe
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DashboardViewModel(),
+      create: (_) => DashboardViewModel(UserService(UserRepositoryImpl())),
       child: Consumer<DashboardViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
+            key: scaffoldKey,
             appBar: AppBar(
               title: const Text(
                 'Dashboard',
@@ -25,7 +33,6 @@ class DashboardScreen extends StatelessWidget {
                 bottom: BorderSide(color: Colors.white, width: 1.5),
               ),
             ),
-
             body: Container(
               color: Colors.black,
               child: Center(
@@ -37,25 +44,40 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.white, width: 1.5),
-                ),
+            endDrawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const DrawerHeader(
+                    decoration: BoxDecoration(color: Colors.black),
+                    child: Text(
+                      'Meu Perfil',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.lock, color: Colors.black),
+                    title: const Text('Trocar Senha'),
+                    onTap: () {
+                      viewModel.forgotPassword(context);
+                      Navigator.pop(context); // Fecha o drawer
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.exit_to_app, color: Colors.black),
+                    title: const Text('Logout'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      viewModel.logout(context);
+                    },
+                  ),
+                ],
               ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.black,
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.white,
-                currentIndex: viewModel.selectedIndex,
-                onTap: (index) {
-                  viewModel.onItemTapped(index);
-                  handleDashboardNavigation(index, context);
-                },
-                items: buildDashboardNavItems()
-              ),
+            ),
+            bottomNavigationBar: buildBottomNavigationBar(
+              viewModel,
+              context,
+              scaffoldKey,
             ),
           );
         },

@@ -89,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   TextButton(
                     onPressed: () {
-                      // Navegar para a tela de recuperação de senha
+                      Navigator.pushNamed(context, '/forgot-password');
                     },
                     child: const Text(
                       'Esqueceu sua senha?',
