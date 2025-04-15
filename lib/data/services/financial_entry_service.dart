@@ -9,7 +9,7 @@ class FinancialEntryService {
 
   FinancialEntryService(this._repository, this._categoryService);
 
-  Future<void> registerFinancialEntry(FinancialEntry financialEntry) async {
+  Future<void> createOrUpdateFinancialEntry(FinancialEntry financialEntry) async {
     await _repository.register(financialEntry);
   }
 

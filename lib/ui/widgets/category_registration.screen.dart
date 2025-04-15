@@ -14,7 +14,6 @@ class CategoryRegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
     return ChangeNotifierProvider(
       create: (_) => DashboardViewModel(UserService(UserRepositoryImpl())),
       child: Consumer<CategoryRegistrationViewModel>(
