@@ -19,28 +19,6 @@ Drawer buildEndDrawer(context) {
           ),
         ),
         ListTile(
-          leading: const Icon(Icons.lock, color: Colors.white),
-          title: const Text(
-            'Trocar Senha',
-            style: TextStyle(color: Colors.white),
-          ),
-          onTap: () {
-            viewModel.forgotPassword(context);
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.exit_to_app, color: Colors.white),
-          title: const Text(
-            'Logout',
-            style: TextStyle(color: Colors.white),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            viewModel.logout(context);
-          },
-        ),
-        ListTile(
           leading: const Icon(Icons.bar_chart, color: Colors.white),
           title: const Text(
               'Metas',
@@ -71,6 +49,28 @@ Drawer buildEndDrawer(context) {
           onTap: () {
             Navigator.pop(context);
             Navigator.pushNamed(context, '/monthly_report');
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.lock, color: Colors.white),
+          title: const Text(
+            'Trocar Senha',
+            style: TextStyle(color: Colors.white),
+          ),
+          onTap: () {
+            viewModel.forgotPassword(context);
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.exit_to_app, color: Colors.white),
+          title: const Text(
+            'Logout',
+            style: TextStyle(color: Colors.white),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            viewModel.logout(context);
           },
         ),
       ],

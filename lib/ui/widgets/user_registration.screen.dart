@@ -35,7 +35,7 @@ class UserRegistrationScreen extends StatelessWidget {
                 );
                 // Redirecionar para a tela de login após 3 segundos
                 Future.delayed(const Duration(seconds: 3), () {
-                  viewModel.setIsRegistered(false); // Reset isRegistered
+                  viewModel.setIsRegistered(false);
                   Navigator.pushReplacementNamed(context, '/login');
                 });
               }
@@ -45,7 +45,6 @@ class UserRegistrationScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                // Logo
                 Center(
                   child: Column(
                     children: [
@@ -59,7 +58,6 @@ class UserRegistrationScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Nome Field
                 TextField(
                   onChanged: viewModel.setName,
                   decoration: InputDecoration(
@@ -79,7 +77,6 @@ class UserRegistrationScreen extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
                 const SizedBox(height: 16),
-                // E-mail Field
                 TextField(
                   onChanged: viewModel.setEmail,
                   decoration: InputDecoration(
@@ -99,7 +96,6 @@ class UserRegistrationScreen extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
                 const SizedBox(height: 16),
-                // Senha Field
                 TextField(
                   onChanged: viewModel.setPassword,
                   decoration: InputDecoration(
@@ -120,7 +116,6 @@ class UserRegistrationScreen extends StatelessWidget {
                   obscureText: true,
                 ),
                 const SizedBox(height: 16),
-                // Confirmar Senha Field
                 TextField(
                   onChanged: (value) {
                     // Implementar lógica de confirmação de senha
@@ -143,14 +138,12 @@ class UserRegistrationScreen extends StatelessWidget {
                   obscureText: true,
                 ),
                 const SizedBox(height: 20),
-                // Error Message
                 if (viewModel.errorMessage.isNotEmpty)
                   Text(
                     viewModel.errorMessage,
                     style: const TextStyle(color: Colors.red),
                   ),
                 const SizedBox(height: 20),
-                // Register Button
                 viewModel.isLoading
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
