@@ -71,6 +71,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       viewModel.logout(context);
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.bar_chart, color: Colors.black),
+                    title: const Text('Metas'),
+                    onTap: () {
+                    Navigator.pop(context);
+                    viewModel.navigateToGoals(context);
+                    },
+                  ),
                 ],
               ),
             ),
