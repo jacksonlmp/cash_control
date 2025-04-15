@@ -36,12 +36,10 @@ class _DashboardChartsState extends State<DashboardCharts> {
   }
 
   Future<void> _loadData() async {
-    // Todas as categorias e lançamentos
     categories = await widget.financialEntryService.findAllCategories();
     entries = await widget.financialEntryService.findAllFinancialEntries();
     categoryById = { for (var c in categories) c.id: c };
 
-    // Despesas por categoria
     totalSpentByCategory = {};
     for (var entry in entries.where((e) => e.type == FinancialEntryType.despesa)) {
       totalSpentByCategory.update(
@@ -51,7 +49,6 @@ class _DashboardChartsState extends State<DashboardCharts> {
       );
     }
 
-    // Totais gerais
     totalReceitas = entries
         .where((e) => e.type == FinancialEntryType.receita)
         .fold(0.0, (sum, e) => sum + e.value);
@@ -97,7 +94,6 @@ class _DashboardChartsState extends State<DashboardCharts> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // TÍTULO
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 26, 0, 12),
               child: Text(
@@ -194,7 +190,6 @@ class _DashboardChartsState extends State<DashboardCharts> {
               ),
             ),
             const SizedBox(height: 24),
-            // Título do gráfico
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 0, 12),
               child: Text(
@@ -224,7 +219,7 @@ class _DashboardChartsState extends State<DashboardCharts> {
                       sections: [
                         PieChartSectionData(
                           value: totalReceitas,
-                          color: const Color(0xFFE1BEE7), // receita (lilás claro)
+                          color: const Color(0xFFE1BEE7),
                           title: totalReceitas > 0
                               ? '${((totalReceitas / (totalReceitas + totalDespesas)) * 100).toStringAsFixed(0)}%'
                               : '',
@@ -234,7 +229,7 @@ class _DashboardChartsState extends State<DashboardCharts> {
                         ),
                         PieChartSectionData(
                           value: totalDespesas,
-                          color: const Color(0xFF7C43BD), // despesa (roxo escuro)
+                          color: const Color(0xFF7C43BD),
                           title: totalDespesas > 0
                               ? '${((totalDespesas / (totalReceitas + totalDespesas)) * 100).toStringAsFixed(0)}%'
                               : '',

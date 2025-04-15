@@ -68,11 +68,8 @@ class DatabaseHelper {
       deadline TEXT NOT NULL
     )
     ''');
-
-    // Adicionar demais tabelas
   }
 
-  // Função de depuração para imprimir os dados do banco de dados
   Future<void> printUsers() async {
     final db = await database;
     final List<Map<String, dynamic>> users = await db.query('users');
@@ -81,7 +78,6 @@ class DatabaseHelper {
     }
   }
 
-  // Função de depuração para imprimir os dados do banco de dados
   Future<List<Map<String, dynamic>>> printCategories() async {
     final db = await database;
     final List<Map<String, dynamic>> categories = await db.query('category');
@@ -108,21 +104,17 @@ class DatabaseHelper {
     }
   }
 
-  // Função para exportar o banco de dados
   Future<void> exportDatabase() async {
     try {
-      // Obter o caminho do banco de dados atual
       final dbPath = await getDatabasesPath();
       final dbFilePath = join(dbPath, 'cashcontrol.db');
 
-      // Verificar se o banco de dados existe
       final dbFile = File(dbFilePath);
       if (!dbFile.existsSync()) {
         print('Banco de dados não encontrado.');
         return;
       }
 
-      // Obter o diretório de destino (pasta de downloads)
       final directory = await getExternalStorageDirectory();
       if (directory == null) {
         print('Não foi possível acessar o diretório externo.');
@@ -130,7 +122,6 @@ class DatabaseHelper {
       }
       final exportFilePath = join(directory.path, 'cashcontrol_export.db');
 
-      // Copiar o banco de dados para o diretório de destino
       final exportFile = File(exportFilePath);
       await dbFile.copy(exportFile.path);
 
@@ -140,7 +131,6 @@ class DatabaseHelper {
     }
   }
 
-  // função para deletar o banco (chamar no main se necessário)
   Future<void> deleteDatabaseFile() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'cashcontrol.db');

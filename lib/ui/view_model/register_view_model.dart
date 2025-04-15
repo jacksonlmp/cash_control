@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import '../../data/services/user_service.dart';
 import '../../domain/models/user.dart';
-import '../../data/database_helper.dart'; // Adicione esta linha
+import '../../data/database_helper.dart';
 
 class RegisterViewModel extends ChangeNotifier {
   final UserService service;
@@ -27,7 +27,6 @@ class RegisterViewModel extends ChangeNotifier {
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
 
-    // Validação: nome obrigatório
     if (name.isEmpty) {
       error = 'O nome é obrigatório.';
       isLoading = false;
@@ -35,7 +34,6 @@ class RegisterViewModel extends ChangeNotifier {
       return;
     }
 
-    // Validação: senhas são idênticas
     if (password != confirmPassword) {
       error = 'As senhas não coincidem.';
       isLoading = false;
@@ -53,7 +51,6 @@ class RegisterViewModel extends ChangeNotifier {
 
       await service.registerUser(user);
 
-      // Chame a função de depuração para imprimir os usuários
       final dbHelper = DatabaseHelper();
       await dbHelper.printUsers();
 

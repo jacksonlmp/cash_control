@@ -44,7 +44,6 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                   onSubmit: () async {
                     await viewModel.registerFinancialEntry();
                     if (viewModel.errorMessage.isEmpty) {
-                      // Sucesso
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -123,7 +122,6 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                         getLabel: (type) => type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
                         onChanged: viewModel.setType
                     ),
-                    // Data
                     CustomButton(
                       isLoading: viewModel.isLoading,
                       text: 'Data: ${viewModel.date.day.toString().padLeft(2, '0')}/'

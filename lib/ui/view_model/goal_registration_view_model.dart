@@ -16,7 +16,6 @@ class GoalRegistrationViewModel extends ChangeNotifier {
   String? _error;
   String? _successMessage;
 
-  // Getters
   String get name => _name;
   String get description => _description;
   double get targetValue => _targetValue;
@@ -26,7 +25,6 @@ class GoalRegistrationViewModel extends ChangeNotifier {
   String? get error => _error;
   String? get successMessage => _successMessage;
 
-  // Setters otimizados
   void setName(String value) {
     final trimmed = value.trim();
     if (_name != trimmed) {
@@ -64,7 +62,6 @@ class GoalRegistrationViewModel extends ChangeNotifier {
     }
   }
 
-  // Validação
   bool validate() {
     final isNameValid = _name.isNotEmpty;
     final isTargetValid = _targetValue > 0;
