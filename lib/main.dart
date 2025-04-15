@@ -1,67 +1,54 @@
+import 'package:cash_control/ui/view_model/user_view_model.dart';
+import 'package:cash_control/ui/widgets/category.screen.dart';
+import 'package:cash_control/ui/widgets/dashboard.screen.dart';
+import 'package:cash_control/ui/widgets/financial_entry.screen.dart';
+import 'package:cash_control/ui/widgets/financial_entry_registration.screen.dart';
+import 'package:cash_control/ui/widgets/forgot_password.screen.dart';
+import 'package:cash_control/ui/widgets/login.screen.dart';
+import 'package:cash_control/ui/widgets/user_registration.screen.dart';
+import 'package:cash_control/ui/widgets/welcome.screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cash_control/ui/view_model/login_view_model.dart';
+import 'package:cash_control/data/repositories/user_repository_impl.dart';
 
 void main() {
+  // Certifique-se de que o Flutter está inicializado antes de executar qualquer código dependente da plataforma
+  WidgetsFlutterBinding.ensureInitialized();
+  // deleta o banco
+  // DatabaseHelper().deleteDatabaseFile();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => LoginViewModel(UserRepositoryImpl()),
         ),
+        ChangeNotifierProvider(
+          create: (_) => UserViewModel(UserRepositoryImpl()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'CashControl',
+        theme: ThemeData(primarySwatch: Colors.deepPurple, useMaterial3: true),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const WelcomeScreen(),
+          '/login': (context) => const LoginScreen(),
+          '/register': (context) => const UserRegistrationScreen(),
+          '/dashboard': (context) => const DashboardScreen(),
+          '/forgot-password': (context) => const ForgotPassword(),     
+          '/financial-entry': (context) => const FinancialEntryScreen(),
+          '/financial-entry-registration': (context) => const FinancialEntryRegistrationScreen(),
+          '/category': (context) => const CategoryScreen(),
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
