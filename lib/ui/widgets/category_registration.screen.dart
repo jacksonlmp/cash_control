@@ -32,7 +32,6 @@ class CategoryRegistrationScreen extends StatelessWidget {
                   onSubmit: () async {
                     await viewModel.registerCategory();
                     if (viewModel.errorMessage.isEmpty) {
-                      // Sucesso
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {

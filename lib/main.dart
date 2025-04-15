@@ -21,9 +21,7 @@ import 'package:provider/provider.dart';
 import 'data/services/goal_service.dart';
 
 void main() {
-  // Certifique-se de que o Flutter está inicializado antes de executar qualquer código dependente da plataforma
   WidgetsFlutterBinding.ensureInitialized();
-  // deleta o banco
   // DatabaseHelper().deleteDatabaseFile();
   runApp(const MyApp());
 }
