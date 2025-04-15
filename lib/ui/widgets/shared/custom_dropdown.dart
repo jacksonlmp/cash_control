@@ -12,7 +12,7 @@ class CustomDropdown<T> extends StatelessWidget {
     super.key,
     required this.label,
     required this.items,
-    required this.getLabel, // Função que define como exibir os itens (string para enums ou categorias)
+    required this.getLabel,
     required this.onChanged,
     this.selectedValue,
     this.validator,

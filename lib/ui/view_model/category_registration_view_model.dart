@@ -6,10 +6,12 @@ class CategoryRegistrationViewModel extends ChangeNotifier {
   final CategoryService _categoryService;
   CategoryRegistrationViewModel(this._categoryService);
 
+  int _selectedIndex = 0;
   String _name = '';
   String _errorMessage = '';
   bool _isLoading = false;
 
+  int get selectedIndex => _selectedIndex;
   String get name => _name;
   String get errorMessage => _errorMessage;
   bool get isLoading => _isLoading;
@@ -46,6 +48,7 @@ class CategoryRegistrationViewModel extends ChangeNotifier {
   }
 
   void onItemTapped(int index) {
+    _selectedIndex = index;
     notifyListeners();
   }
 }

@@ -5,9 +5,22 @@ import 'package:cash_control/domain/models/category.dart';
 import 'package:cash_control/domain/models/financial_entry.dart';
 import 'package:flutter/material.dart';
 
-class FinancialEntryRegistrationViewModel extends ChangeNotifier {
+class FinancialEntryEditViewModel extends ChangeNotifier {
   final FinancialEntryService _financialEntryService;
-  FinancialEntryRegistrationViewModel(this._financialEntryService){
+  late FinancialEntry _financialEntry;
+
+  late TextEditingController nameController;
+  late TextEditingController valueController;
+
+  FinancialEntryEditViewModel(this._financialEntryService, FinancialEntry financialEntry) {
+    _financialEntry = financialEntry;
+    _name = financialEntry.name;
+    _value = financialEntry.value;
+    _date = financialEntry.date;
+    _type = financialEntry.type;
+    _category = null;
+    nameController = TextEditingController(text: _name);
+    valueController = TextEditingController(text: _value.toStringAsFixed(2));
     loadCategories();
   }
 
@@ -22,7 +35,6 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   bool _isLoading = false;
   int _selectedIndex = 2;
 
-  // Getters
   String get name => _name;
   double get value => _value;
   Category? get category => _category;
@@ -44,14 +56,16 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCategory(Category category) {
+  void setCategory(Category? category) {
     _category = category;
     notifyListeners();
   }
 
   void setType(FinancialEntryType? type) {
-    _type = type!;
-    notifyListeners();
+    if (type != null) {
+      _type = type;
+      notifyListeners();
+    }
   }
 
   void setDate(DateTime date) {
@@ -64,6 +78,10 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       _categories = await _financialEntryService.findAllCategories();
+      _category = _categories.firstWhere(
+            (cat) => cat.id == _financialEntry.categoryId,
+        orElse: () => getCategoryById(_financialEntry.categoryId)
+      );
     } catch (e) {
       _errorMessage = 'Erro ao carregar categorias';
     } finally {
@@ -72,7 +90,15 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> registerFinancialEntry() async {
+  Category getCategoryById(String id) {
+    final category = categories.firstWhere(
+          (c) => c.id == id,
+      orElse: () => Category(id: '', name: 'Desconhecida'),
+    );
+    return category;
+  }
+
+  Future<void> updateFinancialEntry() async {
     if (_name.isEmpty || _value <= 0 || _category == null) {
       _errorMessage = 'Preencha todos os campos obrigatórios.';
       notifyListeners();
@@ -83,20 +109,20 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _financialEntryService.createOrUpdateFinancialEntry(
-        FinancialEntry(
-          id: UniqueKey().toString(),
-          name: _name,
-          value: _value,
-          categoryId: _category!.id,
-          type: _type,
-          date: _date,
-        ),
+      final updatedEntry = FinancialEntry(
+        id: _financialEntry.id,
+        name: _name,
+        value: _value,
+        categoryId: _category!.id,
+        type: _type,
+        date: _date,
       );
+
+      await _financialEntryService.createOrUpdateFinancialEntry(updatedEntry);
       _errorMessage = '';
       DatabaseHelper().printFinancialEntries();
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = 'Erro ao editar entrada: ${e.toString()}';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -106,5 +132,12 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   void onItemTapped(int index) {
     _selectedIndex = index;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    valueController.dispose();
+    super.dispose();
   }
 }

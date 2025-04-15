@@ -6,18 +6,21 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final Function(String) onChanged;
   final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
   const CustomTextField({
     required this.label,
     required this.onChanged,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.controller,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       onChanged: onChanged,
       keyboardType: keyboardType,
       style: const TextStyle(color: Colors.white),
@@ -37,3 +40,4 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
