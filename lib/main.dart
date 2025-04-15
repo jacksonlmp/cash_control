@@ -1,5 +1,6 @@
 import 'package:cash_control/ui/view_model/user_view_model.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
+import 'package:cash_control/ui/widgets/financial_entry.screen.dart';
 import 'package:cash_control/ui/widgets/forgot_password.screen.dart';
 import 'package:cash_control/ui/widgets/login.screen.dart';
 import 'package:cash_control/ui/widgets/user_registration.screen.dart';
@@ -10,6 +11,10 @@ import 'package:cash_control/ui/view_model/login_view_model.dart';
 import 'package:cash_control/data/repositories/user_repository_impl.dart';
 
 void main() {
+  // Certifique-se de que o Flutter está inicializado antes de executar qualquer código dependente da plataforma
+  WidgetsFlutterBinding.ensureInitialized();
+  // deleta o banco
+  // DatabaseHelper().deleteDatabaseFile();
   runApp(const MyApp());
 }
 
@@ -37,6 +42,7 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const UserRegistrationScreen(),
           '/dashboard': (context) => const DashboardScreen(),
           '/forgot-password': (context) => const ForgotPassword(),     
+          '/financial-entry': (context) => const FinancialEntryScreen(),
         },
       ),
     );

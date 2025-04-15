@@ -122,6 +122,19 @@ class FinancialEntryEditViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteFinancialEntry(String id) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await _financialEntryService.deleteFinancialEntry(id);
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   void onItemTapped(int index) {
     _selectedIndex = index;
     notifyListeners();

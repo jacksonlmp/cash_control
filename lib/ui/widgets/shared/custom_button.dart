@@ -5,11 +5,15 @@ class CustomButton extends StatelessWidget {
   final bool isLoading;
   final String text;
   final VoidCallback onPressed;
+  final Color? backgroundColor;
+  final bool hasBorder;
 
   const CustomButton({
     required this.isLoading,
     required this.text,
     required this.onPressed,
+    this.backgroundColor,
+    this.hasBorder = false,
     super.key,
   });
 
@@ -19,10 +23,13 @@ class CustomButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFA100FF),
+          backgroundColor: backgroundColor ?? const Color(0xFFA100FF),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
+            side: hasBorder
+                ? const BorderSide(color: Color(0xFFA100FF), width: 2)
+                : BorderSide.none,
           ),
         ),
         onPressed: isLoading ? null : onPressed,
