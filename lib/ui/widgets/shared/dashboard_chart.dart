@@ -264,7 +264,7 @@ class _DashboardChartsState extends State<DashboardCharts> {
                         style: TextStyle(fontSize: 14, color: Colors.white54),
                       ),
                       Text(
-                        NumberFormat.simpleCurrency(locale: 'pt_BR').format(totalReceitas + totalDespesas),
+                        NumberFormat.simpleCurrency(locale: 'pt_BR').format(totalReceitas - totalDespesas),
                         style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,

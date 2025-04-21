@@ -1,9 +1,12 @@
-import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cash_control/domain/models/goal.dart';
 import 'package:cash_control/ui/view_model/goal_registration_view_model.dart';
+import 'package:cash_control/ui/widgets/shared/custom_button.dart';
+import 'package:cash_control/data/services/goal_service.dart';
+
+import '../../data/repositories/goal_repository_impl.dart';
 
 class GoalRegistrationScreen extends StatefulWidget {
   final Goal? goal;
@@ -20,25 +23,27 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
   final _descriptionController = TextEditingController();
   final _targetValueController = TextEditingController();
   final _currentValueController = TextEditingController();
+  final _deadlineController = TextEditingController();
 
-  late final GoalRegistrationViewModel _viewModel;
   DateTime? _selectedDeadline;
 
   @override
   void initState() {
     super.initState();
-    _viewModel = GoalRegistrationViewModel();
+    final goal = widget.goal;
 
-    if (widget.goal != null) {
-      _viewModel.loadGoal(widget.goal!);
-      _nameController.text = widget.goal!.name;
-      _descriptionController.text = widget.goal!.description ?? '';
-      _targetValueController.text = widget.goal!.targetValue.toString();
-      _currentValueController.text = widget.goal!.currentValue.toString();
-      _selectedDeadline = widget.goal!.deadline;
-    } else {
-      _viewModel.reset();
+    if (goal != null) {
+      _nameController.text = goal.name;
+      _descriptionController.text = goal.description ?? '';
+      _targetValueController.text = goal.targetValue.toString();
+      _currentValueController.text = goal.currentValue.toString();
+      _selectedDeadline = goal.deadline;
+      _deadlineController.text = _formatDate(goal.deadline);
     }
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
   }
 
   @override
@@ -47,7 +52,7 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
     _descriptionController.dispose();
     _targetValueController.dispose();
     _currentValueController.dispose();
-    _viewModel.dispose();
+    _deadlineController.dispose();
     super.dispose();
   }
 
@@ -70,8 +75,16 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _viewModel,
+    return ChangeNotifierProvider(
+      create: (_) {
+        final viewModel = GoalRegistrationViewModel(GoalService(GoalRepositoryImpl()));
+        if (widget.goal != null) {
+          viewModel.loadGoal(widget.goal!);
+        } else {
+          viewModel.reset();
+        }
+        return viewModel;
+      },
       child: Scaffold(
         backgroundColor: const Color(0xFF121212),
         appBar: AppBar(
@@ -149,15 +162,11 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    controller: _deadlineController,
                     readOnly: true,
                     style: const TextStyle(color: Colors.white),
                     decoration: _inputDecoration('Data limite').copyWith(
                       suffixIcon: const Icon(Icons.calendar_today, color: Colors.purpleAccent),
-                    ),
-                    controller: TextEditingController(
-                      text: _selectedDeadline == null
-                          ? ''
-                          : '${_selectedDeadline!.day.toString().padLeft(2, '0')}/${_selectedDeadline!.month.toString().padLeft(2, '0')}/${_selectedDeadline!.year}',
                     ),
                     onTap: () async {
                       final picked = await showDatePicker(
@@ -179,10 +188,13 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                         },
                       );
                       if (picked != null) {
-                        setState(() => _selectedDeadline = picked);
+                        setState(() {
+                          _selectedDeadline = picked;
+                          _deadlineController.text = _formatDate(picked);
+                        });
                       }
                     },
-                    validator: (value) {
+                    validator: (_) {
                       if (_selectedDeadline == null) {
                         return 'Selecione uma data limite';
                       }
@@ -193,6 +205,8 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                   SizedBox(
                     height: 50,
                     child: CustomButton(
+                      text: widget.goal == null ? 'Criar Meta' : 'Salvar Alterações',
+                      isLoading: viewModel.isLoading,
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           final target = double.parse(_targetValueController.text);
@@ -207,7 +221,7 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                             return;
                           }
 
-                          final success = await _viewModel.saveGoal(
+                          final success = await viewModel.saveGoal(
                             name: _nameController.text,
                             description: _descriptionController.text,
                             targetValue: target,
@@ -217,23 +231,21 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
                           );
 
                           if (success) {
-                            if (_viewModel.successMessage != null) {
+                            if (viewModel.successMessage != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(_viewModel.successMessage!)),
+                                SnackBar(content: Text(viewModel.successMessage!)),
                               );
-                              _viewModel.clearMessages();
+                              viewModel.clearMessages();
                             }
                             Navigator.pop(context, true);
-                          } else if (_viewModel.error != null) {
+                          } else if (viewModel.error != null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(_viewModel.error!)),
+                              SnackBar(content: Text(viewModel.error!)),
                             );
-                            _viewModel.clearMessages();
+                            viewModel.clearMessages();
                           }
                         }
                       },
-                      text: widget.goal == null ? 'Criar Meta' : 'Salvar Alterações',
-                      isLoading: viewModel.isLoading,
                     ),
                   ),
                 ],

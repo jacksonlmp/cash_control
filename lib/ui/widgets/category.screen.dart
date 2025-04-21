@@ -11,41 +11,40 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
+  final CategoryViewModel? viewModel; // <-- Adicionado
+
+  const CategoryScreen({super.key, this.viewModel}); // <-- Modificado
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return ChangeNotifierProvider(
-      create: (_) => CategoryViewModel(
-          CategoryService(CategoryRepositoryImpl())
-      ),
+    return ChangeNotifierProvider<CategoryViewModel>(
+      create: (_) => viewModel ?? CategoryViewModel(CategoryService(CategoryRepositoryImpl()))..loadCategories(),
       child: Consumer<CategoryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: buildAppBar(context, 'Categorias', '/dashboard'),
             body: Container(
               color: Colors.black,
-              child: Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    if (viewModel.errorMessage.isNotEmpty)
-                      Text(
-                        viewModel.errorMessage,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    if (viewModel.categories.isEmpty)
-                      const Text(
-                          'Nenhuma categoria cadastrada',
-                          style: TextStyle(color: Colors.white)
-                      )
-                    else
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: viewModel.categories.length,
-                          itemBuilder: (context, index) {
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  if (viewModel.errorMessage.isNotEmpty)
+                    Text(
+                      viewModel.errorMessage,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  if (viewModel.categories.isEmpty)
+                    const Text(
+                      'Nenhuma categoria cadastrada',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  else
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(viewModel.categories.length, (index) {
                             final category = viewModel.categories[index];
                             return Card(
                               color: Colors.grey[900],
@@ -95,39 +94,39 @@ class CategoryScreen extends StatelessWidget {
                                 ),
                               ),
                             );
-                          },
+                          }),
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: CustomButton(
-                          isLoading: viewModel.isLoading,
-                          text: 'Cadastrar',
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => ChangeNotifierProvider(
-                                  create: (_) => CategoryRegistrationViewModel(
-                                    CategoryService(CategoryRepositoryImpl()),
-                                  ),
-                                  child: const CategoryRegistrationScreen(),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: CustomButton(
+                        isLoading: viewModel.isLoading,
+                        text: 'Cadastrar',
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChangeNotifierProvider(
+                                create: (_) => CategoryRegistrationViewModel(
+                                  CategoryService(CategoryRepositoryImpl()),
                                 ),
+                                child: const CategoryRegistrationScreen(),
                               ),
-                            );
-                          },
-                        )
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             endDrawer: buildEndDrawer(context),
-            bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey)
+            bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },
       ),

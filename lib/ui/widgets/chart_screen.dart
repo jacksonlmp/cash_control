@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-
 import '../../data/services/financial_summary_service.dart';
 import '../view_model/monthly_financial_chart_view_model.dart';
+import '../../data/repositories/financial_summary_repository_impl.dart';
+import '../../data/database_helper.dart';
 
 class ChartScreen extends StatelessWidget {
-  final FinancialSummaryService _summaryService = FinancialSummaryService();
+  final FinancialSummaryService _summaryService;
 
-  ChartScreen({super.key});
+
+  ChartScreen({super.key})
+      : _summaryService = FinancialSummaryService(FinancialSummaryRepositoryImpl(DatabaseHelper()));
 
   @override
   Widget build(BuildContext context) {

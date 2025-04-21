@@ -4,8 +4,10 @@ import 'package:cash_control/domain/models/goal.dart';
 import 'package:uuid/uuid.dart';
 
 class GoalRegistrationViewModel extends ChangeNotifier {
-  final GoalService _goalService = GoalService();
-  final Uuid _uuid = const Uuid();
+  final GoalService _goalService;
+  final Uuid _uuid;
+
+  GoalRegistrationViewModel(this._goalService, {Uuid? uuid}) : _uuid = uuid ?? const Uuid();
 
   String _name = '';
   String _description = '';
@@ -79,6 +81,7 @@ class GoalRegistrationViewModel extends ChangeNotifier {
     required DateTime deadline,
     String? goalId,
   }) async {
+    _setLoading(true);
     try {
       final goal = Goal(
         id: goalId ?? _uuid.v4(),
@@ -112,10 +115,10 @@ class GoalRegistrationViewModel extends ChangeNotifier {
       _error = 'Erro: ${e.toString()}';
       return false;
     } finally {
+      _setLoading(false);
       notifyListeners();
     }
   }
-
 
   void loadGoal(Goal goal) {
     _name = goal.name;
@@ -150,3 +153,4 @@ class GoalRegistrationViewModel extends ChangeNotifier {
     }
   }
 }
+

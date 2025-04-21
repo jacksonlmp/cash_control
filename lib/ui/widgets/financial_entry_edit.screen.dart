@@ -36,7 +36,7 @@ class FinancialEntryEditScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             backgroundColor: Colors.black,
-            appBar: buildAppBar(context, 'Editar Despesa/Receita', '/financial-entry'),
+            appBar: buildAppBar(context, 'Editar transação', '/financial-entry'),
             body: Container(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -174,7 +174,7 @@ class FinancialEntryEditScreen extends StatelessWidget {
                             builder: (context) => AlertDialog(
                               backgroundColor: Colors.grey[900],
                               title: const Text(
-                                'Excluir despesa/receita',
+                                'Excluir transação',
                                 style: TextStyle(color: Colors.white),
                               ),
                               content: const Text(

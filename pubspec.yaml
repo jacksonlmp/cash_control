@@ -20,11 +20,16 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.7.0
-  
+
 dependencies:
   flutter:
     sdk: flutter
 
+  floor: ^1.4.0
+  floor_annotation: ^1.4.0
+  googleapis: ^14.0.0  
+  googleapis_auth: ^1.2.0
+  google_sign_in: ^5.0.7
   cupertino_icons: ^1.0.8
   provider: ^6.1.2
   uuid: ^4.0.0
@@ -33,15 +38,17 @@ dependencies:
   percent_indicator: ^4.2.2
   path_provider: ^2.0.11
   shared_preferences: ^2.2.0
-  intl: ^0.18.1
-  fl_chart: ^0.68.0
-
+  intl: ^0.20.2
+  fl_chart: ^0.71.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  floor_generator: ^1.4.0
   flutter_lints: ^5.0.0
+  mockito: ^5.4.5
+  build_runner: ^2.4.15
 
 flutter:
   uses-material-design: true
@@ -49,3 +56,5 @@ flutter:
   assets:
     - assets/images/logo_cash_control.jpg
 
+dependency_overrides:
+  analyzer: ^6.2.0

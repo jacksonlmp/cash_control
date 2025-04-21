@@ -33,7 +33,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             backgroundColor: Colors.black,
-            appBar: buildAppBar(context, 'Cadastrar Despesa/Receita', '/financial-entry'),
+            appBar: buildAppBar(context, 'Cadastrar transação', '/financial-entry'),
             endDrawer: buildEndDrawer(context),
             body: Container(
               padding: const EdgeInsets.all(16.0),

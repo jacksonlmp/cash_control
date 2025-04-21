@@ -11,7 +11,7 @@ class UserService {
       throw Exception('Email inválido');
     }
     if (!_isValidPassword(user.password)) {
-      throw Exception('Senha não atende aos requisitos de segurança');
+      throw Exception('Senha fraca');
     }
 
     if (await _repository.existsEmail(user.email)) {
@@ -30,16 +30,21 @@ class UserService {
   }
 
   Future<void> forgotPassword() async {
+
     await _repository.forgotPassword();
   }
 
   bool _isValidEmail(String email) {
-    // Implementar validação de e-mail
-    return true;
+    final emailRegex = RegExp(
+        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    );
+    return emailRegex.hasMatch(email);
   }
 
   bool _isValidPassword(String password) {
-    // Implementar validação de senha
-    return true;
+    final passwordRegex = RegExp(
+        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$'
+    );
+    return passwordRegex.hasMatch(password);
   }
 }

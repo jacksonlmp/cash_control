@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 List<BottomNavigationBarItem> buildDashboardNavItems() {
   return const [
     BottomNavigationBarItem(
@@ -19,11 +18,11 @@ List<BottomNavigationBarItem> buildDashboardNavItems() {
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.attach_money, color: Colors.white),
-      label: 'Despesas',
+      label: 'Transações',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.person, color: Colors.white),
-      label: 'Meu perfil',
+      icon: Icon(Icons.account_balance_wallet, color: Colors.white),
+      label: 'Atualidade',
     ),
   ];
 }

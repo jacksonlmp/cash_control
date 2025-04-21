@@ -1,14 +1,10 @@
-import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/data/repositories/goal_repository.dart';
-import 'package:cash_control/data/repositories/goal_repository_impl.dart';
-
-
 import 'package:cash_control/domain/models/goal.dart';
 
-
 class GoalService {
+  final GoalRepository _goalRepository;
 
-  final GoalRepository _goalRepository = GoalRepositoryImpl();
+  GoalService(this._goalRepository);
 
   Future<List<Goal>> getGoals() => _goalRepository.getGoals();
 
@@ -20,7 +16,11 @@ class GoalService {
 
   Future<int> deleteGoal(String id) => _goalRepository.deleteGoal(id);
 
-  Future<int> updateCurrentValue(String id, double currentValue) => _goalRepository.updateCurrentValue(id, currentValue);
-
-
+  Future<int> updateCurrentValue(String id, double currentValue) =>
+      _goalRepository.updateCurrentValue(id, currentValue);
 }
+
+class GoalServiceTestable extends GoalService {
+  GoalServiceTestable(GoalRepository mockRepo) : super(mockRepo);
+}
+

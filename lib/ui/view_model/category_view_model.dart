@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CategoryViewModel extends ChangeNotifier {
   final CategoryService _categoryService;
   CategoryViewModel(this._categoryService) {
-    loadCategories();
+    _initializeCategories();
   }
 
   int _selectedIndex = 1;
@@ -18,6 +18,13 @@ class CategoryViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   List<Category> get categories => _categories;
 
+  // Função para inicializar as categorias (adicionar as categorias padrão, se necessário)
+  Future<void> _initializeCategories() async {
+    await _categoryService.addDefaultCategories();  // Chama o método para adicionar categorias padrão
+    loadCategories();  // Carrega as categorias após adicionar as padrão
+  }
+
+  // Carregar categorias do repositório
   Future<void> loadCategories() async {
     _isLoading = true;
     notifyListeners();
@@ -31,6 +38,7 @@ class CategoryViewModel extends ChangeNotifier {
     }
   }
 
+  // Deletar uma categoria
   Future<void> deleteCategory(String id) async {
     try {
       _isLoading = true;
@@ -45,6 +53,7 @@ class CategoryViewModel extends ChangeNotifier {
     }
   }
 
+  // Alterar a categoria selecionada
   void onItemTapped(int index) {
     _selectedIndex = index;
     notifyListeners();

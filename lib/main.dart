@@ -1,10 +1,13 @@
+import 'package:cash_control/ui/widgets/atualidade.screen.dart'; // Corrigido o nome do arquivo para 'atualidade_screen.dart'
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cash_control/ui/view_model/register_view_model.dart';
 import 'package:cash_control/ui/view_model/financial_report_view_model.dart';
 import 'package:cash_control/ui/view_model/goal_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/goal_view_model.dart';
 import 'package:cash_control/ui/view_model/user_view_model.dart';
 import 'package:cash_control/ui/view_model/login_view_model.dart';
-import 'package:cash_control/data/repositories/user_repository_impl.dart';
-import 'package:cash_control/ui/widgets/category.screen.dart';
+import 'package:cash_control/ui/widgets/category.screen.dart'; // Corrigido o nome do arquivo para 'category_screen.dart'
 import 'package:cash_control/ui/widgets/chart_screen.dart';
 import 'package:cash_control/ui/widgets/dashboard.screen.dart';
 import 'package:cash_control/ui/widgets/financial_entry.screen.dart';
@@ -16,13 +19,14 @@ import 'package:cash_control/ui/widgets/goal_registration.screen.dart';
 import 'package:cash_control/ui/widgets/login.screen.dart';
 import 'package:cash_control/ui/widgets/user_registration.screen.dart';
 import 'package:cash_control/ui/widgets/welcome.screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'data/services/goal_service.dart';
+import 'package:cash_control/data/repositories/goal_repository_impl.dart';
+import 'package:cash_control/data/repositories/user_repository_impl.dart';
+import 'package:cash_control/data/services/goal_service.dart';
+import 'package:cash_control/data/services/user_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // DatabaseHelper().deleteDatabaseFile();
+
   runApp(const MyApp());
 }
 
@@ -40,13 +44,16 @@ class MyApp extends StatelessWidget {
           create: (_) => UserViewModel(UserRepositoryImpl()),
         ),
         ChangeNotifierProvider(
-          create: (_) => GoalRegistrationViewModel(),
+          create: (_) => GoalRegistrationViewModel(GoalService(GoalRepositoryImpl())),
         ),
         ChangeNotifierProvider(
-          create: (_) => GoalViewModel(GoalService()),
+          create: (_) => GoalViewModel(GoalService(GoalRepositoryImpl())),
         ),
         ChangeNotifierProvider(
           create: (_) => FinancialReportViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RegisterViewModel(UserService(UserRepositoryImpl())),
         ),
       ],
       child: MaterialApp(
@@ -61,10 +68,11 @@ class MyApp extends StatelessWidget {
           '/forgot-password': (context) => const ForgotPassword(),
           '/financial-entry': (context) => const FinancialEntryScreen(),
           '/financial-entry-registration': (context) => const FinancialEntryRegistrationScreen(),
+          '/atualidade': (context) => AtualidadeScreen(),
           '/category': (context) => const CategoryScreen(),
           '/goals': (context) => const GoalScreen(),
           '/goals/register': (context) => const GoalRegistrationScreen(),
-          '/monthly_evolution': (context) =>  ChartScreen(),
+          '/monthly_evolution': (context) => ChartScreen(),
           '/monthly_report': (context) => const FinancialReportScreen(),
         },
       ),
