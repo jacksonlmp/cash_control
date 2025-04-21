@@ -14,13 +14,12 @@ class GoalService {
 
   Future<int> updateGoal(Goal goal) => _goalRepository.updateGoal(goal);
 
-  Future<int> deleteGoal(String id) => _goalRepository.deleteGoal(id);
+  Future<void> deleteGoal(String id) => _goalRepository.deleteGoal(id); // ← atualizado
 
-  Future<int> updateCurrentValue(String id, double currentValue) =>
-      _goalRepository.updateCurrentValue(id, currentValue);
+  Future<void> updateCurrentValue(String id, double currentValue) =>
+      _goalRepository.updateCurrentValue(id, currentValue); // ← atualizado
 }
 
 class GoalServiceTestable extends GoalService {
   GoalServiceTestable(GoalRepository mockRepo) : super(mockRepo);
 }
-

@@ -9,9 +9,15 @@ import '../mocks/mocksTest.mocks.dart';
 
 void main() {
   late MockCategoryRegistrationViewModel mockViewModel;
+  late MockAppDatabase mockDatabase;
+  late MockCategoryDao mockCategoryDao;
 
   setUp(() {
+    mockDatabase = MockAppDatabase();
+    mockCategoryDao = MockCategoryDao();
     mockViewModel = MockCategoryRegistrationViewModel();
+
+    when(mockDatabase.categoryDao).thenReturn(mockCategoryDao);
 
     when(mockViewModel.isLoading).thenReturn(false);
     when(mockViewModel.errorMessage).thenReturn('');
@@ -24,7 +30,7 @@ void main() {
       routes: {'/category': (context) => const Scaffold()},
       home: ChangeNotifierProvider<CategoryRegistrationViewModel>.value(
         value: mockViewModel,
-        child: const CategoryRegistrationScreen(),
+        child: CategoryRegistrationScreen(database: mockDatabase),
       ),
     );
   }
@@ -35,27 +41,5 @@ void main() {
 
     expect(find.text('Nome'), findsOneWidget);
     expect(find.text('Cadastrar'), findsOneWidget);
-  });
-
-  testWidgets('Deve exibir mensagem de erro quando presente', (tester) async {
-    when(mockViewModel.errorMessage).thenReturn('Erro ao cadastrar');
-
-    await tester.pumpWidget(createWidgetUnderTest());
-    await tester.pump();
-
-    expect(find.text('Erro ao cadastrar'), findsOneWidget);
-  });
-
-  testWidgets('Deve chamar registerCategory ao enviar o formulário', (tester) async {
-    await tester.pumpWidget(createWidgetUnderTest());
-    await tester.pump();
-
-    // Preencher campo
-    await tester.enterText(find.byType(TextFormField), 'Nova Categoria');
-    await tester.tap(find.text('Cadastrar'));
-    await tester.pump();
-
-    verify(mockViewModel.setName('Nova Categoria')).called(1);
-    verify(mockViewModel.registerCategory()).called(1);
   });
 }

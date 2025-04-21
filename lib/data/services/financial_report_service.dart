@@ -14,4 +14,3 @@ class FinancialReportService {
     return _repository.getAnnualReport();
   }
 }
-

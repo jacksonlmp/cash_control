@@ -5,13 +5,14 @@ import 'package:cash_control/domain/models/goal.dart';
 import 'package:cash_control/ui/view_model/goal_registration_view_model.dart';
 import 'package:cash_control/ui/widgets/shared/custom_button.dart';
 import 'package:cash_control/data/services/goal_service.dart';
-
-import '../../data/repositories/goal_repository_impl.dart';
+import 'package:cash_control/data/repositories/goal_repository_impl.dart';
+import 'package:cash_control/data/floor/app_database.dart';
 
 class GoalRegistrationScreen extends StatefulWidget {
   final Goal? goal;
+  final AppDatabase database;
 
-  const GoalRegistrationScreen({Key? key, this.goal}) : super(key: key);
+  const GoalRegistrationScreen({super.key, this.goal, required this.database});
 
   @override
   State<GoalRegistrationScreen> createState() => _GoalRegistrationScreenState();
@@ -77,7 +78,11 @@ class _GoalRegistrationScreenState extends State<GoalRegistrationScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) {
-        final viewModel = GoalRegistrationViewModel(GoalService(GoalRepositoryImpl()));
+        final viewModel = GoalRegistrationViewModel(
+          GoalService(
+            GoalRepositoryImpl(widget.database),
+          ),
+        );
         if (widget.goal != null) {
           viewModel.loadGoal(widget.goal!);
         } else {

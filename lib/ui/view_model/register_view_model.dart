@@ -1,8 +1,6 @@
-// lib/ui/user/view_model/register_view_model.dart
 import 'package:flutter/material.dart';
 import '../../data/services/user_service.dart';
 import '../../domain/models/user.dart';
-import '../../data/database_helper.dart';
 
 class RegisterViewModel extends ChangeNotifier {
   final UserService service;
@@ -51,14 +49,22 @@ class RegisterViewModel extends ChangeNotifier {
 
       await service.registerUser(user);
 
-      final dbHelper = DatabaseHelper();
-      await dbHelper.printUsers();
-
+      // Removido: DatabaseHelper().printUsers();
+      // Se quiser logar algo após o cadastro, pode adicionar aqui.
     } catch (e) {
       error = e.toString().replaceAll('Exception: ', '');
     }
 
     isLoading = false;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
   }
 }

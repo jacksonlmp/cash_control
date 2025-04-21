@@ -1,4 +1,3 @@
-// test/widget/goal_screen_test.dart
 import 'package:cash_control/domain/models/goal.dart';
 import 'package:cash_control/ui/view_model/goal_view_model.dart';
 import 'package:cash_control/ui/widgets/goal.screen.dart';
@@ -11,16 +10,18 @@ import '../mocks/mocksTest.mocks.dart';
 
 void main() {
   late MockGoalViewModel mockViewModel;
+  late MockAppDatabase mockDatabase;
 
   setUp(() {
     mockViewModel = MockGoalViewModel();
+    mockDatabase = MockAppDatabase();
   });
 
   Widget createTestWidget() {
     return MaterialApp(
       home: ChangeNotifierProvider<GoalViewModel>.value(
         value: mockViewModel,
-        child: const GoalScreen(),
+        child: GoalScreen(database: mockDatabase),
       ),
     );
   }
@@ -99,7 +100,6 @@ void main() {
 
     await tester.tap(find.widgetWithText(PopupMenuItem<String>, 'Editar'));
     await tester.pumpAndSettle();
-
   });
 
   testWidgets('Deve navegar para cadastro ao clicar no botão flutuante', (tester) async {
@@ -111,7 +111,5 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-
   });
-
 }

@@ -26,7 +26,7 @@ class GenericModel extends ChangeNotifier {
     Navigator.pushNamed(context, '/goals');
   }
 
-  Future<void> atualidade(BuildContext context) async {
-    Navigator.pushNamed(context, '/atualidade');
+  Future<void> navigateToCambiospiservice(BuildContext context) async {
+    Navigator.pushNamed(context, '/cambio');
   }
 }

@@ -3,13 +3,20 @@ import 'package:cash_control/ui/widgets/category.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+
 import '../mocks/mocksTest.mocks.dart';
 
 void main() {
   late MockCategoryViewModel mockViewModel;
+  late MockAppDatabase mockDatabase;
+  late MockCategoryDao mockCategoryDao;
 
   setUp(() {
     mockViewModel = MockCategoryViewModel();
+    mockDatabase = MockAppDatabase();
+    mockCategoryDao = MockCategoryDao();
+
+    when(mockDatabase.categoryDao).thenReturn(mockCategoryDao);
 
     when(mockViewModel.isLoading).thenReturn(false);
     when(mockViewModel.errorMessage).thenReturn('');
@@ -21,7 +28,10 @@ void main() {
 
   Widget createWidgetUnderTest() {
     return MaterialApp(
-      home: CategoryScreen(viewModel: mockViewModel), // ← Injecta o mock
+      home: CategoryScreen(
+        viewModel: mockViewModel,
+        database: mockDatabase,
+      ),
     );
   }
 
@@ -37,15 +47,19 @@ void main() {
 
   testWidgets('Deve exibir mensagem de erro', (tester) async {
     when(mockViewModel.errorMessage).thenReturn('Erro ao carregar categorias');
+
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pump();
+
     expect(find.text('Erro ao carregar categorias'), findsOneWidget);
   });
 
   testWidgets('Deve exibir mensagem quando não há categorias', (tester) async {
     when(mockViewModel.categories).thenReturn([]);
+
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pump();
+
     expect(find.text('Nenhuma categoria cadastrada'), findsOneWidget);
   });
 }

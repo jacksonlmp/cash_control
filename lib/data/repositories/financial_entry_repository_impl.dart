@@ -1,44 +1,28 @@
-import 'package:cash_control/data/database_helper.dart';
-import 'package:cash_control/data/model/financial_entry_model.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository.dart';
-import 'package:sqflite/sqflite.dart';
-import '../../domain/models/financial_entry.dart';
+import 'package:cash_control/domain/models/financial_entry.dart';
+import 'package:cash_control/data/floor/app_database.dart';
+import 'package:cash_control/data/floor/mapper/financial_entry_mapper.dart';
 
 class FinancialEntryRepositoryImpl implements FinancialEntryRepository {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  final AppDatabase db;
+
+  FinancialEntryRepositoryImpl(this.db);
 
   @override
-  Future<void> register(FinancialEntry financialEntry) async {
-    final db = await _databaseHelper.database;
-
-    final financialEntryModel = FinancialEntryModel(
-      id: financialEntry.id,
-      name: financialEntry.name,
-      value: financialEntry.value,
-      categoryId: financialEntry.categoryId,
-      type: financialEntry.type,
-      date: financialEntry.date,
-    );
-
-    await db.insert(
-      'financial_entry',
-      financialEntryModel.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<void> register(FinancialEntry entry) async {
+    await db.financialEntryDao.insertEntry(entry.toEntity());
   }
 
   @override
   Future<List<FinancialEntry>> findAll() async {
-    final db = await _databaseHelper.database;
-
-    final List<Map<String, dynamic>> maps = await db.query('financial_entry');
-
-    return maps.map((map) => FinancialEntryModel.fromMap(map)).toList();
+    final entities = await db.financialEntryDao.findAll();
+    return entities.map((e) => e.toModel()).toList();
   }
 
   @override
   Future<void> delete(String id) async {
-    final db = await _databaseHelper.database;
-    await db.delete('financial_entry', where: 'id = ?', whereArgs: [id]);
+    final entries = await db.financialEntryDao.findAll();
+    final entry = entries.firstWhere((e) => e.id == id);
+    await db.financialEntryDao.deleteEntry(entry);
   }
 }

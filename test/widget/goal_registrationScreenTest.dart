@@ -9,9 +9,11 @@ import '../mocks/mocksTest.mocks.dart';
 
 void main() {
   late MockGoalRegistrationViewModel mockViewModel;
+  late MockAppDatabase mockDatabase;
 
   setUp(() {
     mockViewModel = MockGoalRegistrationViewModel();
+    mockDatabase = MockAppDatabase();
 
     when(mockViewModel.isLoading).thenReturn(false);
     when(mockViewModel.successMessage).thenReturn(null);
@@ -23,14 +25,14 @@ void main() {
       currentValue: anyNamed('currentValue'),
       deadline: anyNamed('deadline'),
       goalId: anyNamed('goalId'),
-    )).thenAnswer((_) async => false); // padrão para prevenir sucesso automático
+    )).thenAnswer((_) async => false);
   });
 
   Widget createWidgetUnderTest() {
     return MaterialApp(
       home: ChangeNotifierProvider<GoalRegistrationViewModel>.value(
         value: mockViewModel,
-        child: const GoalRegistrationScreen(),
+        child: GoalRegistrationScreen(database: mockDatabase),
       ),
     );
   }
@@ -63,12 +65,11 @@ void main() {
 
     await tester.pumpWidget(createWidgetUnderTest());
 
-    // Exibe manualmente o snackbar
     ScaffoldMessenger.of(tester.element(find.byType(GoalRegistrationScreen))).showSnackBar(
       const SnackBar(content: Text('Erro ao salvar')),
     );
 
-    await tester.pump(); // mostra o SnackBar
+    await tester.pump();
     expect(find.text('Erro ao salvar'), findsOneWidget);
   });
 
@@ -81,7 +82,7 @@ void main() {
       const SnackBar(content: Text('Meta salva com sucesso')),
     );
 
-    await tester.pump(); // mostra o SnackBar
+    await tester.pump();
     expect(find.text('Meta salva com sucesso'), findsOneWidget);
   });
 }

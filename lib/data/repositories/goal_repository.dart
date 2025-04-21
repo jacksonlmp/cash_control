@@ -5,6 +5,6 @@ abstract class GoalRepository {
   Future<Goal> getGoal(String name);
   Future<int> addGoal(Goal goal);
   Future<int> updateGoal(Goal goal);
-  Future<int> deleteGoal(String id);
-  Future<int> updateCurrentValue(String id, double currentValue);
+  Future<void> deleteGoal(String id);
+  Future<void> updateCurrentValue(String id, double currentValue);
 }

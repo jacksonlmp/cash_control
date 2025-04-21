@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../data/services/financial_summary_service.dart';
-import '../view_model/monthly_financial_chart_view_model.dart';
-import '../../data/repositories/financial_summary_repository_impl.dart';
-import '../../data/database_helper.dart';
+import 'package:cash_control/data/floor/app_database.dart';
+import 'package:cash_control/data/repositories/financial_summary_repository_impl.dart';
+import 'package:cash_control/data/services/financial_summary_service.dart';
+import 'package:cash_control/ui/view_model/monthly_financial_chart_view_model.dart';
 
 class ChartScreen extends StatelessWidget {
+  final AppDatabase database;
   final FinancialSummaryService _summaryService;
 
-
-  ChartScreen({super.key})
-      : _summaryService = FinancialSummaryService(FinancialSummaryRepositoryImpl(DatabaseHelper()));
+  ChartScreen({super.key, required this.database})
+      : _summaryService = FinancialSummaryService(
+    FinancialSummaryRepositoryImpl(database),
+  );
 
   @override
   Widget build(BuildContext context) {

@@ -12,11 +12,13 @@ import '../mocks/mocksTest.mocks.dart';
 
 void main() {
   late MockFinancialEntryEditViewModel mockViewModel;
+  late MockAppDatabase mockDatabase;
   late FinancialEntry mockEntry;
   late DateTime fixedDate;
 
   setUp(() {
     mockViewModel = MockFinancialEntryEditViewModel();
+    mockDatabase = MockAppDatabase();
     fixedDate = DateTime(2025, 4, 20);
     mockEntry = FinancialEntry(
       id: '1',
@@ -44,7 +46,10 @@ void main() {
     return MaterialApp(
       home: ChangeNotifierProvider<FinancialEntryEditViewModel>.value(
         value: mockViewModel,
-        child: FinancialEntryEditScreen(financialEntry: mockEntry),
+        child: FinancialEntryEditScreen(
+          financialEntry: mockEntry,
+          database: mockDatabase, // ✅ Adicionado aqui
+        ),
       ),
     );
   }

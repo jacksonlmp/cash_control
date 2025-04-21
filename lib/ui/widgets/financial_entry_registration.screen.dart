@@ -1,3 +1,4 @@
+import 'package:cash_control/data/floor/app_database.dart';
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
@@ -16,7 +17,9 @@ import 'package:cash_control/ui/widgets/shared/custom_text_field.dart';
 import 'package:cash_control/ui/widgets/shared/custom_form.dart';
 
 class FinancialEntryRegistrationScreen extends StatelessWidget {
-  const FinancialEntryRegistrationScreen({super.key});
+  final AppDatabase database;
+
+  const FinancialEntryRegistrationScreen({super.key, required this.database});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +28,8 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => FinancialEntryRegistrationViewModel(
         FinancialEntryService(
-          FinancialEntryRepositoryImpl(),
-          CategoryService(CategoryRepositoryImpl()),
+          FinancialEntryRepositoryImpl(database),
+          CategoryService(CategoryRepositoryImpl(database.categoryDao)),
         ),
       ),
       child: Consumer<FinancialEntryRegistrationViewModel>(
@@ -34,7 +37,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Colors.black,
             appBar: buildAppBar(context, 'Cadastrar transação', '/financial-entry'),
-            endDrawer: buildEndDrawer(context),
+            endDrawer: buildEndDrawer(context, database), // <- corrigido aqui
             body: Container(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -80,9 +83,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                   formFields: [
                     CustomTextField(
                       label: 'Nome',
-                      onChanged: (val) {
-                        viewModel.setName(val);
-                      },
+                      onChanged: viewModel.setName,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, insira um nome';
@@ -106,21 +107,24 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 16),
-                    CustomDropdown(
-                        label: 'Categoria',
-                        items: viewModel.categories,
-                        getLabel: (category) => category.name,
-                        onChanged: (Category? newCategory) {
-                          if (newCategory != null) {
-                            viewModel.setCategory(newCategory);
-                          }
+                    CustomDropdown<Category>(
+                      label: 'Categoria',
+                      items: viewModel.categories,
+                      selectedValue: viewModel.category,
+                      getLabel: (category) => category.name,
+                      onChanged: (newCategory) {
+                        if (newCategory != null) {
+                          viewModel.setCategory(newCategory);
                         }
+                      },
                     ),
-                    CustomDropdown(
-                        label: 'Tipo',
-                        items: FinancialEntryType.values,
-                        getLabel: (type) => type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
-                        onChanged: viewModel.setType
+                    CustomDropdown<FinancialEntryType>(
+                      label: 'Tipo',
+                      items: FinancialEntryType.values,
+                      selectedValue: viewModel.type,
+                      getLabel: (type) =>
+                      type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
+                      onChanged: viewModel.setType,
                     ),
                     CustomButton(
                       isLoading: viewModel.isLoading,
@@ -135,10 +139,7 @@ class FinancialEntryRegistrationScreen extends StatelessWidget {
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2100),
                           builder: (context, child) {
-                            return Theme(
-                              data: ThemeData.dark(),
-                              child: child!,
-                            );
+                            return Theme(data: ThemeData.dark(), child: child!);
                           },
                         );
                         if (picked != null) {

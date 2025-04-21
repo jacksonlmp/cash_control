@@ -1,54 +1,56 @@
-// lib/data/repositories/financial_report_repository_impl.dart
-import 'package:cash_control/data/database_helper.dart';
-import 'package:cash_control/data/model/financial_entry_model.dart';
+import 'package:cash_control/data/floor/app_database.dart';
+import 'package:cash_control/data/floor/mapper/financial_entry_mapper.dart';
 import 'package:cash_control/domain/models/financial_entry.dart';
 import 'package:cash_control/data/repositories/financial_report_repository.dart';
 
 class FinancialReportRepositoryImpl implements FinancialReportRepository {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  final AppDatabase _database;
+
+  FinancialReportRepositoryImpl(this._database);
 
   @override
   Future<Map<String, List<FinancialEntry>>> getMonthlyReport(int year) async {
-    final db = await _databaseHelper.database;
+    try {
+      final entries = await _database.financialEntryDao.findAll();
+      final Map<String, List<FinancialEntry>> monthlyReport = {};
 
-    final result = await db.rawQuery('''
-      SELECT * FROM financial_entry
-      WHERE strftime('%Y', date) = ?
-      ORDER BY date ASC
-    ''', [year.toString()]);
+      for (var entity in entries) {
+        final model = entity.toModel();
+        if (model.date.year == year) {
+          final month = "${model.date.year.toString().padLeft(4, '0')}-${model.date.month.toString().padLeft(2, '0')}";
 
-    final Map<String, List<FinancialEntry>> monthlyReport = {};
+          monthlyReport.putIfAbsent(month, () => []);
+          monthlyReport[month]!.add(model);
+        }
+      }
 
-    for (var row in result) {
-      final entry = FinancialEntryModel.fromMap(row);
-      final month = entry.date.toIso8601String().substring(0, 7); // yyyy-MM
-
-      monthlyReport.putIfAbsent(month, () => []);
-      monthlyReport[month]!.add(entry);
+      return monthlyReport;
+    } catch (e, stack) {
+      print('Erro ao obter relatório mensal: $e');
+      print('StackTrace: $stack');
+      rethrow;
     }
-
-    return monthlyReport;
   }
 
   @override
   Future<Map<int, List<FinancialEntry>>> getAnnualReport() async {
-    final db = await _databaseHelper.database;
+    try {
+      final entries = await _database.financialEntryDao.findAll();
+      final Map<int, List<FinancialEntry>> annualReport = {};
 
-    final result = await db.rawQuery('''
-      SELECT * FROM financial_entry
-      ORDER BY date ASC
-    ''');
+      for (var entity in entries) {
+        final model = entity.toModel();
+        final year = model.date.year;
 
-    final Map<int, List<FinancialEntry>> annualReport = {};
+        annualReport.putIfAbsent(year, () => []);
+        annualReport[year]!.add(model);
+      }
 
-    for (var row in result) {
-      final entry = FinancialEntryModel.fromMap(row);
-      final year = entry.date.year;
-
-      annualReport.putIfAbsent(year, () => []);
-      annualReport[year]!.add(entry);
+      return annualReport;
+    } catch (e, stack) {
+      print('Erro ao obter relatório anual: $e');
+      print('StackTrace: $stack');
+      rethrow;
     }
-
-    return annualReport;
   }
 }

@@ -1,47 +1,27 @@
-import 'package:cash_control/data/database_helper.dart';
-import 'package:cash_control/data/model/category_model.dart';
-import 'package:cash_control/data/repositories/category_repository.dart';
-import 'package:sqflite/sqflite.dart';
-
 import '../../domain/models/category.dart';
+import 'package:cash_control/data/floor/entities/category_entity.dart';
+import 'package:cash_control/data/floor/dao/category_dao.dart';
+import 'category_repository.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  final CategoryDao _dao;
+
+  CategoryRepositoryImpl(this._dao);
 
   @override
   Future<void> register(Category category) async {
-    final db = await _databaseHelper.database;
-
-    final categoryModel = CategoryModel(
-      id: category.id,
-      name: category.name,
-    );
-
-    await db.insert(
-        'category',
-        categoryModel.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace
-    );
+    final entity = CategoryEntity(id: category.id, name: category.name);
+    await _dao.insertCategory(entity);
   }
 
   @override
   Future<List<Category>> findAll() async {
-    final db = await _databaseHelper.database;
-
-    final List<Map<String, dynamic>> maps = await db.query('category');
-
-    return List.generate(maps.length, (i) {
-      return Category(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-      );
-    });
+    final entities = await _dao.findAll();
+    return entities.map((e) => Category(id: e.id, name: e.name)).toList();
   }
 
   @override
   Future<void> delete(String id) async {
-    final db = await _databaseHelper.database;
-    await db.delete('category', where: 'id = ?', whereArgs: [id]);
+    await _dao.deleteCategory(id);
   }
-
 }

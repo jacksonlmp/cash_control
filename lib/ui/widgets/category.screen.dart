@@ -1,3 +1,4 @@
+import 'package:cash_control/data/floor/app_database.dart';
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
@@ -11,16 +12,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatelessWidget {
-  final CategoryViewModel? viewModel; // <-- Adicionado
+  final CategoryViewModel? viewModel;
+  final AppDatabase database; // <-- Adicionado
 
-  const CategoryScreen({super.key, this.viewModel}); // <-- Modificado
+  const CategoryScreen({
+    super.key,
+    required this.database,
+    this.viewModel,
+  });
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return ChangeNotifierProvider<CategoryViewModel>(
-      create: (_) => viewModel ?? CategoryViewModel(CategoryService(CategoryRepositoryImpl()))..loadCategories(),
+      create: (_) => viewModel ??
+          CategoryViewModel(
+            CategoryService(
+              CategoryRepositoryImpl(database.categoryDao),
+            ),
+          )..loadCategories(),
       child: Consumer<CategoryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -112,9 +123,11 @@ class CategoryScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (_) => ChangeNotifierProvider(
                                 create: (_) => CategoryRegistrationViewModel(
-                                  CategoryService(CategoryRepositoryImpl()),
+                                  CategoryService(
+                                    CategoryRepositoryImpl(database.categoryDao),
+                                  ),
                                 ),
-                                child: const CategoryRegistrationScreen(),
+                                child: CategoryRegistrationScreen(database: database),
                               ),
                             ),
                           );
@@ -125,7 +138,7 @@ class CategoryScreen extends StatelessWidget {
                 ],
               ),
             ),
-            endDrawer: buildEndDrawer(context),
+            endDrawer: buildEndDrawer(context, database), // <-- Atualizado
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },

@@ -1,67 +1,45 @@
-import 'package:cash_control/data/database_helper.dart';
+import 'package:cash_control/data/floor/app_database.dart';
+import 'package:cash_control/data/floor/mapper/user_mapper.dart';
 import 'package:cash_control/data/repositories/user_repository.dart';
 import 'package:cash_control/domain/models/user.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  final AppDatabase _db;
+
+  UserRepositoryImpl(this._db);
 
   @override
   Future<void> register(User user) async {
-    final Database db = await _databaseHelper.database;
-    await db.insert('users', {
-      'id': user.id,
-      'name': user.name,
-      'email': user.email,
-      'password': user.password,
-    });
-  }
-
-  @override
-  Future<User?> getUserByEmailAndPassword(String email, String password) async {
-    final Database db = await _databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'users',
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
-    );
-    if (maps.isNotEmpty) {
-      final map = maps.first;
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('logged_user_id', map['id'].toString());
-
-      return User(
-        id: map['id'],
-        name: map['name'],
-        email: map['email'],
-        password: map['password'],
-      );
-    } else {
-      return null;
-    }
+    await _db.userDao.insertUser(user.toEntity());
   }
 
   @override
   Future<bool> existsEmail(String email) async {
-    final db = await _databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'users',
-      where: 'email = ?',
-      whereArgs: [email],
-    );
+    final user = await _db.userDao.findUserByEmail(email);
+    return user != null;
+  }
 
-    return maps.isNotEmpty;
+  @override
+  Future<User?> getUserByEmailAndPassword(String email, String password) async {
+    final userEntity = await _db.userDao.findUserByEmailAndPassword(email, password);
+    if (userEntity != null) {
+      final user = userEntity.toModel();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('logged_user_id', user.id);
+      return user;
+    }
+    return null;
   }
 
   @override
   Future<void> logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     await prefs.remove('logged_user_id');
   }
 
   @override
   Future<void> forgotPassword() async {
-    return;
+    // Implementação futura (ex: enviar email, etc.)
   }
 }

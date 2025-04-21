@@ -1,4 +1,3 @@
-import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
@@ -79,10 +78,8 @@ class FinancialEntryEditViewModel extends ChangeNotifier {
 
     try {
       _categories = await _financialEntryService.findAllCategories();
-
       final matched = _categories.where((cat) => cat.id == _financialEntry.categoryId);
       _category = matched.isNotEmpty ? matched.first : null;
-
     } catch (e) {
       _errorMessage = 'Erro ao carregar categorias';
     } finally {
@@ -113,7 +110,6 @@ class FinancialEntryEditViewModel extends ChangeNotifier {
 
       await _financialEntryService.createOrUpdateFinancialEntry(updatedEntry);
       _errorMessage = '';
-      DatabaseHelper().printFinancialEntries();
     } catch (e) {
       _errorMessage = 'Erro ao editar entrada: ${e.toString()}';
     } finally {

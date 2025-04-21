@@ -1,3 +1,4 @@
+import 'package:cash_control/data/floor/app_database.dart';
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
@@ -17,18 +18,21 @@ import 'package:provider/provider.dart';
 import 'financial_entry_edit.screen.dart';
 
 class FinancialEntryScreen extends StatelessWidget {
-  const FinancialEntryScreen({super.key});
+  final AppDatabase database;
+
+  const FinancialEntryScreen({super.key, required this.database});
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+    final financialEntryService = FinancialEntryService(
+      FinancialEntryRepositoryImpl(database),
+      CategoryService(CategoryRepositoryImpl(database.categoryDao)),
+    );
+
     return ChangeNotifierProvider(
-      create: (_) => FinancialEntryViewModel(
-        FinancialEntryService(
-          FinancialEntryRepositoryImpl(),
-          CategoryService(CategoryRepositoryImpl()),
-        ),
-      ),
+      create: (_) => FinancialEntryViewModel(financialEntryService),
       child: Consumer<FinancialEntryViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -39,17 +43,11 @@ class FinancialEntryScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 20),
                   if (viewModel.errorMessage.isNotEmpty)
-                    Text(
-                      viewModel.errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                    Text(viewModel.errorMessage, style: const TextStyle(color: Colors.red)),
                   if (viewModel.financialEntries.isEmpty)
                     const Expanded(
                       child: Center(
-                        child: Text(
-                          'Nenhuma transação cadastrado',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text('Nenhuma transação cadastrada', style: TextStyle(color: Colors.white)),
                       ),
                     )
                   else
@@ -57,13 +55,13 @@ class FinancialEntryScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: viewModel.financialEntries.length,
                         itemBuilder: (context, index) {
-                          final financialEntry = viewModel.financialEntries[index];
+                          final entry = viewModel.financialEntries[index];
                           return GestureDetector(
                             onTap: () {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => FinancialEntryEditScreen(financialEntry: financialEntry),
+                                  builder: (_) => FinancialEntryEditScreen(financialEntry: entry, database: database),
                                 ),
                               );
                             },
@@ -78,25 +76,17 @@ class FinancialEntryScreen extends StatelessWidget {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          financialEntry.name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
+                                        Text(entry.name,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16)),
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFA100FF),
-                                          ),
+                                          decoration: const BoxDecoration(color: Color(0xFFA100FF)),
                                           child: Text(
-                                            viewModel.getCategoryNameById(financialEntry.categoryId),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                            ),
+                                            viewModel.getCategoryNameById(entry.categoryId),
+                                            style: const TextStyle(color: Colors.white, fontSize: 14),
                                           ),
                                         ),
                                       ],
@@ -106,20 +96,17 @@ class FinancialEntryScreen extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'R\$ ${NumberFormat.currency(locale: 'pt_BR', symbol: '').format(financialEntry.value)}',
+                                          'R\$ ${NumberFormat.currency(locale: 'pt_BR', symbol: '').format(entry.value)}',
                                           style: TextStyle(
-                                            color: financialEntry.type == FinancialEntryType.despesa ? Colors.red : Colors.green,
+                                            color: entry.type == FinancialEntryType.despesa
+                                                ? Colors.red
+                                                : Colors.green,
                                             fontSize: 14,
                                           ),
                                         ),
                                         Text(
-                                          '${financialEntry.date.day.toString().padLeft(2, '0')}/'
-                                              '${financialEntry.date.month.toString().padLeft(2, '0')}/'
-                                              '${financialEntry.date.year}',
-                                          style: const TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 14,
-                                          ),
+                                          DateFormat('dd/MM/yyyy').format(entry.date),
+                                          style: const TextStyle(color: Colors.white70, fontSize: 14),
                                         ),
                                       ],
                                     ),
@@ -142,28 +129,19 @@ class FinancialEntryScreen extends StatelessWidget {
                           children: [
                             const Text(
                               'Saldo',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             Builder(
                               builder: (context) {
                                 final balance = viewModel.getBalance();
-                                final balanceColor = balance > 0
+                                final color = balance > 0
                                     ? Colors.green
                                     : balance < 0
                                     ? Colors.red
                                     : Colors.white;
-
                                 return Text(
                                   'R\$ ${NumberFormat.currency(locale: 'pt_BR', symbol: '').format(balance)}',
-                                  style: TextStyle(
-                                    color: balanceColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.bold),
                                 );
                               },
                             ),
@@ -181,13 +159,8 @@ class FinancialEntryScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => ChangeNotifierProvider(
-                                    create: (_) => FinancialEntryRegistrationViewModel(
-                                      FinancialEntryService(
-                                        FinancialEntryRepositoryImpl(),
-                                        CategoryService(CategoryRepositoryImpl()),
-                                      ),
-                                    ),
-                                    child: const FinancialEntryRegistrationScreen(),
+                                    create: (_) => FinancialEntryRegistrationViewModel(financialEntryService),
+                                    child: FinancialEntryRegistrationScreen(database: database),
                                   ),
                                 ),
                               );
@@ -200,7 +173,7 @@ class FinancialEntryScreen extends StatelessWidget {
                 ],
               ),
             ),
-            endDrawer: buildEndDrawer(context),
+            endDrawer: buildEndDrawer(context, database),
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },

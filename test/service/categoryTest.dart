@@ -16,7 +16,7 @@ void main() {
   final mockCategory = Category(id: '1', name: 'Alimentação');
 
   group('CategoryService Tests', () {
-    test('Deve registrar uma categoria', () async {
+    test('deve registrar uma categoria', () async {
       when(mockCategoryRepository.register(mockCategory)).thenAnswer((_) async {});
 
       await categoryService.registerCategory(mockCategory);
@@ -24,7 +24,7 @@ void main() {
       verify(mockCategoryRepository.register(mockCategory)).called(1);
     });
 
-    test('Deve retornar uma lista de categorias', () async {
+    test('deve retornar uma lista de categorias', () async {
       when(mockCategoryRepository.findAll()).thenAnswer((_) async => [mockCategory]);
 
       final result = await categoryService.findAllCategories();
@@ -35,7 +35,7 @@ void main() {
       verify(mockCategoryRepository.findAll()).called(1);
     });
 
-    test('Deve retornar lista vazia quando não houver categorias', () async {
+    test('deve retornar lista vazia quando não houver categorias', () async {
       when(mockCategoryRepository.findAll()).thenAnswer((_) async => []);
 
       final result = await categoryService.findAllCategories();
@@ -44,7 +44,7 @@ void main() {
       verify(mockCategoryRepository.findAll()).called(1);
     });
 
-    test('Deve deletar uma categoria', () async {
+    test('deve deletar uma categoria', () async {
       when(mockCategoryRepository.delete('1')).thenAnswer((_) async {});
 
       await categoryService.deleteCategory('1');
@@ -52,7 +52,7 @@ void main() {
       verify(mockCategoryRepository.delete('1')).called(1);
     });
 
-    test('Deve falhar ao registrar categoria se o repositório falhar', () async {
+    test('deve falhar ao registrar categoria se o repositório falhar', () async {
       when(mockCategoryRepository.register(mockCategory)).thenThrow(Exception('Falha ao salvar categoria'));
 
       expect(
@@ -61,7 +61,7 @@ void main() {
       );
     });
 
-    test('Deve falhar ao deletar categoria se o repositório falhar', () async {
+    test('deve falhar ao deletar categoria se o repositório falhar', () async {
       when(mockCategoryRepository.delete('1')).thenThrow(Exception('Falha ao deletar categoria'));
 
       expect(
@@ -71,4 +71,3 @@ void main() {
     });
   });
 }
-

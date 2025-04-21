@@ -17,11 +17,10 @@ class CategoryViewModel extends ChangeNotifier {
   String get errorMessage => _errorMessage;
   bool get isLoading => _isLoading;
   List<Category> get categories => _categories;
-
   // Função para inicializar as categorias (adicionar as categorias padrão, se necessário)
   Future<void> _initializeCategories() async {
-    await _categoryService.addDefaultCategories();  // Chama o método para adicionar categorias padrão
-    loadCategories();  // Carrega as categorias após adicionar as padrão
+    await _categoryService.addDefaultCategories();
+    loadCategories();
   }
 
   // Carregar categorias do repositório

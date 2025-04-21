@@ -1,23 +1,28 @@
-import 'package:cash_control/data/repositories/user_repository_impl.dart';
-import 'package:cash_control/data/services/user_service.dart';
-import 'package:cash_control/ui/view_model/dashboard_view_model.dart';
+import 'package:cash_control/data/floor/app_database.dart';
+import 'package:cash_control/data/repositories/category_repository_impl.dart';
+import 'package:cash_control/data/services/category_service.dart';
+import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
 import 'package:cash_control/ui/widgets/shared/app_bar.dart';
 import 'package:cash_control/ui/widgets/shared/bottom_navigation_bar.dart';
 import 'package:cash_control/ui/widgets/shared/end_drawer.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cash_control/ui/widgets/shared/custom_text_field.dart';
 import 'package:cash_control/ui/widgets/shared/custom_form.dart';
-import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoryRegistrationScreen extends StatelessWidget {
-  const CategoryRegistrationScreen({super.key});
+  final AppDatabase database;
+
+  const CategoryRegistrationScreen({super.key, required this.database});
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    return ChangeNotifierProvider(
-      create: (_) => DashboardViewModel(UserService(UserRepositoryImpl())),
+
+    return ChangeNotifierProvider<CategoryRegistrationViewModel>(
+      create: (_) => CategoryRegistrationViewModel(
+        CategoryService(CategoryRepositoryImpl(database.categoryDao)),
+      ),
       child: Consumer<CategoryRegistrationViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -85,7 +90,7 @@ class CategoryRegistrationScreen extends StatelessWidget {
                 ),
               ),
             ),
-            endDrawer: buildEndDrawer(context),
+            endDrawer: buildEndDrawer(context, database),
             bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },

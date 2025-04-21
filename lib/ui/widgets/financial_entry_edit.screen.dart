@@ -1,3 +1,4 @@
+import 'package:cash_control/data/floor/app_database.dart';
 import 'package:cash_control/data/repositories/category_repository_impl.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository_impl.dart';
 import 'package:cash_control/data/services/category_service.dart';
@@ -18,8 +19,13 @@ import 'package:cash_control/ui/widgets/shared/custom_form.dart';
 
 class FinancialEntryEditScreen extends StatelessWidget {
   final FinancialEntry financialEntry;
+  final AppDatabase database;
 
-  const FinancialEntryEditScreen({super.key, required this.financialEntry});
+  const FinancialEntryEditScreen({
+    super.key,
+    required this.financialEntry,
+    required this.database,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +33,10 @@ class FinancialEntryEditScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => FinancialEntryEditViewModel(
         FinancialEntryService(
-          FinancialEntryRepositoryImpl(),
-          CategoryService(CategoryRepositoryImpl()),
+          FinancialEntryRepositoryImpl(database),
+          CategoryService(CategoryRepositoryImpl(database.categoryDao)),
         ),
-        financialEntry
+        financialEntry,
       ),
       child: Consumer<FinancialEntryEditViewModel>(
         builder: (context, viewModel, child) {
@@ -86,15 +92,9 @@ class FinancialEntryEditScreen extends StatelessWidget {
                         CustomTextField(
                           label: 'Nome',
                           controller: viewModel.nameController,
-                          onChanged: (val) {
-                            viewModel.setName(val);
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor, insira um nome';
-                            }
-                            return null;
-                          },
+                          onChanged: viewModel.setName,
+                          validator: (value) =>
+                          (value == null || value.isEmpty) ? 'Por favor, insira um nome' : null,
                         ),
                         const SizedBox(height: 16),
                         CustomTextField(
@@ -105,31 +105,26 @@ class FinancialEntryEditScreen extends StatelessWidget {
                             viewModel.setValue(parsed);
                           },
                           keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor, insira um valor';
-                            }
-                            return null;
-                          },
+                          validator: (value) =>
+                          (value == null || value.isEmpty) ? 'Por favor, insira um valor' : null,
                         ),
                         const SizedBox(height: 16),
-                        CustomDropdown(
-                            selectedValue: viewModel.type,
-                            label: 'Tipo',
-                            items: FinancialEntryType.values,
-                            getLabel: (type) => type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
-                            onChanged: viewModel.setType
+                        CustomDropdown<FinancialEntryType>(
+                          selectedValue: viewModel.type,
+                          label: 'Tipo',
+                          items: FinancialEntryType.values,
+                          getLabel: (type) =>
+                          type == FinancialEntryType.despesa ? 'Despesa' : 'Receita',
+                          onChanged: viewModel.setType,
                         ),
-                        CustomDropdown(
-                            selectedValue: viewModel.category,
-                            label: 'Categoria',
-                            items: viewModel.categories,
-                            getLabel: (category) => category.name,
-                            onChanged: (Category? newCategory) {
-                              if (newCategory != null) {
-                                viewModel.setCategory(newCategory);
-                              }
-                            }
+                        CustomDropdown<Category>(
+                          selectedValue: viewModel.category,
+                          label: 'Categoria',
+                          items: viewModel.categories,
+                          getLabel: (category) => category.name,
+                          onChanged: (newCategory) {
+                            if (newCategory != null) viewModel.setCategory(newCategory);
+                          },
                         ),
                         CustomButton(
                           isLoading: viewModel.isLoading,
@@ -144,73 +139,53 @@ class FinancialEntryEditScreen extends StatelessWidget {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
                               builder: (context, child) {
-                                return Theme(
-                                  data: ThemeData.dark(),
-                                  child: child!,
-                                );
+                                return Theme(data: ThemeData.dark(), child: child!);
                               },
                             );
-                            if (picked != null) {
-                              viewModel.setDate(picked);
-                            }
+                            if (picked != null) viewModel.setDate(picked);
                           },
                         ),
                         if (viewModel.errorMessage.isNotEmpty)
-                          Text(
-                            viewModel.errorMessage,
-                            style: const TextStyle(color: Colors.red),
-                          ),
+                          Text(viewModel.errorMessage, style: const TextStyle(color: Colors.red)),
                       ],
                     ),
                     const SizedBox(height: 20),
                     CustomButton(
-                        isLoading: viewModel.isLoading,
-                        text: 'Excluir',
-                        backgroundColor: Colors.black,
-                        hasBorder: true,
-                        onPressed: () async {
-                          final confirm = await showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              backgroundColor: Colors.grey[900],
-                              title: const Text(
-                                'Excluir transação',
-                                style: TextStyle(color: Colors.white),
+                      isLoading: viewModel.isLoading,
+                      text: 'Excluir',
+                      backgroundColor: Colors.black,
+                      hasBorder: true,
+                      onPressed: () async {
+                        final confirm = await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            backgroundColor: Colors.grey[900],
+                            title: const Text('Excluir transação', style: TextStyle(color: Colors.white)),
+                            content: const Text('Tem certeza que deseja excluir?', style: TextStyle(color: Colors.white)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text('Cancelar', style: TextStyle(color: Color(0xFFA100FF))),
                               ),
-                              content: const Text(
-                                'Tem certeza que deseja excluir?',
-                                style: TextStyle(color: Colors.white),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: const Text('Excluir', style: TextStyle(color: Color(0xFFA100FF))),
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
-                                  child: const Text(
-                                    'Cancelar',
-                                    style: TextStyle(color: Color(0xFFA100FF)),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(true),
-                                  child: const Text(
-                                    'Excluir',
-                                    style: TextStyle(color: Color(0xFFA100FF)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirm == true) {
-                            await viewModel.deleteFinancialEntry(financialEntry.id);
-                            Navigator.pushNamed(context, '/financial-entry');
-                          }
-                        },
-                    )
-                  ]
+                            ],
+                          ),
+                        );
+                        if (confirm == true) {
+                          await viewModel.deleteFinancialEntry(financialEntry.id);
+                          Navigator.pushNamed(context, '/financial-entry');
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
-            endDrawer: buildEndDrawer(context),
-            bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey)
+            endDrawer: buildEndDrawer(context, database),
+            bottomNavigationBar: buildBottomNavigationBar(viewModel, context, scaffoldKey),
           );
         },
       ),

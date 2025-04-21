@@ -22,7 +22,7 @@ List<BottomNavigationBarItem> buildDashboardNavItems() {
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.account_balance_wallet, color: Colors.white),
-      label: 'Atualidade',
+      label: 'Cambio',
     ),
   ];
 }

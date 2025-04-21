@@ -11,7 +11,7 @@ void main() {
 
   setUp(() {
     mockGoalRepository = MockGoalRepository();
-    goalService = GoalServiceTestable(mockGoalRepository);
+    goalService = GoalService(mockGoalRepository); // Corrigido aqui
   });
 
   final mockGoal = Goal(
@@ -61,20 +61,20 @@ void main() {
   });
 
   test('Deve deletar uma meta pelo ID', () async {
-    when(mockGoalRepository.deleteGoal('1')).thenAnswer((_) async => 1);
+    when(mockGoalRepository.deleteGoal('1')).thenAnswer((_) async => Future.value());
 
-    final result = await goalService.deleteGoal('1');
+    await goalService.deleteGoal('1');
 
-    expect(result, 1);
     verify(mockGoalRepository.deleteGoal('1')).called(1);
   });
 
+
   test('Deve atualizar o valor atual de uma meta', () async {
-    when(mockGoalRepository.updateCurrentValue('1', 2000)).thenAnswer((_) async => 1);
+    when(mockGoalRepository.updateCurrentValue('1', 2000)).thenAnswer((_) async => Future.value());
 
-    final result = await goalService.updateCurrentValue('1', 2000);
+    await goalService.updateCurrentValue('1', 2000);
 
-    expect(result, 1);
     verify(mockGoalRepository.updateCurrentValue('1', 2000)).called(1);
   });
+
 }

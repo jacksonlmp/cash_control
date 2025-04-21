@@ -3,50 +3,55 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i8;
-import 'dart:ui' as _i21;
+import 'dart:async' as _i10;
+import 'dart:ui' as _i24;
 
-import 'package:cash_control/data/database_helper.dart' as _i16;
+import 'package:cash_control/data/floor/app_database.dart' as _i36;
+import 'package:cash_control/data/floor/dao/category_dao.dart' as _i6;
+import 'package:cash_control/data/floor/dao/financial_entry_dao.dart' as _i7;
+import 'package:cash_control/data/floor/dao/goal_dao.dart' as _i8;
+import 'package:cash_control/data/floor/dao/user_dao.dart' as _i9;
+import 'package:cash_control/data/floor/entities/category_entity.dart' as _i37;
 import 'package:cash_control/data/repositories/category_repository.dart'
-    as _i11;
-import 'package:cash_control/data/repositories/financial_entry_repository.dart'
-    as _i13;
-import 'package:cash_control/data/repositories/financial_report_repository.dart'
     as _i15;
-import 'package:cash_control/data/repositories/financial_summary_repository.dart'
+import 'package:cash_control/data/repositories/financial_entry_repository.dart'
     as _i17;
-import 'package:cash_control/data/repositories/goal_repository.dart' as _i10;
-import 'package:cash_control/data/repositories/user_repository.dart' as _i7;
+import 'package:cash_control/data/repositories/financial_report_repository.dart'
+    as _i19;
+import 'package:cash_control/data/repositories/financial_summary_repository.dart'
+    as _i20;
+import 'package:cash_control/data/repositories/goal_repository.dart' as _i14;
+import 'package:cash_control/data/repositories/user_repository.dart' as _i12;
 import 'package:cash_control/data/services/financial_entry_service.dart'
-    as _i18;
-import 'package:cash_control/domain/enum/financial_entry_type.dart' as _i26;
-import 'package:cash_control/domain/models/category.dart' as _i12;
-import 'package:cash_control/domain/models/financial_entry.dart' as _i14;
+    as _i21;
+import 'package:cash_control/domain/enum/financial_entry_type.dart' as _i29;
+import 'package:cash_control/domain/models/category.dart' as _i16;
+import 'package:cash_control/domain/models/financial_entry.dart' as _i18;
 import 'package:cash_control/domain/models/goal.dart' as _i2;
-import 'package:cash_control/domain/models/user.dart' as _i9;
+import 'package:cash_control/domain/models/user.dart' as _i13;
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart'
-    as _i29;
-import 'package:cash_control/ui/view_model/category_view_model.dart' as _i30;
-import 'package:cash_control/ui/view_model/dashboard_view_model.dart' as _i32;
+    as _i32;
+import 'package:cash_control/ui/view_model/category_view_model.dart' as _i33;
+import 'package:cash_control/ui/view_model/dashboard_view_model.dart' as _i35;
 import 'package:cash_control/ui/view_model/financial_entry_edit_view_model.dart'
-    as _i28;
-import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart'
-    as _i25;
-import 'package:cash_control/ui/view_model/financial_entry_view_model.dart'
-    as _i27;
-import 'package:cash_control/ui/view_model/goal_registration_view_model.dart'
-    as _i23;
-import 'package:cash_control/ui/view_model/goal_view_model.dart' as _i24;
-import 'package:cash_control/ui/view_model/login_view_model.dart' as _i22;
-import 'package:cash_control/ui/view_model/monthly_financial_chart_view_model.dart'
     as _i31;
-import 'package:cash_control/ui/view_model/user_view_model.dart' as _i19;
-import 'package:flutter/foundation.dart' as _i6;
-import 'package:flutter/material.dart' as _i4;
-import 'package:flutter/src/widgets/framework.dart' as _i5;
+import 'package:cash_control/ui/view_model/financial_entry_registration_view_model.dart'
+    as _i28;
+import 'package:cash_control/ui/view_model/financial_entry_view_model.dart'
+    as _i30;
+import 'package:cash_control/ui/view_model/goal_registration_view_model.dart'
+    as _i26;
+import 'package:cash_control/ui/view_model/goal_view_model.dart' as _i27;
+import 'package:cash_control/ui/view_model/login_view_model.dart' as _i25;
+import 'package:cash_control/ui/view_model/monthly_financial_chart_view_model.dart'
+    as _i34;
+import 'package:cash_control/ui/view_model/user_view_model.dart' as _i22;
+import 'package:flutter/foundation.dart' as _i5;
+import 'package:flutter/material.dart' as _i3;
+import 'package:flutter/src/widgets/framework.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i20;
-import 'package:sqflite/sqflite.dart' as _i3;
+import 'package:mockito/src/dummies.dart' as _i23;
+import 'package:sqflite/sqflite.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -72,8 +77,9 @@ class _FakeGoal_0 extends _i1.SmartFake implements _i2.Goal {
         );
 }
 
-class _FakeDatabase_1 extends _i1.SmartFake implements _i3.Database {
-  _FakeDatabase_1(
+class _FakeTextEditingController_1 extends _i1.SmartFake
+    implements _i3.TextEditingController {
+  _FakeTextEditingController_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -82,9 +88,8 @@ class _FakeDatabase_1 extends _i1.SmartFake implements _i3.Database {
         );
 }
 
-class _FakeTextEditingController_2 extends _i1.SmartFake
-    implements _i4.TextEditingController {
-  _FakeTextEditingController_2(
+class _FakeDateTime_2 extends _i1.SmartFake implements DateTime {
+  _FakeDateTime_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -93,18 +98,8 @@ class _FakeTextEditingController_2 extends _i1.SmartFake
         );
 }
 
-class _FakeDateTime_3 extends _i1.SmartFake implements DateTime {
-  _FakeDateTime_3(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeWidget_4 extends _i1.SmartFake implements _i5.Widget {
-  _FakeWidget_4(
+class _FakeWidget_3 extends _i1.SmartFake implements _i4.Widget {
+  _FakeWidget_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -113,13 +108,13 @@ class _FakeWidget_4 extends _i1.SmartFake implements _i5.Widget {
         );
 
   @override
-  String toString({_i6.DiagnosticLevel? minLevel = _i6.DiagnosticLevel.info}) =>
+  String toString({_i5.DiagnosticLevel? minLevel = _i5.DiagnosticLevel.info}) =>
       super.toString();
 }
 
-class _FakeStatelessElement_5 extends _i1.SmartFake
-    implements _i5.StatelessElement {
-  _FakeStatelessElement_5(
+class _FakeStatelessElement_4 extends _i1.SmartFake
+    implements _i4.StatelessElement {
+  _FakeStatelessElement_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -128,13 +123,13 @@ class _FakeStatelessElement_5 extends _i1.SmartFake
         );
 
   @override
-  String toString({_i6.DiagnosticLevel? minLevel = _i6.DiagnosticLevel.info}) =>
+  String toString({_i5.DiagnosticLevel? minLevel = _i5.DiagnosticLevel.info}) =>
       super.toString();
 }
 
-class _FakeDiagnosticsNode_6 extends _i1.SmartFake
-    implements _i6.DiagnosticsNode {
-  _FakeDiagnosticsNode_6(
+class _FakeDiagnosticsNode_5 extends _i1.SmartFake
+    implements _i5.DiagnosticsNode {
+  _FakeDiagnosticsNode_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -144,38 +139,101 @@ class _FakeDiagnosticsNode_6 extends _i1.SmartFake
 
   @override
   String toString({
-    _i6.TextTreeConfiguration? parentConfiguration,
-    _i6.DiagnosticLevel? minLevel = _i6.DiagnosticLevel.info,
+    _i5.TextTreeConfiguration? parentConfiguration,
+    _i5.DiagnosticLevel? minLevel = _i5.DiagnosticLevel.info,
   }) =>
       super.toString();
+}
+
+class _FakeCategoryDao_6 extends _i1.SmartFake implements _i6.CategoryDao {
+  _FakeCategoryDao_6(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFinancialEntryDao_7 extends _i1.SmartFake
+    implements _i7.FinancialEntryDao {
+  _FakeFinancialEntryDao_7(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeGoalDao_8 extends _i1.SmartFake implements _i8.GoalDao {
+  _FakeGoalDao_8(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeUserDao_9 extends _i1.SmartFake implements _i9.UserDao {
+  _FakeUserDao_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeStreamController_10<T> extends _i1.SmartFake
+    implements _i10.StreamController<T> {
+  _FakeStreamController_10(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDatabaseExecutor_11 extends _i1.SmartFake
+    implements _i11.DatabaseExecutor {
+  _FakeDatabaseExecutor_11(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [UserRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserRepository extends _i1.Mock implements _i7.UserRepository {
+class MockUserRepository extends _i1.Mock implements _i12.UserRepository {
   @override
-  _i8.Future<void> register(_i9.User? user) => (super.noSuchMethod(
+  _i10.Future<void> register(_i13.User? user) => (super.noSuchMethod(
         Invocation.method(
           #register,
           [user],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<bool> existsEmail(String? email) => (super.noSuchMethod(
+  _i10.Future<bool> existsEmail(String? email) => (super.noSuchMethod(
         Invocation.method(
           #existsEmail,
           [email],
         ),
-        returnValue: _i8.Future<bool>.value(false),
-        returnValueForMissingStub: _i8.Future<bool>.value(false),
-      ) as _i8.Future<bool>);
+        returnValue: _i10.Future<bool>.value(false),
+        returnValueForMissingStub: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
 
   @override
-  _i8.Future<_i9.User?> getUserByEmailAndPassword(
+  _i10.Future<_i13.User?> getUserByEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -187,100 +245,100 @@ class MockUserRepository extends _i1.Mock implements _i7.UserRepository {
             password,
           ],
         ),
-        returnValue: _i8.Future<_i9.User?>.value(),
-        returnValueForMissingStub: _i8.Future<_i9.User?>.value(),
-      ) as _i8.Future<_i9.User?>);
+        returnValue: _i10.Future<_i13.User?>.value(),
+        returnValueForMissingStub: _i10.Future<_i13.User?>.value(),
+      ) as _i10.Future<_i13.User?>);
 
   @override
-  _i8.Future<void> logout() => (super.noSuchMethod(
+  _i10.Future<void> logout() => (super.noSuchMethod(
         Invocation.method(
           #logout,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> forgotPassword() => (super.noSuchMethod(
+  _i10.Future<void> forgotPassword() => (super.noSuchMethod(
         Invocation.method(
           #forgotPassword,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [GoalRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGoalRepository extends _i1.Mock implements _i10.GoalRepository {
+class MockGoalRepository extends _i1.Mock implements _i14.GoalRepository {
   @override
-  _i8.Future<List<_i2.Goal>> getGoals() => (super.noSuchMethod(
+  _i10.Future<List<_i2.Goal>> getGoals() => (super.noSuchMethod(
         Invocation.method(
           #getGoals,
           [],
         ),
-        returnValue: _i8.Future<List<_i2.Goal>>.value(<_i2.Goal>[]),
+        returnValue: _i10.Future<List<_i2.Goal>>.value(<_i2.Goal>[]),
         returnValueForMissingStub:
-            _i8.Future<List<_i2.Goal>>.value(<_i2.Goal>[]),
-      ) as _i8.Future<List<_i2.Goal>>);
+            _i10.Future<List<_i2.Goal>>.value(<_i2.Goal>[]),
+      ) as _i10.Future<List<_i2.Goal>>);
 
   @override
-  _i8.Future<_i2.Goal> getGoal(String? name) => (super.noSuchMethod(
+  _i10.Future<_i2.Goal> getGoal(String? name) => (super.noSuchMethod(
         Invocation.method(
           #getGoal,
           [name],
         ),
-        returnValue: _i8.Future<_i2.Goal>.value(_FakeGoal_0(
+        returnValue: _i10.Future<_i2.Goal>.value(_FakeGoal_0(
           this,
           Invocation.method(
             #getGoal,
             [name],
           ),
         )),
-        returnValueForMissingStub: _i8.Future<_i2.Goal>.value(_FakeGoal_0(
+        returnValueForMissingStub: _i10.Future<_i2.Goal>.value(_FakeGoal_0(
           this,
           Invocation.method(
             #getGoal,
             [name],
           ),
         )),
-      ) as _i8.Future<_i2.Goal>);
+      ) as _i10.Future<_i2.Goal>);
 
   @override
-  _i8.Future<int> addGoal(_i2.Goal? goal) => (super.noSuchMethod(
+  _i10.Future<int> addGoal(_i2.Goal? goal) => (super.noSuchMethod(
         Invocation.method(
           #addGoal,
           [goal],
         ),
-        returnValue: _i8.Future<int>.value(0),
-        returnValueForMissingStub: _i8.Future<int>.value(0),
-      ) as _i8.Future<int>);
+        returnValue: _i10.Future<int>.value(0),
+        returnValueForMissingStub: _i10.Future<int>.value(0),
+      ) as _i10.Future<int>);
 
   @override
-  _i8.Future<int> updateGoal(_i2.Goal? goal) => (super.noSuchMethod(
+  _i10.Future<int> updateGoal(_i2.Goal? goal) => (super.noSuchMethod(
         Invocation.method(
           #updateGoal,
           [goal],
         ),
-        returnValue: _i8.Future<int>.value(0),
-        returnValueForMissingStub: _i8.Future<int>.value(0),
-      ) as _i8.Future<int>);
+        returnValue: _i10.Future<int>.value(0),
+        returnValueForMissingStub: _i10.Future<int>.value(0),
+      ) as _i10.Future<int>);
 
   @override
-  _i8.Future<int> deleteGoal(String? id) => (super.noSuchMethod(
+  _i10.Future<void> deleteGoal(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteGoal,
           [id],
         ),
-        returnValue: _i8.Future<int>.value(0),
-        returnValueForMissingStub: _i8.Future<int>.value(0),
-      ) as _i8.Future<int>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<int> updateCurrentValue(
+  _i10.Future<void> updateCurrentValue(
     String? id,
     double? currentValue,
   ) =>
@@ -292,284 +350,202 @@ class MockGoalRepository extends _i1.Mock implements _i10.GoalRepository {
             currentValue,
           ],
         ),
-        returnValue: _i8.Future<int>.value(0),
-        returnValueForMissingStub: _i8.Future<int>.value(0),
-      ) as _i8.Future<int>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [CategoryRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCategoryRepository extends _i1.Mock
-    implements _i11.CategoryRepository {
+    implements _i15.CategoryRepository {
   @override
-  _i8.Future<void> register(_i12.Category? category) => (super.noSuchMethod(
+  _i10.Future<void> register(_i16.Category? category) => (super.noSuchMethod(
         Invocation.method(
           #register,
           [category],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<List<_i12.Category>> findAll() => (super.noSuchMethod(
+  _i10.Future<List<_i16.Category>> findAll() => (super.noSuchMethod(
         Invocation.method(
           #findAll,
           [],
         ),
-        returnValue: _i8.Future<List<_i12.Category>>.value(<_i12.Category>[]),
+        returnValue: _i10.Future<List<_i16.Category>>.value(<_i16.Category>[]),
         returnValueForMissingStub:
-            _i8.Future<List<_i12.Category>>.value(<_i12.Category>[]),
-      ) as _i8.Future<List<_i12.Category>>);
+            _i10.Future<List<_i16.Category>>.value(<_i16.Category>[]),
+      ) as _i10.Future<List<_i16.Category>>);
 
   @override
-  _i8.Future<void> delete(String? id) => (super.noSuchMethod(
+  _i10.Future<void> delete(String? id) => (super.noSuchMethod(
         Invocation.method(
           #delete,
           [id],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [FinancialEntryRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialEntryRepository extends _i1.Mock
-    implements _i13.FinancialEntryRepository {
+    implements _i17.FinancialEntryRepository {
   @override
-  _i8.Future<void> register(_i14.FinancialEntry? financialEntry) =>
+  _i10.Future<void> register(_i18.FinancialEntry? financialEntry) =>
       (super.noSuchMethod(
         Invocation.method(
           #register,
           [financialEntry],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<List<_i14.FinancialEntry>> findAll() => (super.noSuchMethod(
+  _i10.Future<List<_i18.FinancialEntry>> findAll() => (super.noSuchMethod(
         Invocation.method(
           #findAll,
           [],
         ),
-        returnValue: _i8.Future<List<_i14.FinancialEntry>>.value(
-            <_i14.FinancialEntry>[]),
-        returnValueForMissingStub: _i8.Future<List<_i14.FinancialEntry>>.value(
-            <_i14.FinancialEntry>[]),
-      ) as _i8.Future<List<_i14.FinancialEntry>>);
+        returnValue: _i10.Future<List<_i18.FinancialEntry>>.value(
+            <_i18.FinancialEntry>[]),
+        returnValueForMissingStub: _i10.Future<List<_i18.FinancialEntry>>.value(
+            <_i18.FinancialEntry>[]),
+      ) as _i10.Future<List<_i18.FinancialEntry>>);
 
   @override
-  _i8.Future<void> delete(String? id) => (super.noSuchMethod(
+  _i10.Future<void> delete(String? id) => (super.noSuchMethod(
         Invocation.method(
           #delete,
           [id],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [FinancialReportRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialReportRepository extends _i1.Mock
-    implements _i15.FinancialReportRepository {
+    implements _i19.FinancialReportRepository {
   @override
-  _i8.Future<Map<String, List<_i14.FinancialEntry>>> getMonthlyReport(
+  _i10.Future<Map<String, List<_i18.FinancialEntry>>> getMonthlyReport(
           int? year) =>
       (super.noSuchMethod(
         Invocation.method(
           #getMonthlyReport,
           [year],
         ),
-        returnValue: _i8.Future<Map<String, List<_i14.FinancialEntry>>>.value(
-            <String, List<_i14.FinancialEntry>>{}),
+        returnValue: _i10.Future<Map<String, List<_i18.FinancialEntry>>>.value(
+            <String, List<_i18.FinancialEntry>>{}),
         returnValueForMissingStub:
-            _i8.Future<Map<String, List<_i14.FinancialEntry>>>.value(
-                <String, List<_i14.FinancialEntry>>{}),
-      ) as _i8.Future<Map<String, List<_i14.FinancialEntry>>>);
+            _i10.Future<Map<String, List<_i18.FinancialEntry>>>.value(
+                <String, List<_i18.FinancialEntry>>{}),
+      ) as _i10.Future<Map<String, List<_i18.FinancialEntry>>>);
 
   @override
-  _i8.Future<Map<int, List<_i14.FinancialEntry>>> getAnnualReport() =>
+  _i10.Future<Map<int, List<_i18.FinancialEntry>>> getAnnualReport() =>
       (super.noSuchMethod(
         Invocation.method(
           #getAnnualReport,
           [],
         ),
-        returnValue: _i8.Future<Map<int, List<_i14.FinancialEntry>>>.value(
-            <int, List<_i14.FinancialEntry>>{}),
+        returnValue: _i10.Future<Map<int, List<_i18.FinancialEntry>>>.value(
+            <int, List<_i18.FinancialEntry>>{}),
         returnValueForMissingStub:
-            _i8.Future<Map<int, List<_i14.FinancialEntry>>>.value(
-                <int, List<_i14.FinancialEntry>>{}),
-      ) as _i8.Future<Map<int, List<_i14.FinancialEntry>>>);
-}
-
-/// A class which mocks [DatabaseHelper].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockDatabaseHelper extends _i1.Mock implements _i16.DatabaseHelper {
-  @override
-  _i8.Future<_i3.Database> get database => (super.noSuchMethod(
-        Invocation.getter(#database),
-        returnValue: _i8.Future<_i3.Database>.value(_FakeDatabase_1(
-          this,
-          Invocation.getter(#database),
-        )),
-        returnValueForMissingStub:
-            _i8.Future<_i3.Database>.value(_FakeDatabase_1(
-          this,
-          Invocation.getter(#database),
-        )),
-      ) as _i8.Future<_i3.Database>);
-
-  @override
-  _i8.Future<void> printUsers() => (super.noSuchMethod(
-        Invocation.method(
-          #printUsers,
-          [],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
-
-  @override
-  _i8.Future<List<Map<String, dynamic>>> printCategories() =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #printCategories,
-          [],
-        ),
-        returnValue: _i8.Future<List<Map<String, dynamic>>>.value(
-            <Map<String, dynamic>>[]),
-        returnValueForMissingStub: _i8.Future<List<Map<String, dynamic>>>.value(
-            <Map<String, dynamic>>[]),
-      ) as _i8.Future<List<Map<String, dynamic>>>);
-
-  @override
-  _i8.Future<void> printFinancialEntries() => (super.noSuchMethod(
-        Invocation.method(
-          #printFinancialEntries,
-          [],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
-
-  @override
-  _i8.Future<void> printGoal() => (super.noSuchMethod(
-        Invocation.method(
-          #printGoal,
-          [],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
-
-  @override
-  _i8.Future<void> exportDatabase() => (super.noSuchMethod(
-        Invocation.method(
-          #exportDatabase,
-          [],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
-
-  @override
-  _i8.Future<void> deleteDatabaseFile() => (super.noSuchMethod(
-        Invocation.method(
-          #deleteDatabaseFile,
-          [],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+            _i10.Future<Map<int, List<_i18.FinancialEntry>>>.value(
+                <int, List<_i18.FinancialEntry>>{}),
+      ) as _i10.Future<Map<int, List<_i18.FinancialEntry>>>);
 }
 
 /// A class which mocks [FinancialSummaryRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialSummaryRepository extends _i1.Mock
-    implements _i17.FinancialSummaryRepository {
+    implements _i20.FinancialSummaryRepository {
   @override
-  _i8.Future<Map<String, Map<String, double>>> getMonthlyTotals() =>
+  _i10.Future<Map<String, Map<String, double>>> getMonthlyTotals() =>
       (super.noSuchMethod(
         Invocation.method(
           #getMonthlyTotals,
           [],
         ),
-        returnValue: _i8.Future<Map<String, Map<String, double>>>.value(
+        returnValue: _i10.Future<Map<String, Map<String, double>>>.value(
             <String, Map<String, double>>{}),
         returnValueForMissingStub:
-            _i8.Future<Map<String, Map<String, double>>>.value(
+            _i10.Future<Map<String, Map<String, double>>>.value(
                 <String, Map<String, double>>{}),
-      ) as _i8.Future<Map<String, Map<String, double>>>);
+      ) as _i10.Future<Map<String, Map<String, double>>>);
 }
 
 /// A class which mocks [FinancialEntryService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialEntryService extends _i1.Mock
-    implements _i18.FinancialEntryService {
+    implements _i21.FinancialEntryService {
   @override
-  _i8.Future<void> createOrUpdateFinancialEntry(
-          _i14.FinancialEntry? financialEntry) =>
+  _i10.Future<void> createOrUpdateFinancialEntry(
+          _i18.FinancialEntry? financialEntry) =>
       (super.noSuchMethod(
         Invocation.method(
           #createOrUpdateFinancialEntry,
           [financialEntry],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<List<_i12.Category>> findAllCategories() => (super.noSuchMethod(
+  _i10.Future<List<_i16.Category>> findAllCategories() => (super.noSuchMethod(
         Invocation.method(
           #findAllCategories,
           [],
         ),
-        returnValue: _i8.Future<List<_i12.Category>>.value(<_i12.Category>[]),
+        returnValue: _i10.Future<List<_i16.Category>>.value(<_i16.Category>[]),
         returnValueForMissingStub:
-            _i8.Future<List<_i12.Category>>.value(<_i12.Category>[]),
-      ) as _i8.Future<List<_i12.Category>>);
+            _i10.Future<List<_i16.Category>>.value(<_i16.Category>[]),
+      ) as _i10.Future<List<_i16.Category>>);
 
   @override
-  _i8.Future<List<_i14.FinancialEntry>> findAllFinancialEntries() =>
+  _i10.Future<List<_i18.FinancialEntry>> findAllFinancialEntries() =>
       (super.noSuchMethod(
         Invocation.method(
           #findAllFinancialEntries,
           [],
         ),
-        returnValue: _i8.Future<List<_i14.FinancialEntry>>.value(
-            <_i14.FinancialEntry>[]),
-        returnValueForMissingStub: _i8.Future<List<_i14.FinancialEntry>>.value(
-            <_i14.FinancialEntry>[]),
-      ) as _i8.Future<List<_i14.FinancialEntry>>);
+        returnValue: _i10.Future<List<_i18.FinancialEntry>>.value(
+            <_i18.FinancialEntry>[]),
+        returnValueForMissingStub: _i10.Future<List<_i18.FinancialEntry>>.value(
+            <_i18.FinancialEntry>[]),
+      ) as _i10.Future<List<_i18.FinancialEntry>>);
 
   @override
-  _i8.Future<void> deleteFinancialEntry(String? id) => (super.noSuchMethod(
+  _i10.Future<void> deleteFinancialEntry(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteFinancialEntry,
           [id],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [NavigatorObserver].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
+class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
   @override
   void didPush(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i3.Route<dynamic>? route,
+    _i3.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -584,8 +560,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didPop(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i3.Route<dynamic>? route,
+    _i3.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -600,8 +576,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didRemove(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i3.Route<dynamic>? route,
+    _i3.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -616,8 +592,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didReplace({
-    _i4.Route<dynamic>? newRoute,
-    _i4.Route<dynamic>? oldRoute,
+    _i3.Route<dynamic>? newRoute,
+    _i3.Route<dynamic>? oldRoute,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -633,8 +609,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didChangeTop(
-    _i4.Route<dynamic>? topRoute,
-    _i4.Route<dynamic>? previousTopRoute,
+    _i3.Route<dynamic>? topRoute,
+    _i3.Route<dynamic>? previousTopRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -649,8 +625,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didStartUserGesture(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i3.Route<dynamic>? route,
+    _i3.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -676,15 +652,15 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 /// A class which mocks [UserViewModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
+class MockUserViewModel extends _i1.Mock implements _i22.UserViewModel {
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -693,11 +669,11 @@ class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
   @override
   String get email => (super.noSuchMethod(
         Invocation.getter(#email),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#email),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#email),
         ),
@@ -706,11 +682,11 @@ class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
   @override
   String get password => (super.noSuchMethod(
         Invocation.getter(#password),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#password),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#password),
         ),
@@ -719,11 +695,11 @@ class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -787,17 +763,17 @@ class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
       );
 
   @override
-  _i8.Future<void> registerUser() => (super.noSuchMethod(
+  _i10.Future<void> registerUser() => (super.noSuchMethod(
         Invocation.method(
           #registerUser,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -806,7 +782,7 @@ class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -836,32 +812,32 @@ class MockUserViewModel extends _i1.Mock implements _i19.UserViewModel {
 /// A class which mocks [LoginViewModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLoginViewModel extends _i1.Mock implements _i22.LoginViewModel {
+class MockLoginViewModel extends _i1.Mock implements _i25.LoginViewModel {
   @override
-  _i4.TextEditingController get emailController => (super.noSuchMethod(
+  _i3.TextEditingController get emailController => (super.noSuchMethod(
         Invocation.getter(#emailController),
-        returnValue: _FakeTextEditingController_2(
+        returnValue: _FakeTextEditingController_1(
           this,
           Invocation.getter(#emailController),
         ),
-        returnValueForMissingStub: _FakeTextEditingController_2(
+        returnValueForMissingStub: _FakeTextEditingController_1(
           this,
           Invocation.getter(#emailController),
         ),
-      ) as _i4.TextEditingController);
+      ) as _i3.TextEditingController);
 
   @override
-  _i4.TextEditingController get passwordController => (super.noSuchMethod(
+  _i3.TextEditingController get passwordController => (super.noSuchMethod(
         Invocation.getter(#passwordController),
-        returnValue: _FakeTextEditingController_2(
+        returnValue: _FakeTextEditingController_1(
           this,
           Invocation.getter(#passwordController),
         ),
-        returnValueForMissingStub: _FakeTextEditingController_2(
+        returnValueForMissingStub: _FakeTextEditingController_1(
           this,
           Invocation.getter(#passwordController),
         ),
-      ) as _i4.TextEditingController);
+      ) as _i3.TextEditingController);
 
   @override
   set error(String? _error) => super.noSuchMethod(
@@ -896,27 +872,27 @@ class MockLoginViewModel extends _i1.Mock implements _i22.LoginViewModel {
       ) as bool);
 
   @override
-  _i8.Future<void> login(_i5.BuildContext? context) => (super.noSuchMethod(
+  _i10.Future<void> login(_i4.BuildContext? context) => (super.noSuchMethod(
         Invocation.method(
           #login,
           [context],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> register() => (super.noSuchMethod(
+  _i10.Future<void> register() => (super.noSuchMethod(
         Invocation.method(
           #register,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -925,7 +901,7 @@ class MockLoginViewModel extends _i1.Mock implements _i22.LoginViewModel {
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -956,15 +932,15 @@ class MockLoginViewModel extends _i1.Mock implements _i22.LoginViewModel {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGoalRegistrationViewModel extends _i1.Mock
-    implements _i23.GoalRegistrationViewModel {
+    implements _i26.GoalRegistrationViewModel {
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -973,11 +949,11 @@ class MockGoalRegistrationViewModel extends _i1.Mock
   @override
   String get description => (super.noSuchMethod(
         Invocation.getter(#description),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#description),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#description),
         ),
@@ -1000,11 +976,11 @@ class MockGoalRegistrationViewModel extends _i1.Mock
   @override
   DateTime get deadline => (super.noSuchMethod(
         Invocation.getter(#deadline),
-        returnValue: _FakeDateTime_3(
+        returnValue: _FakeDateTime_2(
           this,
           Invocation.getter(#deadline),
         ),
-        returnValueForMissingStub: _FakeDateTime_3(
+        returnValueForMissingStub: _FakeDateTime_2(
           this,
           Invocation.getter(#deadline),
         ),
@@ -1080,7 +1056,7 @@ class MockGoalRegistrationViewModel extends _i1.Mock
       ) as bool);
 
   @override
-  _i8.Future<bool> saveGoal({
+  _i10.Future<bool> saveGoal({
     required String? name,
     String? description,
     required double? targetValue,
@@ -1101,9 +1077,9 @@ class MockGoalRegistrationViewModel extends _i1.Mock
             #goalId: goalId,
           },
         ),
-        returnValue: _i8.Future<bool>.value(false),
-        returnValueForMissingStub: _i8.Future<bool>.value(false),
-      ) as _i8.Future<bool>);
+        returnValue: _i10.Future<bool>.value(false),
+        returnValueForMissingStub: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
 
   @override
   void loadGoal(_i2.Goal? goal) => super.noSuchMethod(
@@ -1133,7 +1109,7 @@ class MockGoalRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1142,7 +1118,7 @@ class MockGoalRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1172,7 +1148,7 @@ class MockGoalRegistrationViewModel extends _i1.Mock
 /// A class which mocks [GoalViewModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
+class MockGoalViewModel extends _i1.Mock implements _i27.GoalViewModel {
   @override
   List<_i2.Goal> get goals => (super.noSuchMethod(
         Invocation.getter(#goals),
@@ -1190,11 +1166,11 @@ class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -1208,27 +1184,27 @@ class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
       ) as bool);
 
   @override
-  _i8.Future<void> loadGoals() => (super.noSuchMethod(
+  _i10.Future<void> loadGoals() => (super.noSuchMethod(
         Invocation.method(
           #loadGoals,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> deleteGoal(String? id) => (super.noSuchMethod(
+  _i10.Future<void> deleteGoal(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteGoal,
           [id],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> updateGoalProgress(
+  _i10.Future<void> updateGoalProgress(
     String? id,
     double? currentValue,
   ) =>
@@ -1240,9 +1216,9 @@ class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
             currentValue,
           ],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   double getTotalSaved() => (super.noSuchMethod(
@@ -1284,7 +1260,7 @@ class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1293,7 +1269,7 @@ class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1324,15 +1300,15 @@ class MockGoalViewModel extends _i1.Mock implements _i24.GoalViewModel {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialEntryRegistrationViewModel extends _i1.Mock
-    implements _i25.FinancialEntryRegistrationViewModel {
+    implements _i28.FinancialEntryRegistrationViewModel {
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -1346,40 +1322,40 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
       ) as double);
 
   @override
-  _i26.FinancialEntryType get type => (super.noSuchMethod(
+  _i29.FinancialEntryType get type => (super.noSuchMethod(
         Invocation.getter(#type),
-        returnValue: _i26.FinancialEntryType.despesa,
-        returnValueForMissingStub: _i26.FinancialEntryType.despesa,
-      ) as _i26.FinancialEntryType);
+        returnValue: _i29.FinancialEntryType.despesa,
+        returnValueForMissingStub: _i29.FinancialEntryType.despesa,
+      ) as _i29.FinancialEntryType);
 
   @override
   DateTime get date => (super.noSuchMethod(
         Invocation.getter(#date),
-        returnValue: _FakeDateTime_3(
+        returnValue: _FakeDateTime_2(
           this,
           Invocation.getter(#date),
         ),
-        returnValueForMissingStub: _FakeDateTime_3(
+        returnValueForMissingStub: _FakeDateTime_2(
           this,
           Invocation.getter(#date),
         ),
       ) as DateTime);
 
   @override
-  List<_i12.Category> get categories => (super.noSuchMethod(
+  List<_i16.Category> get categories => (super.noSuchMethod(
         Invocation.getter(#categories),
-        returnValue: <_i12.Category>[],
-        returnValueForMissingStub: <_i12.Category>[],
-      ) as List<_i12.Category>);
+        returnValue: <_i16.Category>[],
+        returnValueForMissingStub: <_i16.Category>[],
+      ) as List<_i16.Category>);
 
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -1425,7 +1401,7 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void setCategory(_i12.Category? category) => super.noSuchMethod(
+  void setCategory(_i16.Category? category) => super.noSuchMethod(
         Invocation.method(
           #setCategory,
           [category],
@@ -1434,7 +1410,7 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void setType(_i26.FinancialEntryType? type) => super.noSuchMethod(
+  void setType(_i29.FinancialEntryType? type) => super.noSuchMethod(
         Invocation.method(
           #setType,
           [type],
@@ -1452,24 +1428,24 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  _i8.Future<void> loadCategories() => (super.noSuchMethod(
+  _i10.Future<void> loadCategories() => (super.noSuchMethod(
         Invocation.method(
           #loadCategories,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> registerFinancialEntry() => (super.noSuchMethod(
+  _i10.Future<void> registerFinancialEntry() => (super.noSuchMethod(
         Invocation.method(
           #registerFinancialEntry,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   void onItemTapped(int? index) => super.noSuchMethod(
@@ -1481,7 +1457,7 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1490,7 +1466,7 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1521,7 +1497,7 @@ class MockFinancialEntryRegistrationViewModel extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialEntryViewModel extends _i1.Mock
-    implements _i27.FinancialEntryViewModel {
+    implements _i30.FinancialEntryViewModel {
   @override
   int get selectedIndex => (super.noSuchMethod(
         Invocation.getter(#selectedIndex),
@@ -1532,11 +1508,11 @@ class MockFinancialEntryViewModel extends _i1.Mock
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -1550,18 +1526,18 @@ class MockFinancialEntryViewModel extends _i1.Mock
       ) as bool);
 
   @override
-  List<_i14.FinancialEntry> get financialEntries => (super.noSuchMethod(
+  List<_i18.FinancialEntry> get financialEntries => (super.noSuchMethod(
         Invocation.getter(#financialEntries),
-        returnValue: <_i14.FinancialEntry>[],
-        returnValueForMissingStub: <_i14.FinancialEntry>[],
-      ) as List<_i14.FinancialEntry>);
+        returnValue: <_i18.FinancialEntry>[],
+        returnValueForMissingStub: <_i18.FinancialEntry>[],
+      ) as List<_i18.FinancialEntry>);
 
   @override
-  List<_i12.Category> get categories => (super.noSuchMethod(
+  List<_i16.Category> get categories => (super.noSuchMethod(
         Invocation.getter(#categories),
-        returnValue: <_i12.Category>[],
-        returnValueForMissingStub: <_i12.Category>[],
-      ) as List<_i12.Category>);
+        returnValue: <_i16.Category>[],
+        returnValueForMissingStub: <_i16.Category>[],
+      ) as List<_i16.Category>);
 
   @override
   bool get hasListeners => (super.noSuchMethod(
@@ -1571,24 +1547,24 @@ class MockFinancialEntryViewModel extends _i1.Mock
       ) as bool);
 
   @override
-  _i8.Future<void> loadFinancialEntry() => (super.noSuchMethod(
+  _i10.Future<void> loadFinancialEntry() => (super.noSuchMethod(
         Invocation.method(
           #loadFinancialEntry,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> loadCategories() => (super.noSuchMethod(
+  _i10.Future<void> loadCategories() => (super.noSuchMethod(
         Invocation.method(
           #loadCategories,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   String getCategoryNameById(String? id) => (super.noSuchMethod(
@@ -1596,14 +1572,14 @@ class MockFinancialEntryViewModel extends _i1.Mock
           #getCategoryNameById,
           [id],
         ),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #getCategoryNameById,
             [id],
           ),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #getCategoryNameById,
@@ -1632,7 +1608,7 @@ class MockFinancialEntryViewModel extends _i1.Mock
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1641,7 +1617,7 @@ class MockFinancialEntryViewModel extends _i1.Mock
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1672,22 +1648,22 @@ class MockFinancialEntryViewModel extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFinancialEntryEditViewModel extends _i1.Mock
-    implements _i28.FinancialEntryEditViewModel {
+    implements _i31.FinancialEntryEditViewModel {
   @override
-  _i4.TextEditingController get nameController => (super.noSuchMethod(
+  _i3.TextEditingController get nameController => (super.noSuchMethod(
         Invocation.getter(#nameController),
-        returnValue: _FakeTextEditingController_2(
+        returnValue: _FakeTextEditingController_1(
           this,
           Invocation.getter(#nameController),
         ),
-        returnValueForMissingStub: _FakeTextEditingController_2(
+        returnValueForMissingStub: _FakeTextEditingController_1(
           this,
           Invocation.getter(#nameController),
         ),
-      ) as _i4.TextEditingController);
+      ) as _i3.TextEditingController);
 
   @override
-  set nameController(_i4.TextEditingController? _nameController) =>
+  set nameController(_i3.TextEditingController? _nameController) =>
       super.noSuchMethod(
         Invocation.setter(
           #nameController,
@@ -1697,20 +1673,20 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       );
 
   @override
-  _i4.TextEditingController get valueController => (super.noSuchMethod(
+  _i3.TextEditingController get valueController => (super.noSuchMethod(
         Invocation.getter(#valueController),
-        returnValue: _FakeTextEditingController_2(
+        returnValue: _FakeTextEditingController_1(
           this,
           Invocation.getter(#valueController),
         ),
-        returnValueForMissingStub: _FakeTextEditingController_2(
+        returnValueForMissingStub: _FakeTextEditingController_1(
           this,
           Invocation.getter(#valueController),
         ),
-      ) as _i4.TextEditingController);
+      ) as _i3.TextEditingController);
 
   @override
-  set valueController(_i4.TextEditingController? _valueController) =>
+  set valueController(_i3.TextEditingController? _valueController) =>
       super.noSuchMethod(
         Invocation.setter(
           #valueController,
@@ -1722,11 +1698,11 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -1740,40 +1716,40 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       ) as double);
 
   @override
-  _i26.FinancialEntryType get type => (super.noSuchMethod(
+  _i29.FinancialEntryType get type => (super.noSuchMethod(
         Invocation.getter(#type),
-        returnValue: _i26.FinancialEntryType.despesa,
-        returnValueForMissingStub: _i26.FinancialEntryType.despesa,
-      ) as _i26.FinancialEntryType);
+        returnValue: _i29.FinancialEntryType.despesa,
+        returnValueForMissingStub: _i29.FinancialEntryType.despesa,
+      ) as _i29.FinancialEntryType);
 
   @override
   DateTime get date => (super.noSuchMethod(
         Invocation.getter(#date),
-        returnValue: _FakeDateTime_3(
+        returnValue: _FakeDateTime_2(
           this,
           Invocation.getter(#date),
         ),
-        returnValueForMissingStub: _FakeDateTime_3(
+        returnValueForMissingStub: _FakeDateTime_2(
           this,
           Invocation.getter(#date),
         ),
       ) as DateTime);
 
   @override
-  List<_i12.Category> get categories => (super.noSuchMethod(
+  List<_i16.Category> get categories => (super.noSuchMethod(
         Invocation.getter(#categories),
-        returnValue: <_i12.Category>[],
-        returnValueForMissingStub: <_i12.Category>[],
-      ) as List<_i12.Category>);
+        returnValue: <_i16.Category>[],
+        returnValueForMissingStub: <_i16.Category>[],
+      ) as List<_i16.Category>);
 
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -1819,7 +1795,7 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       );
 
   @override
-  void setCategory(_i12.Category? category) => super.noSuchMethod(
+  void setCategory(_i16.Category? category) => super.noSuchMethod(
         Invocation.method(
           #setCategory,
           [category],
@@ -1828,7 +1804,7 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       );
 
   @override
-  void setType(_i26.FinancialEntryType? type) => super.noSuchMethod(
+  void setType(_i29.FinancialEntryType? type) => super.noSuchMethod(
         Invocation.method(
           #setType,
           [type],
@@ -1846,34 +1822,34 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       );
 
   @override
-  _i8.Future<void> loadCategories() => (super.noSuchMethod(
+  _i10.Future<void> loadCategories() => (super.noSuchMethod(
         Invocation.method(
           #loadCategories,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> updateFinancialEntry() => (super.noSuchMethod(
+  _i10.Future<void> updateFinancialEntry() => (super.noSuchMethod(
         Invocation.method(
           #updateFinancialEntry,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> deleteFinancialEntry(String? id) => (super.noSuchMethod(
+  _i10.Future<void> deleteFinancialEntry(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteFinancialEntry,
           [id],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   void onItemTapped(int? index) => super.noSuchMethod(
@@ -1894,7 +1870,7 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1903,7 +1879,7 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1925,7 +1901,7 @@ class MockFinancialEntryEditViewModel extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCategoryRegistrationViewModel extends _i1.Mock
-    implements _i29.CategoryRegistrationViewModel {
+    implements _i32.CategoryRegistrationViewModel {
   @override
   int get selectedIndex => (super.noSuchMethod(
         Invocation.getter(#selectedIndex),
@@ -1936,11 +1912,11 @@ class MockCategoryRegistrationViewModel extends _i1.Mock
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -1949,11 +1925,11 @@ class MockCategoryRegistrationViewModel extends _i1.Mock
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -1983,14 +1959,14 @@ class MockCategoryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  _i8.Future<void> registerCategory() => (super.noSuchMethod(
+  _i10.Future<void> registerCategory() => (super.noSuchMethod(
         Invocation.method(
           #registerCategory,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   void onItemTapped(int? index) => super.noSuchMethod(
@@ -2002,7 +1978,7 @@ class MockCategoryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -2011,7 +1987,7 @@ class MockCategoryRegistrationViewModel extends _i1.Mock
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -2041,7 +2017,7 @@ class MockCategoryRegistrationViewModel extends _i1.Mock
 /// A class which mocks [CategoryViewModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
+class MockCategoryViewModel extends _i1.Mock implements _i33.CategoryViewModel {
   @override
   int get selectedIndex => (super.noSuchMethod(
         Invocation.getter(#selectedIndex),
@@ -2052,11 +2028,11 @@ class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
   @override
   String get errorMessage => (super.noSuchMethod(
         Invocation.getter(#errorMessage),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.getter(#errorMessage),
         ),
@@ -2070,11 +2046,11 @@ class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
       ) as bool);
 
   @override
-  List<_i12.Category> get categories => (super.noSuchMethod(
+  List<_i16.Category> get categories => (super.noSuchMethod(
         Invocation.getter(#categories),
-        returnValue: <_i12.Category>[],
-        returnValueForMissingStub: <_i12.Category>[],
-      ) as List<_i12.Category>);
+        returnValue: <_i16.Category>[],
+        returnValueForMissingStub: <_i16.Category>[],
+      ) as List<_i16.Category>);
 
   @override
   bool get hasListeners => (super.noSuchMethod(
@@ -2084,24 +2060,24 @@ class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
       ) as bool);
 
   @override
-  _i8.Future<void> loadCategories() => (super.noSuchMethod(
+  _i10.Future<void> loadCategories() => (super.noSuchMethod(
         Invocation.method(
           #loadCategories,
           [],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> deleteCategory(String? id) => (super.noSuchMethod(
+  _i10.Future<void> deleteCategory(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteCategory,
           [id],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
   void onItemTapped(int? index) => super.noSuchMethod(
@@ -2113,7 +2089,7 @@ class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
       );
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -2122,7 +2098,7 @@ class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -2153,7 +2129,7 @@ class MockCategoryViewModel extends _i1.Mock implements _i30.CategoryViewModel {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMonthlyFinancialChart extends _i1.Mock
-    implements _i31.MonthlyFinancialChart {
+    implements _i34.MonthlyFinancialChart {
   @override
   Map<String, Map<String, double>> get data => (super.noSuchMethod(
         Invocation.getter(#data),
@@ -2162,48 +2138,48 @@ class MockMonthlyFinancialChart extends _i1.Mock
       ) as Map<String, Map<String, double>>);
 
   @override
-  _i5.Widget build(_i5.BuildContext? context) => (super.noSuchMethod(
+  _i4.Widget build(_i4.BuildContext? context) => (super.noSuchMethod(
         Invocation.method(
           #build,
           [context],
         ),
-        returnValue: _FakeWidget_4(
+        returnValue: _FakeWidget_3(
           this,
           Invocation.method(
             #build,
             [context],
           ),
         ),
-        returnValueForMissingStub: _FakeWidget_4(
+        returnValueForMissingStub: _FakeWidget_3(
           this,
           Invocation.method(
             #build,
             [context],
           ),
         ),
-      ) as _i5.Widget);
+      ) as _i4.Widget);
 
   @override
-  _i5.StatelessElement createElement() => (super.noSuchMethod(
+  _i4.StatelessElement createElement() => (super.noSuchMethod(
         Invocation.method(
           #createElement,
           [],
         ),
-        returnValue: _FakeStatelessElement_5(
+        returnValue: _FakeStatelessElement_4(
           this,
           Invocation.method(
             #createElement,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeStatelessElement_5(
+        returnValueForMissingStub: _FakeStatelessElement_4(
           this,
           Invocation.method(
             #createElement,
             [],
           ),
         ),
-      ) as _i5.StatelessElement);
+      ) as _i4.StatelessElement);
 
   @override
   String toStringShort() => (super.noSuchMethod(
@@ -2211,14 +2187,14 @@ class MockMonthlyFinancialChart extends _i1.Mock
           #toStringShort,
           [],
         ),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #toStringShort,
             [],
           ),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #toStringShort,
@@ -2228,7 +2204,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
       ) as String);
 
   @override
-  void debugFillProperties(_i6.DiagnosticPropertiesBuilder? properties) =>
+  void debugFillProperties(_i5.DiagnosticPropertiesBuilder? properties) =>
       super.noSuchMethod(
         Invocation.method(
           #debugFillProperties,
@@ -2240,7 +2216,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
   @override
   String toStringShallow({
     String? joiner = ', ',
-    _i6.DiagnosticLevel? minLevel = _i6.DiagnosticLevel.debug,
+    _i5.DiagnosticLevel? minLevel = _i5.DiagnosticLevel.debug,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2251,7 +2227,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
             #minLevel: minLevel,
           },
         ),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #toStringShallow,
@@ -2262,7 +2238,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
             },
           ),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #toStringShallow,
@@ -2279,7 +2255,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
   String toStringDeep({
     String? prefixLineOne = '',
     String? prefixOtherLines,
-    _i6.DiagnosticLevel? minLevel = _i6.DiagnosticLevel.debug,
+    _i5.DiagnosticLevel? minLevel = _i5.DiagnosticLevel.debug,
     int? wrapWidth = 65,
   }) =>
       (super.noSuchMethod(
@@ -2293,7 +2269,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
             #wrapWidth: wrapWidth,
           },
         ),
-        returnValue: _i20.dummyValue<String>(
+        returnValue: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #toStringDeep,
@@ -2306,7 +2282,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
             },
           ),
         ),
-        returnValueForMissingStub: _i20.dummyValue<String>(
+        returnValueForMissingStub: _i23.dummyValue<String>(
           this,
           Invocation.method(
             #toStringDeep,
@@ -2322,9 +2298,9 @@ class MockMonthlyFinancialChart extends _i1.Mock
       ) as String);
 
   @override
-  _i6.DiagnosticsNode toDiagnosticsNode({
+  _i5.DiagnosticsNode toDiagnosticsNode({
     String? name,
-    _i6.DiagnosticsTreeStyle? style,
+    _i5.DiagnosticsTreeStyle? style,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2335,7 +2311,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
             #style: style,
           },
         ),
-        returnValue: _FakeDiagnosticsNode_6(
+        returnValue: _FakeDiagnosticsNode_5(
           this,
           Invocation.method(
             #toDiagnosticsNode,
@@ -2346,7 +2322,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
             },
           ),
         ),
-        returnValueForMissingStub: _FakeDiagnosticsNode_6(
+        returnValueForMissingStub: _FakeDiagnosticsNode_5(
           this,
           Invocation.method(
             #toDiagnosticsNode,
@@ -2357,20 +2333,20 @@ class MockMonthlyFinancialChart extends _i1.Mock
             },
           ),
         ),
-      ) as _i6.DiagnosticsNode);
+      ) as _i5.DiagnosticsNode);
 
   @override
-  List<_i6.DiagnosticsNode> debugDescribeChildren() => (super.noSuchMethod(
+  List<_i5.DiagnosticsNode> debugDescribeChildren() => (super.noSuchMethod(
         Invocation.method(
           #debugDescribeChildren,
           [],
         ),
-        returnValue: <_i6.DiagnosticsNode>[],
-        returnValueForMissingStub: <_i6.DiagnosticsNode>[],
-      ) as List<_i6.DiagnosticsNode>);
+        returnValue: <_i5.DiagnosticsNode>[],
+        returnValueForMissingStub: <_i5.DiagnosticsNode>[],
+      ) as List<_i5.DiagnosticsNode>);
 
   @override
-  String toString({_i6.DiagnosticLevel? minLevel = _i6.DiagnosticLevel.info}) =>
+  String toString({_i5.DiagnosticLevel? minLevel = _i5.DiagnosticLevel.info}) =>
       super.toString();
 }
 
@@ -2378,7 +2354,7 @@ class MockMonthlyFinancialChart extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDashboardViewModel extends _i1.Mock
-    implements _i32.DashboardViewModel {
+    implements _i35.DashboardViewModel {
   @override
   int get selectedIndex => (super.noSuchMethod(
         Invocation.getter(#selectedIndex),
@@ -2403,28 +2379,28 @@ class MockDashboardViewModel extends _i1.Mock
       );
 
   @override
-  _i8.Future<void> logout(_i5.BuildContext? context) => (super.noSuchMethod(
+  _i10.Future<void> logout(_i4.BuildContext? context) => (super.noSuchMethod(
         Invocation.method(
           #logout,
           [context],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  _i8.Future<void> forgotPassword(_i5.BuildContext? context) =>
+  _i10.Future<void> forgotPassword(_i4.BuildContext? context) =>
       (super.noSuchMethod(
         Invocation.method(
           #forgotPassword,
           [context],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 
   @override
-  void addListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -2433,7 +2409,7 @@ class MockDashboardViewModel extends _i1.Mock
       );
 
   @override
-  void removeListener(_i21.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i24.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -2458,4 +2434,154 @@ class MockDashboardViewModel extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [AppDatabase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppDatabase extends _i1.Mock implements _i36.AppDatabase {
+  @override
+  _i6.CategoryDao get categoryDao => (super.noSuchMethod(
+        Invocation.getter(#categoryDao),
+        returnValue: _FakeCategoryDao_6(
+          this,
+          Invocation.getter(#categoryDao),
+        ),
+        returnValueForMissingStub: _FakeCategoryDao_6(
+          this,
+          Invocation.getter(#categoryDao),
+        ),
+      ) as _i6.CategoryDao);
+
+  @override
+  _i7.FinancialEntryDao get financialEntryDao => (super.noSuchMethod(
+        Invocation.getter(#financialEntryDao),
+        returnValue: _FakeFinancialEntryDao_7(
+          this,
+          Invocation.getter(#financialEntryDao),
+        ),
+        returnValueForMissingStub: _FakeFinancialEntryDao_7(
+          this,
+          Invocation.getter(#financialEntryDao),
+        ),
+      ) as _i7.FinancialEntryDao);
+
+  @override
+  _i8.GoalDao get goalDao => (super.noSuchMethod(
+        Invocation.getter(#goalDao),
+        returnValue: _FakeGoalDao_8(
+          this,
+          Invocation.getter(#goalDao),
+        ),
+        returnValueForMissingStub: _FakeGoalDao_8(
+          this,
+          Invocation.getter(#goalDao),
+        ),
+      ) as _i8.GoalDao);
+
+  @override
+  _i9.UserDao get userDao => (super.noSuchMethod(
+        Invocation.getter(#userDao),
+        returnValue: _FakeUserDao_9(
+          this,
+          Invocation.getter(#userDao),
+        ),
+        returnValueForMissingStub: _FakeUserDao_9(
+          this,
+          Invocation.getter(#userDao),
+        ),
+      ) as _i9.UserDao);
+
+  @override
+  _i10.StreamController<String> get changeListener => (super.noSuchMethod(
+        Invocation.getter(#changeListener),
+        returnValue: _FakeStreamController_10<String>(
+          this,
+          Invocation.getter(#changeListener),
+        ),
+        returnValueForMissingStub: _FakeStreamController_10<String>(
+          this,
+          Invocation.getter(#changeListener),
+        ),
+      ) as _i10.StreamController<String>);
+
+  @override
+  set changeListener(_i10.StreamController<String>? _changeListener) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #changeListener,
+          _changeListener,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i11.DatabaseExecutor get database => (super.noSuchMethod(
+        Invocation.getter(#database),
+        returnValue: _FakeDatabaseExecutor_11(
+          this,
+          Invocation.getter(#database),
+        ),
+        returnValueForMissingStub: _FakeDatabaseExecutor_11(
+          this,
+          Invocation.getter(#database),
+        ),
+      ) as _i11.DatabaseExecutor);
+
+  @override
+  set database(_i11.DatabaseExecutor? _database) => super.noSuchMethod(
+        Invocation.setter(
+          #database,
+          _database,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i10.Future<void> close() => (super.noSuchMethod(
+        Invocation.method(
+          #close,
+          [],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+}
+
+/// A class which mocks [CategoryDao].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCategoryDao extends _i1.Mock implements _i6.CategoryDao {
+  @override
+  _i10.Future<List<_i37.CategoryEntity>> findAll() => (super.noSuchMethod(
+        Invocation.method(
+          #findAll,
+          [],
+        ),
+        returnValue: _i10.Future<List<_i37.CategoryEntity>>.value(
+            <_i37.CategoryEntity>[]),
+        returnValueForMissingStub: _i10.Future<List<_i37.CategoryEntity>>.value(
+            <_i37.CategoryEntity>[]),
+      ) as _i10.Future<List<_i37.CategoryEntity>>);
+
+  @override
+  _i10.Future<void> insertCategory(_i37.CategoryEntity? category) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertCategory,
+          [category],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+
+  @override
+  _i10.Future<void> deleteCategory(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteCategory,
+          [id],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }

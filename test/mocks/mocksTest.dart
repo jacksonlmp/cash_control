@@ -1,3 +1,5 @@
+import 'package:cash_control/data/floor/app_database.dart';
+import 'package:cash_control/data/floor/dao/category_dao.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/ui/view_model/category_registration_view_model.dart';
 import 'package:cash_control/ui/view_model/category_view_model.dart';
@@ -16,7 +18,6 @@ import 'package:cash_control/data/repositories/goal_repository.dart';
 import 'package:cash_control/data/repositories/category_repository.dart';
 import 'package:cash_control/data/repositories/financial_entry_repository.dart';
 import 'package:cash_control/data/repositories/financial_report_repository.dart';
-import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/data/repositories/financial_summary_repository.dart';
 import 'package:flutter/widgets.dart';
 
@@ -26,7 +27,6 @@ import 'package:flutter/widgets.dart';
   MockSpec<CategoryRepository>(),
   MockSpec<FinancialEntryRepository>(),
   MockSpec<FinancialReportRepository>(),
-  MockSpec<DatabaseHelper>(),
   MockSpec<FinancialSummaryRepository>(),
   MockSpec<FinancialEntryService>(),
   MockSpec<NavigatorObserver>(),
@@ -41,6 +41,8 @@ import 'package:flutter/widgets.dart';
   MockSpec<CategoryViewModel>(),
   MockSpec<MonthlyFinancialChart>(),
   MockSpec<DashboardViewModel>(),
+  MockSpec<AppDatabase>(),
+  MockSpec<CategoryDao>()
 ])
 
 void main() {}

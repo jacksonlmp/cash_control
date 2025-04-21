@@ -16,7 +16,8 @@ void handleDashboardNavigation(int index, BuildContext context, scaffoldKey) {
       Navigator.pushReplacementNamed(context, '/financial-entry');
       break;
     case 4:
-      scaffoldKey.currentState?.openEndDrawer();
+      Navigator.pushNamed(context, '/atualidade');  // Certifique-se de que a rota está configurada corretamente
       break;
   }
 }
+

@@ -1,4 +1,3 @@
-import 'package:cash_control/data/database_helper.dart';
 import 'package:cash_control/data/services/financial_entry_service.dart';
 import 'package:cash_control/domain/enum/financial_entry_type.dart';
 import 'package:cash_control/domain/models/category.dart';
@@ -7,7 +6,8 @@ import 'package:flutter/material.dart';
 
 class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   final FinancialEntryService _financialEntryService;
-  FinancialEntryRegistrationViewModel(this._financialEntryService){
+
+  FinancialEntryRegistrationViewModel(this._financialEntryService) {
     loadCategories();
   }
 
@@ -49,8 +49,10 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
   }
 
   void setType(FinancialEntryType? type) {
-    _type = type!;
-    notifyListeners();
+    if (type != null) {
+      _type = type;
+      notifyListeners();
+    }
   }
 
   void setDate(DateTime date) {
@@ -82,20 +84,19 @@ class FinancialEntryRegistrationViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _financialEntryService.createOrUpdateFinancialEntry(
-        FinancialEntry(
-          id: UniqueKey().toString(),
-          name: _name,
-          value: _value,
-          categoryId: _category!.id,
-          type: _type,
-          date: _date,
-        ),
+      final newEntry = FinancialEntry(
+        id: UniqueKey().toString(),
+        name: _name,
+        value: _value,
+        categoryId: _category!.id,
+        type: _type,
+        date: _date,
       );
+
+      await _financialEntryService.createOrUpdateFinancialEntry(newEntry);
       _errorMessage = '';
-      DatabaseHelper().printFinancialEntries();
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = 'Erro ao registrar entrada: ${e.toString()}';
     } finally {
       _isLoading = false;
       notifyListeners();

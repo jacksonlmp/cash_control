@@ -10,9 +10,11 @@ import '../mocks/mocksTest.mocks.dart';
 
 void main() {
   late MockFinancialEntryRegistrationViewModel mockViewModel;
+  late MockAppDatabase mockDatabase;
 
   setUp(() {
     mockViewModel = MockFinancialEntryRegistrationViewModel();
+    mockDatabase = MockAppDatabase();
 
     when(mockViewModel.isLoading).thenReturn(false);
     when(mockViewModel.date).thenReturn(DateTime(2025, 4, 20));
@@ -27,7 +29,9 @@ void main() {
     return MaterialApp(
       home: ChangeNotifierProvider<FinancialEntryRegistrationViewModel>.value(
         value: mockViewModel,
-        child: const FinancialEntryRegistrationScreen(),
+        child: FinancialEntryRegistrationScreen(
+          database: mockDatabase,
+        ),
       ),
     );
   }
