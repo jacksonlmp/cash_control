@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cash_control/data/cambioApiService.dart';
 
@@ -7,102 +8,163 @@ class Cambioapiscreen extends StatefulWidget {
 }
 
 class _CambioapiscreenState extends State<Cambioapiscreen> {
-  Map<String, dynamic> exchangeRates = {};
-  bool isLoading = true;
+  final List<String> baseOptions = ['BRL', 'USD'];
+  final List<String> currencies = ['BRL', 'USD', 'EUR', 'BTC', 'ETH', 'JPY'];
+
+  String baseCurrency = 'BRL';
+  String targetCurrency = 'USD';
+
+  double conversionRate = 0.0;
+  double amount = 1.0;
   String errorMessage = '';
+  bool isLoading = false;
 
-  void _fetchExchangeRates() async {
-    try {
-      var rates = await getExchangeRates(
-        ['BRL', 'EUR', 'BTC', 'ETH', 'JPY'],
-        base: 'USD',
-      );
-
-      setState(() {
-        exchangeRates = rates;
-        isLoading = false;
-        errorMessage = '';
-      });
-    } catch (e) {
-      print('Erro ao buscar taxas: $e');
-      setState(() {
-        isLoading = false;
-        errorMessage = 'Erro ao carregar as taxas de câmbio.';
-      });
-    }
-  }
+  final _controller = TextEditingController(text: '1');
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _fetchExchangeRates();
+    _fetchRate();
   }
 
-  Icon _getCurrencyIcon(String symbol) {
-    switch (symbol) {
-      case 'BRL':
-        return const Icon(Icons.attach_money, color: Colors.green);
-      case 'EUR':
-        return const Icon(Icons.euro, color: Colors.indigo);
-      case 'BTC':
-        return const Icon(Icons.currency_bitcoin, color: Colors.orange);
-      case 'ETH':
-        return const Icon(Icons.device_hub, color: Colors.purple);
-      case 'JPY':
-        return const Icon(Icons.money, color: Colors.redAccent);
-      default:
-        return const Icon(Icons.attach_money);
+  @override
+  void dispose() {
+    _controller.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _fetchRate() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
+
+    try {
+      if (baseCurrency == targetCurrency) {
+        setState(() {
+          conversionRate = amount;
+          isLoading = false;
+        });
+        return;
+      }
+
+      final data = await getCryptoExchangeRates(
+        cryptoIds: ['bitcoin'],
+        currencies: [baseCurrency.toLowerCase(), targetCurrency.toLowerCase()],
+      );
+
+      final rates = data['bitcoin'] as Map<String, dynamic>;
+
+      final base = baseCurrency.toLowerCase();
+      final target = targetCurrency.toLowerCase();
+
+      if (!rates.containsKey(base) || !rates.containsKey(target)) {
+        throw Exception('Taxa não disponível');
+      }
+
+      final baseRate = (rates[base] as num).toDouble();
+      final targetRate = (rates[target] as num).toDouble();
+
+      setState(() {
+        conversionRate = (targetRate / baseRate) * amount;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Erro ao buscar taxa de câmbio.';
+        isLoading = false;
+      });
     }
+  }
+
+  void _onAmountChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        amount = double.tryParse(value) ?? 1.0;
+      });
+      _fetchRate();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Taxas de Câmbio")),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(16.0),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text("Conversor de Cripto"),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        shape: const Border(bottom: BorderSide(color: Colors.deepPurple, width: 1.5)),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text("Moeda Base:", style: TextStyle(color: Colors.white)),
+            DropdownButton<String>(
+              dropdownColor: Colors.grey[900],
+              value: baseCurrency,
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => baseCurrency = value);
+                  _fetchRate();
+                }
+              },
+              items: baseOptions.map((currency) {
+                return DropdownMenuItem(
+                  value: currency,
+                  child: Text(currency, style: const TextStyle(color: Colors.white)),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+            const Text("Converter Para:", style: TextStyle(color: Colors.white)),
+            DropdownButton<String>(
+              dropdownColor: Colors.grey[900],
+              value: targetCurrency,
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => targetCurrency = value);
+                  _fetchRate();
+                }
+              },
+              items: currencies.where((c) => c != baseCurrency).map((currency) {
+                return DropdownMenuItem(
+                  value: currency,
+                  child: Text(currency, style: const TextStyle(color: Colors.white)),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "Valor",
+                labelStyle: const TextStyle(color: Colors.white),
+                enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
+                focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurpleAccent)),
+              ),
+              onChanged: _onAmountChanged,
+            ),
+            const SizedBox(height: 24),
             if (errorMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Text(
-                  errorMessage,
-                  style: const TextStyle(
-                      color: Colors.red, fontWeight: FontWeight.bold),
-                ),
+              Text(errorMessage, style: const TextStyle(color: Colors.redAccent)),
+            if (!isLoading && errorMessage.isEmpty)
+              Text(
+                "$amount $baseCurrency = ${conversionRate.toStringAsFixed(4)} $targetCurrency",
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: exchangeRates.length,
-                itemBuilder: (context, index) {
-                  String symbol = exchangeRates.keys.elementAt(index);
-                  double rate = (exchangeRates[symbol] as num).toDouble();
-
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      leading: _getCurrencyIcon(symbol),
-                      title: Text(
-                        '1 USD = $rate $symbol',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold),
-                      ),
-                      trailing: const Icon(Icons.show_chart,
-                          color: Colors.blueAccent),
-                    ),
-                  );
-                },
+            if (isLoading)
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Center(child: CircularProgressIndicator(color: Colors.deepPurple)),
               ),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: _fetchExchangeRates,
-              icon: const Icon(Icons.refresh),
-              label: const Text("Atualizar Taxas"),
-            ),
           ],
         ),
       ),
